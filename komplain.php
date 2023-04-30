@@ -102,7 +102,7 @@ require 'cek.php';
                                     <tbody>
 
                                     <?php 
-                                        $ambilsemuadatakomplain = mysqli_query($conn, "select * from komplain");
+                                        $ambilsemuadatakomplain = mysqli_query($conn, 'SELECT k.idkomplain, k.nama, k.komplain, DATE_FORMAT(k.tanggal, "%d-%m-%Y") AS "tanggal" FROM `komplain` `k` WHERE 1;');
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatakomplain)){
                                             $idkomplain = $data['idkomplain'];
