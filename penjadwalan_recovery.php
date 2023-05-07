@@ -12,7 +12,7 @@ require 'cek.php';
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Pemulihan Data Pelanggan</title>
+        <title>Pemulihan Data Penjadwalan</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -23,49 +23,59 @@ require 'cek.php';
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Pemulihan Data Pelanggan</h1>
-
-
+                        <h1 class="mt-4">Pemulihan Data Penjadwalan</h1>
                         <div class="card mb-4">
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
                                             <th>No.</th>
-                                            <th>Nama Pelanggan</th>
-                                            <th>Alamat</th>
-                                            <th>Telp</th>
-                                            <th>Prioritas</th>
+                                            <th>Nama</th>
+                                            <th>Aktifitas</th>
+                                            <th>Tgl Mulai</th>
+                                            <th>Tgl Selesai</th>
+                                            <th>Deskripsi</th>
+                                            <th>Dibuat Tgl</th>
+                                            <th>Kategori</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         
                                         <?php 
-                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select * from pelanggan where is_active = 0");
+                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select j.id, l.iduser, l.nama, j.aktifitas, j.deskripsi, j.tgl_pelaksanaan, j.tgl_selesai, j.added_date, j.status, k.id as idkategori, k.nama_kategori from jadwal j inner join login l on j.adminid = l.iduser inner join kategori_jadwal k on j.kategori = k.id where j.is_active = 0");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatapelanggan)){
-                                            $idpelanggan = $data['idpelanggan'];
-                                            $namapelanggan = $data['namapelanggan'];
-                                            $alamat = $data['alamat'];
-                                            $telp = $data['telp'];
-                                            $prioritas = $data['prioritas'];
-                                            // $idp = $data['idpelanggan'];
-                                        
+                                            $idjadwal = $data['id'];
+                                            $iduser = $data['iduser'];
+                                            $nama = $data['nama'];
+                                            $aktifitas = $data['aktifitas'];
+                                            $tglmulai = $data['tgl_pelaksanaan'];
+                                            $tglselesai = $data['tgl_selesai'];
+                                            $deskripsi = $data['deskripsi'];
+                                            $adddate = $data['added_date'];
+                                            $kategori = $data['nama_kategori'];
+                                            $idkategori = $data['idkategori'];
+                                            $status = $data['status'];
                                         ?>
 
 
                                         <tr>
                                             <td><?=$i++;?></td>
-                                            <!-- <td><?=$idpelanggan;?></td> -->
-                                            <td><?=$namapelanggan;?></td>
-                                            <td><?=$alamat;?></td>
-                                            <td>(+62) <?=$telp;?></td>
-                                            <td><?=$prioritas;?></td>
+                                            <td><?=$nama;?></td>
+                                            <td><?=$aktifitas;?></td>
+                                            <td><?=$tglmulai;?></td>
+                                            <td><?=$tglselesai;?></td>
+                                            <td><?=$deskripsi;?></td>
+                                            <td><?=$adddate;?></td>
+                                            <td><?=$kategori;?></td>
+                                            <td><?=$status;?></td>
+                                            
                                             <td>
                                                 <form method="post">
-                                                    <input type="hidden" name="idpelanggan" value="<?=$idpelanggan;?>">
-                                                    <button type="submit" name="pulihpelanggan" class="btn btn-warning">
+                                                    <input type="hidden" name="idjadwal" value="<?=$idjadwal;?>">
+                                                    <button type="submit" name="pulihjadwal" class="btn btn-warning">
                                                         Pulihkan
                                                     </button>
                                                 </form>
@@ -75,6 +85,8 @@ require 'cek.php';
                                         <?php 
                                         };
                                         ?>
+
+
 
                                     </tbody>
                                 </table>

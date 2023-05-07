@@ -12,7 +12,7 @@ require 'cek.php';
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Pemulihan Data Pelanggan</title>
+        <title>Data Pelanggan</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -23,7 +23,7 @@ require 'cek.php';
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Pemulihan Data Pelanggan</h1>
+                        <h1 class="mt-4">Notifikasi</h1>
 
 
                         <div class="card mb-4">
@@ -35,7 +35,6 @@ require 'cek.php';
                                             <th>Nama Pelanggan</th>
                                             <th>Alamat</th>
                                             <th>Telp</th>
-                                            <th>Prioritas</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -49,7 +48,6 @@ require 'cek.php';
                                             $namapelanggan = $data['namapelanggan'];
                                             $alamat = $data['alamat'];
                                             $telp = $data['telp'];
-                                            $prioritas = $data['prioritas'];
                                             // $idp = $data['idpelanggan'];
                                         
                                         ?>
@@ -61,7 +59,6 @@ require 'cek.php';
                                             <td><?=$namapelanggan;?></td>
                                             <td><?=$alamat;?></td>
                                             <td>(+62) <?=$telp;?></td>
-                                            <td><?=$prioritas;?></td>
                                             <td>
                                                 <form method="post">
                                                     <input type="hidden" name="idpelanggan" value="<?=$idpelanggan;?>">
@@ -71,10 +68,11 @@ require 'cek.php';
                                                 </form>
                                             </td>
                                         </tr>
-                                            
                                         <?php 
                                         };
                                         ?>
+
+
 
                                     </tbody>
                                 </table>

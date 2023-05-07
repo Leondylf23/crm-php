@@ -37,19 +37,23 @@ require 'cek.php';
                                             <th>No.</th>
                                             <th>Nama Pelanggan</th>
                                             <th>Tanggal Komplain</th>
+                                            <th>Kategori</th>
                                             <th>Komplain</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                     <?php 
-                                        $ambilsemuadatakomplain = mysqli_query($conn, 'SELECT k.idkomplain, k.nama, k.komplain, DATE_FORMAT(k.tanggal, "%d-%m-%Y") AS "tanggal" FROM `komplain` `k` WHERE 1;');
+                                        $ambilsemuadatakomplain = mysqli_query($conn, 'SELECT k.idkomplain, k.nama, k.komplain, DATE_FORMAT(k.tanggal, "%d-%m-%Y") AS tanggal, kk.nama_kategori, k.idkategori FROM komplain k INNER JOIN kategori_komplain kk ON k.idkategori = kk.id WHERE k.is_active = 1;');
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatakomplain)){
                                             $idkomplain = $data['idkomplain'];
                                             $namapelanggan = $data['nama'];
                                             $tanggalkomplain = $data['tanggal'];
                                             $komplain = $data['komplain'];
+                                            $kategori = $data['nama_kategori'];
+                                            $idkategori = $data['idkategori'];
                                         
                                         ?>
 
@@ -59,8 +63,85 @@ require 'cek.php';
                                             <!-- <td><?=$idkomplain;?></td> -->
                                             <td><?=$namapelanggan;?></td>
                                             <td><?=$tanggalkomplain;?></td>
+                                            <td><?=$kategori;?></td>
                                             <td><?=$komplain;?></td>
+                                            <td>
+                                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idkomplain;?>">
+                                                    Edit
+                                                </button>
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idkomplain;?>">
+                                                    Delete
+                                                </button>
+                                            </td>
                                         </tr>
+
+                                        <!-- Edit The Modal -->
+                                        <div class="modal fade" id="edit<?=$idkomplain;?>">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Edit Komplain</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <form method="post">
+                                                        <div class="modal-body">
+                                                            <input type="text" name="namapelanggan" value="<?=$namapelanggan;?>" class="form-control" required>
+                                                            <br>
+                                                            <input type="text" name="komplain" value="<?=$komplain;?>" class="form-control" required>
+                                                            <br>
+                                                            <select name="kategori" class="form-control mb-2">
+                                                                 <?php 
+                                                                    $data = mysqli_query($conn, "select * from kategori_komplain");
+                                                                    while($fetcharray = mysqli_fetch_array($data)){
+                                                                        $valuee = $fetcharray['nama_kategori'];
+                                                                        $idkke = $fetcharray['id'];
+                                                                ?>
+
+                                                                <option value="<?=$idkke;?>" <?php if($idkke == $idkategori){echo("selected"); } ?>><?=$valuee;?></option>
+
+                                                                <?php
+                                                                    }
+                                                                ?>
+                                                            </select>
+                                                            <input type="hidden" name="idkomplain" value="<?=$idkomplain;?>">
+                                                            <button type="submit" class="btn btn-primary" name="updatekomplain">Submit</button>
+                                                        </div>
+                                                    </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Delete The Modal -->
+                                            <div class="modal fade" id="delete<?=$idkomplain;?>">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Hapus Pelanggan?</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <form method="post">
+                                                        <div class="modal-body">
+                                                            Apakah anda yakin ingin menghapus komplain <?=$namapelanggan;?>?
+                                                            <input type="hidden" name="idkomplain" value="<?=$idkomplain;?>">
+                                                            <br>
+                                                            <br>
+                                                            <button type="submit" class="btn btn-danger" name="hapuskomplain">Hapus</button>
+                                                        </div>
+                                                    </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         <?php 
                                         };
                                         ?>
@@ -68,6 +149,9 @@ require 'cek.php';
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
+                        <a href="komplain_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -108,10 +192,22 @@ require 'cek.php';
                 <div class="modal-body">
                     <input type="text" name="namapelanggan" placeholder="Nama Pelanggan" class="form-control" required>
                     <br>
-                    <input type="date" name="tanggalkomplain" placeholder="Tanggal" class="form-control" required>
-                    <br>
                     <input type="text" name="komplain" class="form-control" placeholder="Komplain/Kritik/Saran" required>
                     <br>
+                    <select name="kategori" class="form-control mb-2">
+                        <?php 
+                        $data = mysqli_query($conn, "select * from kategori_komplain");
+                        while($fetcharray = mysqli_fetch_array($data)){
+                            $valuen = $fetcharray['nama_kategori'];
+                            $idkkn = $fetcharray['id'];
+                        ?>
+
+                        <option value="<?=$idkkn;?>"><?=$valuen;?></option>
+
+                        <?php
+                        }
+                        ?>
+                    </select>
                     <button type="submit" class="btn btn-primary" name="addnewcomplain">Submit</button>
                 </div>
             </form>

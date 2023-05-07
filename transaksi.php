@@ -146,6 +146,9 @@ require 'cek.php';
                             </div>
                         </div>
                     </div>
+                    <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
+                        <a href="tansaksi_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
+                    </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
@@ -216,10 +219,16 @@ require 'cek.php';
                         ?>
                     </select>
                     <br>
-                    <button type="button" class="btn btn-primary mb-2" name="tambahproduk">Tambah Produk</button>
+                    <form method="post">
+                        
+                        <button type="submit" class="btn btn-primary mb-2" name="tambahproduk">Tambah Produk</button>
+                    </from>
                     
                     <div class="mb-2">
                         <?php 
+                            if(isset($_POST['tambahproduk'])) {
+                                array_push($dataprodukbaru, array("namaproduk"=>"aa", "qty"=>1, "prc_satuan"=>123, "prc_total"=>321));
+                            }
 
                             foreach($dataprodukbaru as $produk) {
                                 ?>
@@ -241,4 +250,7 @@ require 'cek.php';
             </div>
         </div>
     </div>
+    <script type="javascript">
+        alert("aaa");
+    </script>
 </html>

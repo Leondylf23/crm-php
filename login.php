@@ -40,7 +40,7 @@ if(!isset($_SESSION['log'])){
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Login</title>
+        <title>Masuk</title>
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     </head>
@@ -53,7 +53,7 @@ if(!isset($_SESSION['log'])){
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <!-- <h1>Welcome To PT. XYZ</h1> -->
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Masuk</h3></div>
                                     <div class="card-body">
                                         <form method="post">
                                             <div class="form-floating mb-3">

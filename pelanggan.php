@@ -41,6 +41,7 @@ require 'cek.php';
                                             <th>Nama Pelanggan</th>
                                             <th>Alamat</th>
                                             <th>Telp</th>
+                                            <th>Prioritas</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -54,6 +55,7 @@ require 'cek.php';
                                             $namapelanggan = $data['namapelanggan'];
                                             $alamat = $data['alamat'];
                                             $telp = $data['telp'];
+                                            $prioritas = $data['prioritas'];
                                             // $idp = $data['idpelanggan'];
                                         
                                         ?>
@@ -65,6 +67,7 @@ require 'cek.php';
                                             <td><?=$namapelanggan;?></td>
                                             <td><?=$alamat;?></td>
                                             <td>(+62) <?=$telp;?></td>
+                                            <td><?=$prioritas;?></td>
                                             <td>
                                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idpelanggan;?>">
                                                     Edit

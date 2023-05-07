@@ -9,8 +9,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Profil</a></li>
-                        <li><a class="dropdown-item" href="#!">Notifikasi</a></li>
+                        <li><a class="dropdown-item" href="user.php">Profil</a></li>
+                        <li><a class="dropdown-item" href="notifikasi.php">Notifikasi</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <?php 
                             if (isset($_SESSION['log'])) {
@@ -33,11 +33,21 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Menu</div>
-                            <a class="nav-link" href="charts.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Dashboard
-                            </a>
+                            <div class="sb-sidenav-menu-heading">Menu</div>    
+                            <?php 
+                                if(isset($_SESSION['role'])) {
+                                    if($_SESSION['role'] == 1) {
+                                        echo(
+                                            '
+                                            <a class="nav-link" href="charts.php">
+                                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                                Dashboard
+                                            </a>
+                                            '
+                                        );
+                                    }
+                                } 
+                            ?>
                             <a class="nav-link" href="pelanggan.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Pelanggan
@@ -50,7 +60,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Transaksi Penjualan
                             </a>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="penjadwalan.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Penjadwalan
                             </a>                            

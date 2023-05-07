@@ -81,15 +81,120 @@ if(isset($_POST['addnewtransaction'])){
 //Menambah Komplain Baru
 if(isset($_POST['addnewcomplain'])){
     $namapelanggan = $_POST['namapelanggan'];
-    $tanggalkomplain = $_POST['tanggalkomplain'];
     $komplain = $_POST['komplain'];
+    $katg_komplain = $_POST['kategori'];
 
-    $addtotable = mysqli_query($conn, "insert into komplain (nama, tanggal, komplain) values('$namapelanggan','$tanggalkomplain', '$komplain')");
+    $addtotable = mysqli_query($conn, "insert into komplain (nama, komplain, idkategori) values('$namapelanggan', '$komplain', '$katg_komplain')");
     if($addtotable){
         header('location:komplain.php');
     } else{
         echo 'Gagal';
         header('location:komplain.php');
+    }
+}
+
+//Edit Komplain
+if(isset($_POST['updatekomplain'])){
+    $namapelanggan = $_POST['namapelanggan'];
+    $komplain = $_POST['komplain'];
+    $katg_komplain = $_POST['kategori'];
+    $idkomplainedit = $_POST['idkomplain'];
+
+    $addtotable = mysqli_query($conn, "update komplain set namapelanggan='$namapelanggan', komplain='$komplain', idkategori='$katg_komplain' where idkomplain = '$idkomplainedit'");
+    if($addtotable){
+        header('location:komplain.php');
+    } else{
+        echo 'Gagal';
+        header('location:komplain.php');
+    }
+}
+
+//Delete Komplain
+if(isset($_POST['hapuskomplain'])){
+    $idkomplaindelete = $_POST['idkomplain'];
+
+    $addtotable = mysqli_query($conn, "update komplain set is_active=0 where idkomplain = '$idkomplaindelete'");
+    if($addtotable){
+        header('location:komplain.php');
+    } else{
+        echo 'Gagal';
+        header('location:komplain.php');
+    }
+}
+
+//Pulihkan Komplain
+if(isset($_POST['pulihkomplain'])){
+    $idkomplainpulih = $_POST['idkomplain'];
+
+    $addtotable = mysqli_query($conn, "update komplain set is_active=1 where idkomplain = '$idkomplainpulih'");
+    if($addtotable){
+        header('location:komplain_recovery.php');
+    } else{
+        echo 'Gagal';
+        header('location:komplain_recovery.php');
+    }
+}
+
+//Menambah Jadwal Baru
+if(isset($_POST['tambahjadwal'])){
+    $admin = $_POST['admin'];
+    $aktifitas = $_POST['aktifitas'];
+    $deskripsi = $_POST['deskripsi'];
+    $kategori = $_POST['kategori'];
+    $tglmulai = $_POST['tglmulai'];
+    $tglselesai = $_POST['tglselesai'];
+
+    $addtotable = mysqli_query($conn, "insert into jadwal (adminid, aktifitas, deskripsi, tgl_pelaksanaan, tgl_selesai, kategori) values ('$admin', '$aktifitas', '$deskripsi', '$tglmulai', '$tglselesai', '$kategori')");
+    if($addtotable){
+        header('location:penjadwalan.php');
+    } else{
+        echo 'Gagal';
+        header('location:penjadwalan.php');
+    }
+}
+
+//update Jadwal
+if(isset($_POST['updatejadwal'])){
+    $idjadwal = $_POST['idjadwal'];
+    $admin = $_POST['admin'];
+    $aktifitas = $_POST['aktifitas'];
+    $deskripsi = $_POST['deskripsi'];
+    $kategori = $_POST['kategori'];
+    $tglmulai = $_POST['tglmulai'];
+    $tglselesai = $_POST['tglselesai'];
+
+    $addtotable = mysqli_query($conn, "update jadwal set adminid = '$admin', aktifitas = '$aktifitas', deskripsi = '$deskripsi', tgl_pelaksanaan = '$tglmulai', tgl_selesai = '$tglselesai', kategori = '$kategori' where id = '$idjadwal')");
+    if($addtotable){
+        header('location:penjadwalan.php');
+    } else{
+        echo 'Gagal';
+        header('location:penjadwalan.php');
+    }
+}
+
+//hapus Jadwal
+if(isset($_POST['hapusjadwal'])){
+    $idjadwal = $_POST['idjadwal'];
+    
+    $addtotable = mysqli_query($conn, "update jadwal set is_active = 0 where id = $idjadwal");
+    if($addtotable){
+        header('location:penjadwalan.php');
+    } else{
+        echo 'Gagal';
+        header('location:penjadwalan.php');
+    }
+}
+
+//Pemulihan Jadwal
+if(isset($_POST['pulihjadwal'])){
+    $idjadwal = $_POST['idjadwal'];
+    
+    $addtotable = mysqli_query($conn, "update jadwal set is_active = 1 where id = $idjadwal");
+    if($addtotable){
+        header('location:penjadwalan_recovery.php');
+    } else{
+        echo 'Gagal';
+        header('location:penjadwalan_recovery.php');
     }
 }
 
@@ -128,14 +233,13 @@ if(isset($_POST['hapuspelanggan'])){
 if(isset($_POST['pulihpelanggan'])){
     $idpelanggan = $_POST['idpelanggan'];
 
-    // $hapus = mysqli_query($conn, "delete from pelanggan where idpelanggan = '$idpelanggan'");
-    $hapus = mysqli_query($conn, "update pelanggan set is_active = 0 where idpelanggan = '$idpelanggan'");
+    $hapus = mysqli_query($conn, "update pelanggan set is_active = 1 where idpelanggan = '$idpelanggan'");
 
     if($hapus){
-        header('location:pelanggan.php');
+        header('location:pelanggan_recovery.php');
     } else{
         echo 'Gagal';
-        header('location:pelanggan.php');
+        header('location:pelanggan_recovery.php');
     }
 }
 
