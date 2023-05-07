@@ -16,7 +16,8 @@ if(isset($_POST['login'])){
     if($hitung>0){
         $_SESSION['log'] = 'True';
         $_SESSION['userid'] = $datas['iduser'];
-        $_SESSION['userName'] = $datas['email'];
+        $_SESSION['userName'] = $datas['nama'];
+        $_SESSION['role'] = $datas['role'];
         header('location:index.php');
     } else {
         echo '<script>alert("Login gagal, silahakan login kembali!")</script>';
@@ -57,23 +58,19 @@ if(!isset($_SESSION['log'])){
                                         <form method="post">
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" name="email" id="inputEmail" type="email" placeholder="name@example.com" />
-                                                <label for="inputEmail">Email address</label>
+                                                <label for="inputEmail">Alamat Email</label>
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" name="password" id="inputPassword" type="password" placeholder="Password" />
                                                 <label for="inputPassword">Password</label>
                                             </div>
-                                            <div class="form-check mb-3">
-                                                <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
-                                                <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                            <div class="d-grid">
                                                 <button class="btn btn-primary" name="login">Login</button>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="card-footer text-center py-3">
-                                        <div class="small"><a href="register.php">Need an account? Sign up!</a></div>
+                                        <div class="small"><a href="register.php">Belum punya akun? Daftar di sini!</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -82,6 +79,15 @@ if(!isset($_SESSION['log'])){
                 </main>
             </div>
         </div>
+        <div id="layoutAuthentication_footer">
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Thendy Rhenaldy 2023</div>                
+                        </div>
+                    </div>
+                </footer>
+            </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
     </body>

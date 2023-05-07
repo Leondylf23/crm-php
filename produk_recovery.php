@@ -22,14 +22,8 @@ require 'cek.php';
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Data Produk</h1>
+                        <h1 class="mt-4">Pemulihan Data Produk</h1>
                         <div class="card mb-4">
-                            <div class="card-header">
-                                <!-- Button to Open the Modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Tambah Produk
-                                </button>
-                            </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
@@ -48,9 +42,9 @@ require 'cek.php';
                                         </tr>
                                     </thead>
                                     <tbody>
-
+    
                                     <?php 
-                                        $ambilsemuadataproduk = mysqli_query($conn, "select * from produk where is_active = 1");
+                                        $ambilsemuadataproduk = mysqli_query($conn, "select * from produk where is_active = 0");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadataproduk)){
                                             $idproduk = $data['idproduk'];
@@ -65,7 +59,7 @@ require 'cek.php';
                                             $keterangan = $data['keterangan'];
                                         
                                         ?>
-
+    
                                         <tr>
                                             <td><?=$i++;?></td>
                                             <!-- <td><?=$idproduk;?></td> -->
@@ -79,103 +73,29 @@ require 'cek.php';
                                             <td><?=$hargajual;?></td>
                                             <td><?=$keterangan;?></td>
                                             <td>
-                                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idproduk;?>">
-                                                    Edit
-                                                </button>
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idproduk;?>">
-                                                    Hapus
-                                                </button>
+                                                <form method="post">
+                                                    <input type="hidden" name="idproduk" value="<?=$idproduk;?>">
+                                                    <button type="submit" class="btn btn-warning" name="pulihproduk">
+                                                        Pulihkan
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
-
-                                        <!-- Edit The Modal -->
-                                        <div class="modal fade" id="edit<?=$idproduk;?>">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-
-                                                    <!-- Modal Header -->
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Detail Produk</h4>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                    </div>
-
-                                                    <!-- Modal body -->
-                                                    <form method="post">
-                                                        <div class="modal-body">
-                                                            <input type="text" name="kodeproduk" value="<?=$kodeproduk;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="namaproduk" value="<?=$namaproduk;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="jenisproduk" value="<?=$jenisproduk;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="merkproduk" value="<?=$merkproduk;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="tipeitem" value="<?=$tipeitem;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="satuan" value="<?=$satuan;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="number" name="hargapokok" value="<?=$hargapokok;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="number" name="hargajual" value="<?=$hargajual;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="keterangan" value="<?=$keterangan;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="hidden" name="idproduk" value="<?=$idproduk;?>">
-                                                            <button type="submit" class="btn btn-primary" name="updateproduk">Submit</button>
-                                                        </div>
-                                                    </form>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Delete The Modal -->
-                                            <div class="modal fade" id="delete<?=$idproduk;?>">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-
-                                                    <!-- Modal Header -->
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Hapus Produk?</h4>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                    </div>
-
-                                                    <!-- Modal body -->
-                                                    <form method="post">
-                                                        <div class="modal-body">
-                                                            Apakah anda yakin ingin menghapus <?=$namaproduk;?>?
-                                                            <input type="hidden" name="idproduk" value="<?=$idproduk;?>">
-                                                            <br>
-                                                            <br>
-                                                            <button type="submit" class="btn btn-danger" name="hapusproduk">Hapus</button>
-                                                        </div>
-                                                    </form>
-
-                                                    </div>
-                                                </div>
-                                            </div>
                                         <?php 
                                         };
                                         ?>
                                     </tbody>
                                 </table>
-                            </div>                                 
+    
+                            </div>
+                                   
                         </div>
-                    </div>
-
-                    <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
-                        <a href="produk_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2022</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
+                            <div class="text-muted">Copyright &copy; Thendy Rhenaldy 2023</div>
                         </div>
                     </div>
                 </footer>

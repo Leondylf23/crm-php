@@ -47,7 +47,7 @@ require 'cek.php';
                                     <tbody>
                                         
                                         <?php 
-                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select * from pelanggan");
+                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select * from pelanggan where is_active = 1");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatapelanggan)){
                                             $idpelanggan = $data['idpelanggan'];
@@ -138,6 +138,9 @@ require 'cek.php';
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
+                        <a href="pelanggan_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">

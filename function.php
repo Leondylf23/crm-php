@@ -113,7 +113,24 @@ if(isset($_POST['updatepelanggan'])){
 if(isset($_POST['hapuspelanggan'])){
     $idpelanggan = $_POST['idpelanggan'];
 
-    $hapus = mysqli_query($conn, "delete from pelanggan where idpelanggan = '$idpelanggan'");
+    // $hapus = mysqli_query($conn, "delete from pelanggan where idpelanggan = '$idpelanggan'");
+    $hapus = mysqli_query($conn, "update pelanggan set is_active = 0 where idpelanggan = '$idpelanggan'");
+
+    if($hapus){
+        header('location:pelanggan.php');
+    } else{
+        echo 'Gagal';
+        header('location:pelanggan.php');
+    }
+}
+
+//Pulih Pelanggan dari database "Pelanggan"
+if(isset($_POST['pulihpelanggan'])){
+    $idpelanggan = $_POST['idpelanggan'];
+
+    // $hapus = mysqli_query($conn, "delete from pelanggan where idpelanggan = '$idpelanggan'");
+    $hapus = mysqli_query($conn, "update pelanggan set is_active = 0 where idpelanggan = '$idpelanggan'");
+
     if($hapus){
         header('location:pelanggan.php');
     } else{
@@ -148,12 +165,27 @@ if(isset($_POST['updateproduk'])){
 if(isset($_POST['hapusproduk'])){
     $idproduk = $_POST['idproduk'];
 
-    $hapusproduk = mysqli_query($conn, "delete from produk where idproduk = '$idproduk'");
+    // $hapusproduk = mysqli_query($conn, "delete from produk where idproduk = '$idproduk'");
+    $hapusproduk = mysqli_query($conn, "update produk set is_active = 0 where idproduk = '$idproduk'");
     if($hapusproduk){
         header('location:produk.php');
     } else{
         echo 'Gagal';
         header('location:produk.php');
+    }
+}
+
+//pulihkan Produk dari database "Produk"
+if(isset($_POST['pulihproduk'])){
+    $idproduk = $_POST['idproduk'];
+
+    // $hapusproduk = mysqli_query($conn, "delete from produk where idproduk = '$idproduk'");
+    $hapusproduk = mysqli_query($conn, "update produk set is_active = 1 where idproduk = '$idproduk'");
+    if($hapusproduk){
+        header('location:produk_recovery.php');
+    } else{
+        echo 'Gagal';
+        header('location:produk_recovery.php');
     }
 }
 

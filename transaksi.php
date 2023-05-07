@@ -36,42 +36,38 @@ require 'cek.php';
                                         <tr>
                                             <th>No.</th>
                                             <th>Tanggal Transaksi</th>
-                                            <th>Id Pelanggan</th>
-                                            <!-- <th>Nama Pelanggan</th> -->
-                                            <th>Nama Produk</th>
-                                            <th>Harga Jual</th>
-                                            <th>Modal</th>
-                                            <th>Untung</th>
+                                            <th>Nama Pelanggan</th>
+                                            
+                                            <th>Total Transaksi</th>
+                                            <th>Metode Pembayaran</th>
+
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php 
-                                        $ambilsemuadatatransaksi = mysqli_query($conn, "select * from transaksi");
+                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, p.namapelanggan, t.totaltransaksi, mp.nama_metode FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatatransaksi)){
                                             $idtransaksi = $data['idtransaksi'];
                                             $tanggaltransaksi = $data['tanggal_transaksi'];
-                                            $idpelanggan = $data['idpelanggan'];
-                                            // $namapelanggan = $data['nama_pelanggan'];
-                                            $idproduk = $data['idproduk'];
-                                            $hargajual = $data['harga_jual'];
-                                            $modal = $data['harga_modal'];
-                                            $untung = $data['untung'];
+                                            
+                                            $namapelanggan = $data['namapelanggan'];
+                                            
+                                            $totaltransaksi = $data['totaltransaksi'];
+                                            $nama_metode = $data['nama_metode'];
+                                            
                                         
                                         ?>
 
 
                                         <tr>
                                             <td><?=$i++;?></td>
-                                            <!-- <td><?=$idtransaksi;?></td> -->
                                             <td><?=$tanggaltransaksi;?></td>
-                                            <td><?=$idpelanggan;?></td>
-                                            <!-- <td><?=$namapelanggan;?></td> -->
-                                            <td><?=$idproduk;?></td>
-                                            <td><?=$hargajual;?></td>
-                                            <td><?=$modal;?></td>
-                                            <td><?=$untung;?></td>
+                                            <td><?=$namapelanggan;?></td>
+                                            <td><?=$totaltransaksi;?></td>
+                                            <td><?=$nama_metode;?></td>
+                                            
                                             <td>
                                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idtransaksi;?>">
                                                     Edit
@@ -186,11 +182,10 @@ require 'cek.php';
 
             <!-- Modal body -->
             <form method="post">
+                <?php 
+                    $dataprodukbaru = array();
+                ?>
                 <div class="modal-body">
-                    <input type="date" name="tanggaltransaksi" placeholder="Tanggal Transaksi" class="form-control" required>
-                    <br>
-                    <!-- <input type="text" name="namapelanggan" placeholder="Nama Pelanggan" class="form-control" required>
-                    <br> -->
                     <select name="pelanggannya" class="form-control">
                         <?php 
                         $ambilsemuadatapelanggannya = mysqli_query($conn, "select * from pelanggan");
@@ -206,29 +201,39 @@ require 'cek.php';
                         ?>
                     </select>
                     <br>
-                    <select name="produknya" class="form-control">
+                    <select name="metodepembayaran" class="form-control">
                         <?php 
-                        $ambilsemuadatanya = mysqli_query($conn, "select * from produk");
-                        while($fetcharray = mysqli_fetch_array($ambilsemuadatanya)){
-                            $namaproduknya = $fetcharray['nama_item'];
-                            $idproduknya = $fetcharray['idproduk'];
+                        $data = mysqli_query($conn, "select * from metode_pembayaran");
+                        while($fetcharray = mysqli_fetch_array($data)){
+                            $metode = $fetcharray['nama_metode'];
+                            $idmp = $fetcharray['id'];
                         ?>
 
-                        <option value="<?=$idproduknya;?>"><?=$namaproduknya;?></option>
+                        <option value="<?=$idmp;?>"><?=$metode;?></option>
 
                         <?php
                         }
                         ?>
                     </select>
                     <br>
-                    <!-- <input type="text" name="namaproduk" placeholder="Nama Produk" class="form-control" required>
-                    <br> -->
-                    <input type="number" name="hargajual" class="form-control" placeholder="Harga Jual" required>
-                    <br>
-                    <input type="number" name="modal" class="form-control" placeholder="Modal" required>
-                    <br>
-                    <input type="number" name="untung" class="form-control" placeholder="Untung" required>
-                    <br>
+                    <button type="button" class="btn btn-primary mb-2" name="tambahproduk">Tambah Produk</button>
+                    
+                    <div class="mb-2">
+                        <?php 
+
+                            foreach($dataprodukbaru as $produk) {
+                                ?>
+                                <div>
+                                    <a><?= $produk['namaproduk'] ?></a>
+                                    <a><?= $produk['qty'] ?></a>
+                                    <a><?= $produk['prc_satuan'] ?></a>
+                                    <a><?= $produk['prc_total'] ?></a>
+                                </div>
+                        <?php   
+                        }
+                        ?>
+                    </div>
+                    
                     <button type="submit" class="btn btn-primary" name="addnewtransaction">Submit</button>
                 </div>
             </form>

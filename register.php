@@ -4,8 +4,10 @@ require 'function.php';
 
 // cek login terdaftar apa kagak
 if(isset($_POST['register'])){
+    $nama = $_POST['nama'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $role = $_POST['role'];
     // echo "<script>alert('test!')</script>";
     //cek apakah email sudah digunakan
     $sql_check = "SELECT * FROM login WHERE email='$email'";
@@ -16,7 +18,7 @@ if(isset($_POST['register'])){
     echo "<script>alert('email sudah digunakan!')</script>";
     } else {
     //insert data ke database
-    $sql_insert = "INSERT INTO login (email, password) VALUES ('$email', '$password')";
+    $sql_insert = "INSERT INTO login (email, password, role, nama) VALUES ('$email', '$password', '$role', '$nama')";
     if ($conn->query($sql_insert) === TRUE) {
         header('location:login.php');
         // echo "<script>alert('Registrasi berhasil!')</script>";
@@ -49,40 +51,37 @@ if(isset($_POST['register'])){
                         <div class="row justify-content-center">
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Buat Account</h3></div>
                                     <div class="card-body">
                                         <form method="post">
-                                            <!-- <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" />
-                                                        <label for="inputFirstName">First name</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" />
-                                                        <label for="inputLastName">Last name</label>
-                                                    </div>
-                                                </div>
-                                            </div> -->
+                                            
+                                            <div class="form-floating mb-3">
+                                                <input class="form-control" id="inputLastName" name="nama" type="text" placeholder="Nama" />
+                                                <label for="inputLastName">Nama</label>
+                                            </div>
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="inputEmail" type="email" name="email" placeholder="name@example.com" />
-                                                <label for="inputEmail">Email address</label>
+                                                <label for="inputEmail">Alamat Email</label>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" id="inputPassword" type="password" name="password" placeholder="Create a password" />
+                                                        <input class="form-control" id="inputPassword" type="password" name="password" placeholder="Buatlah password" />
                                                         <label for="inputPassword">Password</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" id="inputPasswordConfirm" type="password" name="checkpassword" placeholder="Confirm password" required/>
-                                                        <label for="inputPasswordConfirm">Confirm Password</label>
+                                                        <input class="form-control" id="inputPasswordConfirm" type="password" name="checkpassword" placeholder="konfirmasi password" required/>
+                                                        <label for="inputPasswordConfirm">Konfirmasi Password</label>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <select name="role" class="form-control">
+                                                    <option value="1">Super Admin</option>
+                                                    <option value="2">Admin</option>
+                                                </select>
                                             </div>
                                             <div class="mt-4 mb-0">
                                                 <div class="d-grid">
@@ -92,7 +91,7 @@ if(isset($_POST['register'])){
                                         </form>
                                     </div>
                                     <div class="card-footer text-center py-3">
-                                        <div class="small"><a href="login.php">Have an account? Go to login</a></div>
+                                        <div class="small"><a href="login.php">Punya akun? Login.</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -104,12 +103,7 @@ if(isset($_POST['register'])){
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2022</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
+                            <div class="text-muted">Copyright &copy; Thendy Rhenaldy 2023</div>                
                         </div>
                     </div>
                 </footer>
