@@ -27,12 +27,18 @@ require 'cek.php';
 
 
                         <div class="card mb-4">
-                            <div class="card-header">
-                                <!-- Button to Open the Modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Tambah Jadwal
-                                </button>
-                            </div>
+                            <?php
+                                if($_SESSION['role'] == 1) {
+                                    echo('
+                                    <div class="card-header">
+                                        <!-- Button to Open the Modal -->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                                        Tambah Jadwal
+                                        </button>
+                                    </div>
+                                    ');
+                                }
+                            ?>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
@@ -46,15 +52,20 @@ require 'cek.php';
                                             <th>Dibuat Tgl</th>
                                             <th>Kategori</th>
                                             <th>Status</th>
-                                            <th>Aksi</th>
+                                            <?php if($_SESSION['role'] == 1) {echo('<th>Aksi</th>');} ?>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         
                                         <?php 
-                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select j.id, l.iduser, l.nama, j.aktifitas, j.deskripsi, j.tgl_pelaksanaan, j.tgl_selesai, j.added_date, j.status, k.id as idkategori, k.nama_kategori from jadwal j inner join login l on j.adminid = l.iduser inner join kategori_jadwal k on j.kategori = k.id where j.is_active = 1");
+                                        $adminid = $_SESSION['userid'];
+                                        if($_SESSION['role'] == 1) {
+                                            $datapenjadwalan = mysqli_query($conn, "select j.id, l.iduser, l.nama, j.aktifitas, j.deskripsi, j.tgl_pelaksanaan, j.tgl_selesai, j.added_date, j.status, k.id as idkategori, k.nama_kategori from jadwal j inner join login l on j.adminid = l.iduser inner join kategori_jadwal k on j.kategori = k.id where j.is_active = 1");
+                                        } else {
+                                            $datapenjadwalan = mysqli_query($conn, "select j.id, l.iduser, l.nama, j.aktifitas, j.deskripsi, j.tgl_pelaksanaan, j.tgl_selesai, j.added_date, j.status, k.id as idkategori, k.nama_kategori from jadwal j inner join login l on j.adminid = l.iduser inner join kategori_jadwal k on j.kategori = k.id where j.is_active = 1 and adminid = $adminid");
+                                        }
                                         $i = 1;
-                                        while($data=mysqli_fetch_array($ambilsemuadatapelanggan)){
+                                        while($data=mysqli_fetch_array($datapenjadwalan)){
                                             $idjadwal = $data['id'];
                                             $iduser = $data['iduser'];
                                             $nama = $data['nama'];
@@ -79,7 +90,7 @@ require 'cek.php';
                                             <td><?=$adddate;?></td>
                                             <td><?=$kategori;?></td>
                                             <td><?=$status;?></td>
-                                            
+                                            <?php if($_SESSION['role'] == 1) {echo('
                                             <td>
                                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idjadwal;?>">
                                                     Edit
@@ -88,6 +99,9 @@ require 'cek.php';
                                                     Delete
                                                 </button>
                                             </td>
+                                                
+                                                ');} ?>
+                                            
                                         </tr>
                                             <!-- Edit The Modal -->
                                             <div class="modal fade" id="edit<?=$idjadwal;?>">

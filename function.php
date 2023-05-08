@@ -324,4 +324,61 @@ if(isset($_POST['hapustransaksi'])){
         header('location:transaksi.php');
     }
 }
+
+
+//Ubah profil
+if(isset($_POST['ubahprofil'])){
+    $iduser = $_SESSION['userid'];
+    $nama = $_POST['nama'];
+
+    $updateuser = mysqli_query($conn, "update login set nama = '$nama' where iduser = $iduser");
+
+    if($updateuser){
+        if(strlen($nama) < 18) {
+            $_SESSION['userName'] = $nama;
+        } else {
+            $_SESSION['userName'] = substr($nama, 0, 18). " ... ";
+        }
+        header('location:user.php');
+    } else{
+        echo '<script>alert("Gagal!")</script>';
+        // header('location:user.php');
+    }
+}
+
+
+//Ubah password
+if(isset($_POST['ubahpassword'])){
+    $iduser = $_SESSION['userid'];
+    $oldpassword = $_POST['oldpass'];
+    $newpassword = $_POST['newpass'];
+    $confirmpassword = $_POST['confirmpass'];
+
+    if($newpassword != $confirmpassword) {
+        echo '<script>alert("Password baru dan konfirmasi password harus sama!")</script>';
+    } else {
+        $passdb = "";
+        $sqldata = mysqli_query($conn, "select password from login where iduser = $iduser limit 1");
+        while($fetcharray = mysqli_fetch_array($sqldata)){
+            $passdb = $fetcharray['password'];
+        }
+
+        if($oldpassword != $passdb) {
+            echo '<script>alert("Password lama salah!")</script>';
+        } else {
+            $updateuserpass = mysqli_query($conn, "update login set password = '$newpassword' where iduser = $iduser");
+        
+            if($updateuserpass){
+                header('location:user.php');
+            } else{
+                echo '<script>alert("Gagal!")</script>';
+                // header('location:user.php');
+            }
+
+        }
+    }
+
+}
+
+
 ?>

@@ -16,7 +16,12 @@ if(isset($_POST['login'])){
     if($hitung>0){
         $_SESSION['log'] = 'True';
         $_SESSION['userid'] = $datas['iduser'];
-        $_SESSION['userName'] = $datas['nama'];
+        $_SESSION['userName'] = substr($datas['nama'], 0, 18). " ... ";
+        if(strlen($datas['nama']) < 18) {
+            $_SESSION['userName'] = $datas['nama'];
+        } else {
+            $_SESSION['userName'] = substr($datas['nama'], 0, 18). " ... ";
+        }
         $_SESSION['role'] = $datas['role'];
         header('location:index.php');
     } else {

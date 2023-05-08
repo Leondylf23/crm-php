@@ -23,8 +23,54 @@ require 'cek.php';
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Profil</h1>
+                        <h1 class="mt-4 mb-4">Profil</h1>
 
+                        <?php
+                            $nama = "";
+                            $email = "";
+                            $id = $_SESSION['userid'];
+
+                            $sqldata = mysqli_query($conn, "select email, nama from login where iduser = $id limit 1");
+                            while($fetcharray = mysqli_fetch_array($sqldata)){
+                                $nama = $fetcharray['nama'];
+                                $email = $fetcharray['email'];
+                            }
+                        ?>
+                        <div class="mb-4">
+                            <form method="post">
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" name="nama" id="inputNama" type="text" placeholder="Nama Lengkap" value="<?= $nama ?>" />
+                                    <label for="inputNama">Nama</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" name="email" id="inputEmail" type="email" placeholder="name@example.com" value="<?= $email ?>" disabled/>
+                                    <label for="inputEmail">Email</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <button class="btn btn-primary" name="ubahprofil">Ubah</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div>
+                            <form method="post">
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" name="oldpass" id="inputOldPass" type="password" />
+                                    <label for="inputOldPass">Password Lama</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" name="newpass" id="inputNewPass" type="password"/>
+                                    <label for="inputNewPass">Password Baru</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" name="confirmpass" id="inputCounfirmPass" type="password"/>
+                                    <label for="inputConfirmPass">Konfirmasi Password Baru</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <button class="btn btn-primary" name="ubahpassword">Ubah</button>
+                                </div>
+                            </form>
+                        </div>
 
                         
                     </div>

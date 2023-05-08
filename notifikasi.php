@@ -32,22 +32,20 @@ require 'cek.php';
                                     <thead>
                                         <tr>
                                             <th>No.</th>
-                                            <th>Nama Pelanggan</th>
-                                            <th>Alamat</th>
-                                            <th>Telp</th>
-                                            <th>Aksi</th>
+                                            <th>Notifikasi</th>
+                                            <th>Tanggal Masuk</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         
                                         <?php 
-                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select * from pelanggan where is_active = 0");
+                                        $userid = $_SESSION['userid'];
+                                        $datasql = mysqli_query($conn, "select * from notifikasi where is_active = 1 and userid = $userid");
                                         $i = 1;
-                                        while($data=mysqli_fetch_array($ambilsemuadatapelanggan)){
-                                            $idpelanggan = $data['idpelanggan'];
-                                            $namapelanggan = $data['namapelanggan'];
-                                            $alamat = $data['alamat'];
-                                            $telp = $data['telp'];
+                                        while($data=mysqli_fetch_array($datasql)){
+                                            $idnotif = $data['id'];
+                                            $isinotif = $data['isi_notif'];
+                                            $addeddate = $data['added_date'];
                                             // $idp = $data['idpelanggan'];
                                         
                                         ?>
@@ -55,18 +53,10 @@ require 'cek.php';
 
                                         <tr>
                                             <td><?=$i++;?></td>
-                                            <!-- <td><?=$idpelanggan;?></td> -->
-                                            <td><?=$namapelanggan;?></td>
-                                            <td><?=$alamat;?></td>
-                                            <td>(+62) <?=$telp;?></td>
-                                            <td>
-                                                <form method="post">
-                                                    <input type="hidden" name="idpelanggan" value="<?=$idpelanggan;?>">
-                                                    <button type="submit" name="pulihpelanggan" class="btn btn-warning">
-                                                        Pulihkan
-                                                    </button>
-                                                </form>
-                                            </td>
+                                            
+                                            <td><?=$isinotif;?></td>
+                                            <td><?=$addeddate;?></td>
+                                            
                                         </tr>
                                         <?php 
                                         };
