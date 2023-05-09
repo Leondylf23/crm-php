@@ -61,19 +61,46 @@ if(isset($_POST['addnewproduct'])){
 
 //Menambah Data Transaksi
 if(isset($_POST['addnewtransaction'])){
-    $tanggaltransaksi = $_POST['tanggaltransaksi'];
-    // $namapelanggan = $_POST['namapelanggan'];
-    $pelanggannya = $_POST['pelanggannya'];
-    $produknya = $_POST['produknya'];
-    $hargajual = $_POST['hargajual'];
-    $modal = $_POST['modal'];
-    $untung = $_POST['untung'];
+    $pelangganid = $_POST['pelanggannya'];
+    $pembayaranid = $_POST['metodepembayaran'];
+    $totalprice = $_POST['totalprice'];
 
-    $addtotransaksi = mysqli_query($conn, "insert into transaksi (tanggal_transaksi, idpelanggan, idproduk, harga_jual, harga_modal, untung) values('$tanggaltransaksi','$pelanggannya','$produknya', '$hargajual','$modal','$untung')");
+    $totalPrdk = $_POST['totaldata'];
+    echo "<script> alert($totalPrdk); </script>";
+    $produk = array();
+
+    for ($i=0; $i < $totalPrdk; $i++) { 
+        $prdk = "prdk-$i";
+        $qty = "qty-$i";
+        $prctotal = "prctotal-$i";
+        $deleted = "deleted-$i";
+
+        if(!$deleted) {
+            array_push($produk, array("produk"=>$_POST[$prdk], "qty"=>$_POST[$qty], "prc-total"=>$_POST[$prctotal]));
+        }
+    }
+    // $tes = $produk[0]['produk'];
+
+    $addtotransaksi = mysqli_query($conn, "insert into transaksi (idpelanggan, idmetode, totaltransaksi) values('$pelangganid','$pembayaranid','$totalprice')");
     if($addtotransaksi){
-        header('location:transaksi.php');
+
+        foreach ($produk as $a) {
+            $idtransaksi = mysqli_insert_id($conn);
+            $prdkid = $a['produk'];
+            $qtyData = $a['qty'];
+            $prcTotal = $a['prc-total'];
+
+            $addtotransaksidetail = mysqli_query($conn, "insert into transaksi_detail (idtransaksi, idproduk, qty, totalharga) values('$idtransksi','$produk','$prcTotal')");
+    
+            if($addtotransaksidetail) {
+                header('location:transaksi.php');    
+            } else {
+                echo '<script> alert("Gagal"); </script>';
+                header('location:transaksi.php');
+            }
+        }
     } else{
-        echo 'Gagal';
+        echo '<script> alert("Gagal"); </script>';
         header('location:transaksi.php');
     }
 }
@@ -316,7 +343,9 @@ if(isset($_POST['updatetransaksi'])){
 if(isset($_POST['hapustransaksi'])){
     $idtransaksi = $_POST['idtransaksi'];
 
-    $hapustransaksi = mysqli_query($conn, "delete from transaksi where idtransaksi = '$idtransaksi'");
+    // $hapustransaksi = mysqli_query($conn, "delete from transaksi where idtransaksi = '$idtransaksi'");
+    $hapustransaksi = mysqli_query($conn, "update transaksi set is_active = 0 where idtransaksi = '$idtransaksi'");
+
     if($hapustransaksi){
         header('location:transaksi.php');
     } else{
@@ -325,6 +354,20 @@ if(isset($_POST['hapustransaksi'])){
     }
 }
 
+//pulihkan transaksi dari database "Transaksi"
+if(isset($_POST['pulihtransaksi'])){
+    $idtransaksi = $_POST['idtransaksi'];
+
+    // $hapustransaksi = mysqli_query($conn, "delete from transaksi where idtransaksi = '$idtransaksi'");
+    $pulihtransaksi = mysqli_query($conn, "update transaksi set is_active = 1 where idtransaksi = '$idtransaksi'");
+
+    if($pulihtransaksi){
+        header('location:transaksi_recovery.php');
+    } else{
+        echo '<script> alert("gagal;"); </script>';
+        header('location:transaksi_recovery.php');
+    }
+}
 
 //Ubah profil
 if(isset($_POST['ubahprofil'])){
@@ -376,9 +419,7 @@ if(isset($_POST['ubahpassword'])){
             }
 
         }
-    }
-
+    } 
 }
-
 
 ?>

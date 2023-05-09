@@ -46,7 +46,7 @@ require 'cek.php';
                                     </thead>
                                     <tbody>
                                     <?php 
-                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, p.namapelanggan, t.totaltransaksi, mp.nama_metode FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode");
+                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, p.namapelanggan, t.totaltransaksi, mp.nama_metode FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 1");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatatransaksi)){
                                             $idtransaksi = $data['idtransaksi'];
@@ -69,8 +69,8 @@ require 'cek.php';
                                             <td><?=$nama_metode;?></td>
                                             
                                             <td>
-                                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idtransaksi;?>">
-                                                    Edit
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detil<?=$idtransaksi;?>">
+                                                    Detil
                                                 </button>
                                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idtransaksi;?>">
                                                     Delete
@@ -113,6 +113,61 @@ require 'cek.php';
                                                 </div>
                                             </div>
 
+                                            <!-- Detil -->
+                                            <div class="modal fade" id="detil<?=$idtransaksi;?>">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Detil Transaksi</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body">
+                                                        <input type="text" disabled value="<?=$tanggaltransaksi;?>" class="form-control">
+                                                        <input type="text" disabled value="<?=$namapelanggan;?>" class="form-control">
+                                                        <input type="text" disabled value="<?=$totaltransaksi;?>" class="form-control">
+                                                        <input type="text" disabled value="<?=$nama_metode;?>" class="form-control">
+                                                        <br>
+                                                        <h4>Detil - Detil Produk:</h4>
+                                                        <div style="height: max(40vh); overflow-y: auto;">
+                                                        <?php 
+                                                            $a = 0;
+                                                            $a++;
+                                                            $dataDetail = mysqli_query($conn, "select * from transaksi_detail td inner join produk p on td.idproduk = p.idproduk where td.idtransaksi = $idtransaksi");
+                                                            while($fetcharray = mysqli_fetch_array($dataDetail)){
+                                                                $namaItem = $fetcharray['nama_item'];
+                                                                $qtyTd = $fetcharray['qty'];
+                                                                $prcPrdk = $fetcharray['harga_jual'];
+                                                                $prcTotal = $fetcharray['totalharga'];
+                                                                
+
+                                                        ?>
+
+                                                        <div>
+                                                            <b><?= $namaItem ?></b>
+                                                            <br>
+                                                            <input type="text" disabled value="<?=$qtyTd;?>" class="form-control">
+                                                            <br>
+                                                            <input type="text" disabled value="<?=$prcPrdk;?>" class="form-control">
+                                                            <br>
+                                                            <input type="text" disabled value="<?=$prcTotal;?>" class="form-control">
+                                                            <br>
+                                                        </div>
+
+                                                        <?php
+                                                            } 
+                                                        ?>
+                                                        </div>
+                                                    </div>
+                                                    
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <!-- Delete The Modal -->
                                             <div class="modal fade" id="delete<?=$idtransaksi;?>">
                                                 <div class="modal-dialog">
@@ -147,7 +202,7 @@ require 'cek.php';
                         </div>
                     </div>
                     <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
-                        <a href="tansaksi_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
+                        <a href="transaksi_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -185,13 +240,10 @@ require 'cek.php';
 
             <!-- Modal body -->
             <form method="post">
-                <?php 
-                    $dataprodukbaru = array();
-                ?>
                 <div class="modal-body">
                     <select name="pelanggannya" class="form-control">
                         <?php 
-                        $ambilsemuadatapelanggannya = mysqli_query($conn, "select * from pelanggan");
+                        $ambilsemuadatapelanggannya = mysqli_query($conn, "select * from pelanggan where is_active = 1");
                         while($fetcharray = mysqli_fetch_array($ambilsemuadatapelanggannya)){
                             $namapelanggannya = $fetcharray['namapelanggan'];
                             $idpelanggannya = $fetcharray['idpelanggan'];
@@ -219,28 +271,15 @@ require 'cek.php';
                         ?>
                     </select>
                     <br>
-                    <form method="post">
+                    <input type="hidden" id="totalprice" name="totalprice" />
+                    <b id="totalHarga">Total Harga: 0</b>
+                    <br>
+                    <br>
+                    <button type="button" class="btn btn-primary mb-2" onclick=addItem()>Tambah Produk</button>
                         
-                        <button type="submit" class="btn btn-primary mb-2" name="tambahproduk">Tambah Produk</button>
-                    </from>
-                    
-                    <div class="mb-2">
-                        <?php 
-                            if(isset($_POST['tambahproduk'])) {
-                                array_push($dataprodukbaru, array("namaproduk"=>"aa", "qty"=>1, "prc_satuan"=>123, "prc_total"=>321));
-                            }
-
-                            foreach($dataprodukbaru as $produk) {
-                                ?>
-                                <div>
-                                    <a><?= $produk['namaproduk'] ?></a>
-                                    <a><?= $produk['qty'] ?></a>
-                                    <a><?= $produk['prc_satuan'] ?></a>
-                                    <a><?= $produk['prc_total'] ?></a>
-                                </div>
-                        <?php   
-                        }
-                        ?>
+                    <div class="mb-2" id="table-data" style="height: max(40vh); overflow-y: auto;">
+                        <input type="hidden" id="totaldata" name="totaldata" />
+                        <!-- Buat isi data -->
                     </div>
                     
                     <button type="submit" class="btn btn-primary" name="addnewtransaction">Submit</button>
@@ -250,7 +289,215 @@ require 'cek.php';
             </div>
         </div>
     </div>
-    <script type="javascript">
-        alert("aaa");
+    <script>
+        var i = 0;
+        var prdkOptions = [];
+        var addedPrdk = [];
+
+        <?php 
+            $dataa = mysqli_query($conn, "select * from produk where is_active = 1");
+            while($fetcharray = mysqli_fetch_array($dataa)){
+                $namaItem = $fetcharray['nama_item'];
+                $idPrdk = $fetcharray['idproduk'];
+                $prc = $fetcharray['harga_jual'];
+                echo("prdkOptions.push({id: '$idPrdk', nama: '$namaItem', prc: '$prc'});");
+            } 
+        ?>
+
+        function addItem() {
+            const tableData = document.getElementById("table-data");
+
+            var newElement = document.createElement("div");
+            newElement.setAttribute("id", "data-" + i);
+            
+            var h4 = document.createElement("h4");
+            h4.setAttribute("class", "modal-title mb-4");
+            // h4.setAttribute("id", "h4-"+i);
+            h4.innerHTML = "Item ";
+            newElement.appendChild(h4);
+
+            //data
+            const prdkElmnt = document.createElement("select");
+            prdkElmnt.setAttribute("id", "prdk-" + i);
+            prdkElmnt.setAttribute("class", "form-control mb-3");
+            prdkElmnt.setAttribute("placeholder", "Cari Produk");
+            prdkElmnt.setAttribute("name", "prdk-" + i);
+            prdkElmnt.setAttribute("onchange", "prdkOnChange("+ i +", this)");
+
+            const prdkOption = document.createElement("option");
+            prdkOption.setAttribute("value",0);
+            prdkOption.innerHTML = "Pilih Produk";
+            prdkElmnt.appendChild(prdkOption);
+
+            prdkOptions.forEach(e => {
+                const prdkOption = document.createElement("option");
+                prdkOption.setAttribute("value",e.id);
+                prdkOption.innerHTML = e.nama;
+                prdkElmnt.appendChild(prdkOption);
+            });
+            newElement.appendChild(prdkElmnt);
+
+            const qtyElmnt = document.createElement("input");
+            qtyElmnt.setAttribute("id", "qty-" + i);
+            qtyElmnt.setAttribute("class", "form-control mb-3");
+            qtyElmnt.setAttribute("type", "number");
+            qtyElmnt.setAttribute("name", "qty-" + i);
+            qtyElmnt.setAttribute("placeholder", "Kuantitas");
+            qtyElmnt.setAttribute("onchange", "qtyOnChage("+ i +", this)");
+            qtyElmnt.setAttribute("onkeyup", "qtyOnChage("+ i +", this)");
+            newElement.appendChild(qtyElmnt);
+
+            const prcSatuanElmnt = document.createElement("b");
+            prcSatuanElmnt.setAttribute("id", "prcSatuan-" + i);
+            prcSatuanElmnt.setAttribute("class", "");
+            prcSatuanElmnt.innerHTML = "Harga Satuan: 0";
+            newElement.appendChild(prcSatuanElmnt);
+
+            const prcSatuanHiddenElmnt = document.createElement("input");
+            prcSatuanHiddenElmnt.setAttribute("id", "prcSatuanHdn-" + i);
+            prcSatuanHiddenElmnt.setAttribute("type", "hidden");
+            prcSatuanHiddenElmnt.setAttribute("name", "prcsatuan-" + i);
+            prcSatuanHiddenElmnt.setAttribute("value", 0);
+            newElement.appendChild(prcSatuanHiddenElmnt);
+
+            const br = document.createElement("br");
+            newElement.appendChild(br);
+
+            const prcTotalElmnt = document.createElement("b");
+            prcTotalElmnt.setAttribute("id", "prcTotal-" + i);
+            prcTotalElmnt.setAttribute("class", "");
+            prcTotalElmnt.innerHTML = "Harga Total: 0";
+            newElement.appendChild(prcTotalElmnt);
+
+            const prcTotalHiddenElmnt = document.createElement("input");
+            prcTotalHiddenElmnt.setAttribute("id", "prcTotalHdn-" + i);
+            prcTotalHiddenElmnt.setAttribute("type", "hidden");
+            prcTotalHiddenElmnt.setAttribute("name", "prctotal-" + i);
+            prcTotalHiddenElmnt.setAttribute("value", 0);
+            newElement.appendChild(prcTotalHiddenElmnt);
+
+            const deleted = document.createElement("input");
+            deleted.setAttribute("id", "deleted-" + i);
+            deleted.setAttribute("type", "hidden");
+            deleted.setAttribute("name", "deleted-" + i);
+            deleted.setAttribute("value", false);
+            newElement.appendChild(deleted);
+
+            const br1 = document.createElement("br");
+            newElement.appendChild(br1);
+            const br2 = document.createElement("br");
+            newElement.appendChild(br2);
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.setAttribute("type", "button");
+            deleteBtn.setAttribute("class", "btn btn-danger");
+            deleteBtn.setAttribute("onclick", "removeItem("+i+")");
+            deleteBtn.innerHTML = "Hapus";
+            newElement.appendChild(deleteBtn);
+
+            const delBtn = document
+
+            i++;
+
+            const identifierElmnt = document.getElementById("totaldata");
+            identifierElmnt.innerHTML = i;
+
+            tableData.appendChild(newElement);
+        }
+
+        function prdkOnChange(dataId, element) {
+            const prcDataElmnt = document.getElementById("prcSatuan-"+dataId);
+            const prcDataHdnElmnt = document.getElementById("prcSatuanHdn-"+dataId);
+            const prcTotalElmnt = document.getElementById("prcTotal-"+dataId);
+            const prcTotalHdnElmnt = document.getElementById("prcTotalHdn-"+dataId);
+            const selectedId = element.value;
+            const qtyInputElmnt = document.getElementById("qty-"+dataId);
+            var prcData = 0;
+
+            if(selectedId != 0) {
+                prdkOptions.forEach(a => {
+                    if(a.id == selectedId) {
+                        prcData = a.prc;
+                    }
+                });
+    
+                prcDataElmnt.innerHTML = "Harga Satuan: "+prcData;
+                prcDataHdnElmnt.value = prcData;
+            } else {
+                prcDataElmnt.innerHTML = "Harga Satuan: "+0;
+                prcDataHdnElmnt.value = 0;
+                
+            }
+            
+            qtyOnChage(dataId, qtyInputElmnt)
+        }
+
+        function qtyOnChage(dataId, element) {
+            const prcTotalElmnt = document.getElementById("prcTotal-"+dataId);
+            const prcSatuanValue = document.getElementById("prcSatuanHdn-"+dataId).value;
+            const prcTotalHdnElmnt = document.getElementById("prcTotalHdn-"+dataId);
+            var qtyData = element.value;
+            var totalPrc = 0;
+
+            if(qtyData <= 0) {
+                element.value = 1;
+                prcTotalElmnt.innerHTML = "Harga Total: "+(prcSatuanValue*1);
+                totalPrc = prcSatuanValue*1;
+            } else {
+                prcTotalElmnt.innerHTML = "Harga Total: "+(prcSatuanValue*qtyData);
+                totalPrc = prcSatuanValue*qtyData;
+            }
+
+            
+            calculateAll(dataId, totalPrc);
+
+        }
+
+        function removeItem(dataId) {
+            const divElmnt = document.getElementById("data-"+dataId);
+            const deletedElmnt = document.getElementById("deleted-"+dataId);
+            
+            deletedElmnt.value = true;
+            divElmnt.setAttribute("style","display: none;");
+
+            calculateAll(dataId, 0);
+            
+        }
+
+        function calculateAll(dataId, totalPrc) {
+
+            if(addedPrdk.length > 0) {
+                var found = false;
+                addedPrdk.forEach(e => {
+                    if(e.id == dataId) {
+                        e.prc_total = totalPrc;
+                        found = true;
+                    }
+                });
+
+                if(!found) {
+                    addedPrdk.push({id: dataId, prc_total: totalPrc});    
+                    
+                }
+            } else {
+                addedPrdk.push({id: dataId, prc_total: totalPrc}); 
+                
+            }
+
+            const totalHargaHdn = document.getElementById("totalprice");
+            const totalHarga = document.getElementById("totalHarga");
+            var tempTotalHarga = 0;
+
+            addedPrdk.forEach(e => {
+                
+                tempTotalHarga += e.prc_total;
+                
+            });
+
+            totalHargaHdn.value = tempTotalHarga;
+            totalHarga.innerHTML = "Total Harga: " + tempTotalHarga;
+        }
+
+            
     </script>
 </html>
