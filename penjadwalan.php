@@ -90,17 +90,17 @@ require 'cek.php';
                                             <td><?=$adddate;?></td>
                                             <td><?=$kategori;?></td>
                                             <td><?=$status;?></td>
-                                            <?php if($_SESSION['role'] == 1) {echo('
+                                            <?php if($_SESSION['role'] == 1) {echo("
                                             <td>
-                                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idjadwal;?>">
+                                                <button type='button' class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#edit$idjadwal'>
                                                     Edit
                                                 </button>
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idjadwal;?>">
+                                                <button type='button' class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#delete$idjadwal'>
                                                     Delete
                                                 </button>
                                             </td>
                                                 
-                                                ');} ?>
+                                                ");} ?>
                                             
                                         </tr>
                                             <!-- Edit The Modal -->

@@ -64,45 +64,53 @@ if(isset($_POST['addnewtransaction'])){
     $pelangganid = $_POST['pelanggannya'];
     $pembayaranid = $_POST['metodepembayaran'];
     $totalprice = $_POST['totalprice'];
-
+    
     $totalPrdk = $_POST['totaldata'];
-    echo "<script> alert($totalPrdk); </script>";
     $produk = array();
-
+    
     for ($i=0; $i < $totalPrdk; $i++) { 
         $prdk = "prdk-$i";
         $qty = "qty-$i";
         $prctotal = "prctotal-$i";
         $deleted = "deleted-$i";
 
-        if(!$deleted) {
+        $isDeleted = $_POST[$deleted];
+        
+        if(($isDeleted == 0) && ($_POST[$prctotal] > 0)) {
             array_push($produk, array("produk"=>$_POST[$prdk], "qty"=>$_POST[$qty], "prc-total"=>$_POST[$prctotal]));
         }
     }
-    // $tes = $produk[0]['produk'];
-
-    $addtotransaksi = mysqli_query($conn, "insert into transaksi (idpelanggan, idmetode, totaltransaksi) values('$pelangganid','$pembayaranid','$totalprice')");
-    if($addtotransaksi){
-
-        foreach ($produk as $a) {
-            $idtransaksi = mysqli_insert_id($conn);
-            $prdkid = $a['produk'];
-            $qtyData = $a['qty'];
-            $prcTotal = $a['prc-total'];
-
-            $addtotransaksidetail = mysqli_query($conn, "insert into transaksi_detail (idtransaksi, idproduk, qty, totalharga) values('$idtransksi','$produk','$prcTotal')");
     
-            if($addtotransaksidetail) {
-                header('location:transaksi.php');    
-            } else {
-                echo '<script> alert("Gagal"); </script>';
-                header('location:transaksi.php');
+    if(count($produk) > 0) {
+        $addtotransaksi = mysqli_query($conn, "insert into transaksi (idpelanggan, idmetode, totaltransaksi) values('$pelangganid','$pembayaranid','$totalprice')");
+        if($addtotransaksi){
+            
+            $idtransaksi = mysqli_insert_id($conn);
+            
+            foreach ($produk as $a) {
+                $prdkid = $a['produk'];
+                $qtyData = $a['qty'];
+                $prcTotal = $a['prc-total'];
+    
+                $addtotransaksidetail = mysqli_query($conn, "insert into transaksi_detail (idtransaksi, idproduk, qty, totalharga) values('$idtransaksi','$prdkid', '$qtyData','$prcTotal')");
+                // echo "<script>alert('$qtyData')</script>";
+        
+                if($addtotransaksidetail) {
+                    // header('location:transaksi.php');    
+                } else {
+                    echo '<script> alert("Gagal"); </script>';
+                    // header('location:transaksi.php');
+                }
             }
+        } else{
+            echo '<script> alert("Gagal"); </script>';
+            // header('location:transaksi.php');
         }
-    } else{
-        echo '<script> alert("Gagal"); </script>';
-        header('location:transaksi.php');
+    } else {
+        echo '<script> alert("Data produk tidak boleh kosong!"); </script>';
+        // header('location:transaksi.php');
     }
+
 }
 
 //Menambah Komplain Baru
@@ -127,7 +135,7 @@ if(isset($_POST['updatekomplain'])){
     $katg_komplain = $_POST['kategori'];
     $idkomplainedit = $_POST['idkomplain'];
 
-    $addtotable = mysqli_query($conn, "update komplain set namapelanggan='$namapelanggan', komplain='$komplain', idkategori='$katg_komplain' where idkomplain = '$idkomplainedit'");
+    $addtotable = mysqli_query($conn, "update komplain set nama='$namapelanggan', komplain='$komplain', idkategori='$katg_komplain' where idkomplain = '$idkomplainedit'");
     if($addtotable){
         header('location:komplain.php');
     } else{
@@ -190,7 +198,7 @@ if(isset($_POST['updatejadwal'])){
     $tglmulai = $_POST['tglmulai'];
     $tglselesai = $_POST['tglselesai'];
 
-    $addtotable = mysqli_query($conn, "update jadwal set adminid = '$admin', aktifitas = '$aktifitas', deskripsi = '$deskripsi', tgl_pelaksanaan = '$tglmulai', tgl_selesai = '$tglselesai', kategori = '$kategori' where id = '$idjadwal')");
+    $addtotable = mysqli_query($conn, "update jadwal set adminid = '$admin', aktifitas = '$aktifitas', deskripsi = '$deskripsi', tgl_pelaksanaan = '$tglmulai', tgl_selesai = '$tglselesai', kategori = '$kategori' where id = '$idjadwal'");
     if($addtotable){
         header('location:penjadwalan.php');
     } else{

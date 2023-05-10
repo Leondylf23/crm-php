@@ -272,13 +272,13 @@ require 'cek.php';
                     </select>
                     <br>
                     <input type="hidden" id="totalprice" name="totalprice" />
-                    <b id="totalHarga">Total Harga: 0</b>
+                    <b id="totalHarga">Total Harga: IDR 0.00</b>
                     <br>
                     <br>
                     <button type="button" class="btn btn-primary mb-2" onclick=addItem()>Tambah Produk</button>
                         
                     <div class="mb-2" id="table-data" style="height: max(40vh); overflow-y: auto;">
-                        <input type="hidden" id="totaldata" name="totaldata" />
+                        <input type="hidden" id="totaldata" name="totaldata" >
                         <!-- Buat isi data -->
                     </div>
                     
@@ -303,7 +303,7 @@ require 'cek.php';
                 echo("prdkOptions.push({id: '$idPrdk', nama: '$namaItem', prc: '$prc'});");
             } 
         ?>
-
+        
         function addItem() {
             const tableData = document.getElementById("table-data");
 
@@ -350,7 +350,7 @@ require 'cek.php';
             const prcSatuanElmnt = document.createElement("b");
             prcSatuanElmnt.setAttribute("id", "prcSatuan-" + i);
             prcSatuanElmnt.setAttribute("class", "");
-            prcSatuanElmnt.innerHTML = "Harga Satuan: 0";
+            prcSatuanElmnt.innerHTML = "Harga Satuan: IDR 0.00";
             newElement.appendChild(prcSatuanElmnt);
 
             const prcSatuanHiddenElmnt = document.createElement("input");
@@ -366,7 +366,7 @@ require 'cek.php';
             const prcTotalElmnt = document.createElement("b");
             prcTotalElmnt.setAttribute("id", "prcTotal-" + i);
             prcTotalElmnt.setAttribute("class", "");
-            prcTotalElmnt.innerHTML = "Harga Total: 0";
+            prcTotalElmnt.innerHTML = "Harga Total: IDR 0.00";
             newElement.appendChild(prcTotalElmnt);
 
             const prcTotalHiddenElmnt = document.createElement("input");
@@ -380,7 +380,7 @@ require 'cek.php';
             deleted.setAttribute("id", "deleted-" + i);
             deleted.setAttribute("type", "hidden");
             deleted.setAttribute("name", "deleted-" + i);
-            deleted.setAttribute("value", false);
+            deleted.setAttribute("value", 0);
             newElement.appendChild(deleted);
 
             const br1 = document.createElement("br");
@@ -400,7 +400,7 @@ require 'cek.php';
             i++;
 
             const identifierElmnt = document.getElementById("totaldata");
-            identifierElmnt.innerHTML = i;
+            identifierElmnt.value = i;
 
             tableData.appendChild(newElement);
         }
@@ -420,11 +420,14 @@ require 'cek.php';
                         prcData = a.prc;
                     }
                 });
-    
-                prcDataElmnt.innerHTML = "Harga Satuan: "+prcData;
+                var value = parseInt(prcData);
+                const formattedPrcTemp = value.toLocaleString('en-US', { style: 'currency', currency: 'IDR' });
+                prcDataElmnt.innerHTML = "Harga Satuan: "+formattedPrcTemp;
                 prcDataHdnElmnt.value = prcData;
             } else {
-                prcDataElmnt.innerHTML = "Harga Satuan: "+0;
+                var zero = 0;
+                const formattedPrcTemp = zero.toLocaleString('en-US', { style: 'currency', currency: 'IDR'});
+                prcDataElmnt.innerHTML = "Harga Satuan: "+formattedPrcTemp;
                 prcDataHdnElmnt.value = 0;
                 
             }
@@ -438,17 +441,28 @@ require 'cek.php';
             const prcTotalHdnElmnt = document.getElementById("prcTotalHdn-"+dataId);
             var qtyData = element.value;
             var totalPrc = 0;
+            
 
             if(qtyData <= 0) {
                 element.value = 1;
-                prcTotalElmnt.innerHTML = "Harga Total: "+(prcSatuanValue*1);
+
+                var prcTemp = prcSatuanValue*1;
+                const formattedPrcTemp = prcTemp.toLocaleString('en-US', { style: 'currency', currency: 'IDR' });
+
+                prcTotalElmnt.innerHTML = "Harga Total: "+ formattedPrcTemp;
+                
+                prcTotalHdnElmnt.value = prcSatuanValue*1;
                 totalPrc = prcSatuanValue*1;
             } else {
-                prcTotalElmnt.innerHTML = "Harga Total: "+(prcSatuanValue*qtyData);
+                var prcTemp = prcSatuanValue*qtyData;
+                const formattedPrcTemp = prcTemp.toLocaleString('en-US', { style: 'currency', currency: 'IDR' });
+
+                prcTotalElmnt.innerHTML = "Harga Total: "+formattedPrcTemp;
+                
+                prcTotalHdnElmnt.value = prcSatuanValue*qtyData;
                 totalPrc = prcSatuanValue*qtyData;
             }
 
-            
             calculateAll(dataId, totalPrc);
 
         }
@@ -457,7 +471,7 @@ require 'cek.php';
             const divElmnt = document.getElementById("data-"+dataId);
             const deletedElmnt = document.getElementById("deleted-"+dataId);
             
-            deletedElmnt.value = true;
+            deletedElmnt.value = 1;
             divElmnt.setAttribute("style","display: none;");
 
             calculateAll(dataId, 0);
@@ -494,8 +508,9 @@ require 'cek.php';
                 
             });
 
+            const formattedAmount = tempTotalHarga.toLocaleString('en-US', { style: 'currency', currency: 'IDR' });
             totalHargaHdn.value = tempTotalHarga;
-            totalHarga.innerHTML = "Total Harga: " + tempTotalHarga;
+            totalHarga.innerHTML = "Total Harga: " + formattedAmount;
         }
 
             
