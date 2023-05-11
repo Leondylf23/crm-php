@@ -76,16 +76,18 @@ if(isset($_SESSION['role'])) {
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Nama Admin</th>
+                                                <th>Email</th>
                                                 <th>Role</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         <?php 
-                                            $logindata = mysqli_query($conn, "SELECT nama, role FROM login");
+                                            $logindata = mysqli_query($conn, "SELECT nama, role, email FROM login");
                                             $i = 1;
                                             while($data=mysqli_fetch_array($logindata)){
                                                 $nama = $data['nama'];
                                                 $role = $data['role'];
+                                                $email = $data['email'];
                                                 
                                                 if ($role == 1) {
                                                     $role = "Super Admin";
@@ -96,6 +98,7 @@ if(isset($_SESSION['role'])) {
                                             <tr>
                                                 <td><?=$i++;?></td>
                                                 <td><?=$nama;?></td>
+                                                <td><?=$email;?></td>
                                                 <td><?=$role;?></td>
                                             </tr>
                                         <?php 
