@@ -39,7 +39,7 @@
                                     if($_SESSION['role'] == 1) {
                                         echo(
                                             '
-                                            <a class="nav-link" href="charts.php">
+                                            <a class="nav-link" href="dashboard.php">
                                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                                 Dashboard
                                             </a>

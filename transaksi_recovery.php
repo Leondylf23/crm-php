@@ -40,13 +40,14 @@ require 'cek.php';
                                     </thead>
                                     <tbody>
                                     <?php 
-                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, p.namapelanggan, t.totaltransaksi, mp.nama_metode FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 0");
+                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, p.namapelanggan, t.totaltransaksi, mp.nama_metode, p.idpelanggan FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 0");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatatransaksi)){
                                             $idtransaksi = $data['idtransaksi'];
                                             $tanggaltransaksi = $data['tanggal_transaksi'];
                                             
                                             $namapelanggan = $data['namapelanggan'];
+                                            $idpelanggan = $data['idpelanggan'];
                                             
                                             $totaltransaksi = $data['totaltransaksi'];
                                             $nama_metode = $data['nama_metode'];
@@ -65,6 +66,7 @@ require 'cek.php';
                                             <td>
                                                 <form method=post>
                                                     <input type="hidden" name="idtransaksi" value="<?=$idtransaksi;?>">
+                                                    <input type="hidden" name="idpelanggan" value="<?=$idpelanggan;?>">
                                                     <button type="submit" class="btn btn-warning" name="pulihtransaksi">
                                                         Pulihkan
                                                     </button>

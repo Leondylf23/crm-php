@@ -82,6 +82,7 @@ if(isset($_POST['addnewtransaction'])){
     }
     
     if(count($produk) > 0) {
+
         $addtotransaksi = mysqli_query($conn, "insert into transaksi (idpelanggan, idmetode, totaltransaksi) values('$pelangganid','$pembayaranid','$totalprice')");
         if($addtotransaksi){
             
@@ -96,12 +97,16 @@ if(isset($_POST['addnewtransaction'])){
                 // echo "<script>alert('$qtyData')</script>";
         
                 if($addtotransaksidetail) {
-                    // header('location:transaksi.php');    
+                    // header('location:transaksi.php'); 
+                    
                 } else {
                     echo '<script> alert("Gagal"); </script>';
                     // header('location:transaksi.php');
                 }
             }
+
+            // new Coroutine(checkPelangganTier($conn, $pelangganid)); // async funtion
+            checkPelangganTier($conn, $pelangganid);
         } else{
             echo '<script> alert("Gagal"); </script>';
             // header('location:transaksi.php');
@@ -329,32 +334,35 @@ if(isset($_POST['pulihproduk'])){
 }
 
 //Update Info Transaksi
-if(isset($_POST['updatetransaksi'])){
-    $idtransaksi = $_POST['idtransaksi'];
-    $tanggaltransaksi = $_POST['tanggal_transaksi'];
-    $namapelanggan = $_POST['nama_pelanggan'];
-    $idproduk = $_POST['idproduk'];
-    $hargajual = $_POST['harga_jual'];
-    $modal = $_POST['harga_modal'];
-    $untung = $_POST['untung'];
+// if(isset($_POST['updatetransaksi'])){
+//     $idtransaksi = $_POST['idtransaksi'];
+//     $tanggaltransaksi = $_POST['tanggal_transaksi'];
+//     $namapelanggan = $_POST['nama_pelanggan'];
+//     $idproduk = $_POST['idproduk'];
+//     $hargajual = $_POST['harga_jual'];
+//     $modal = $_POST['harga_modal'];
+//     $untung = $_POST['untung'];
 
-    $updatetransaksi = mysqli_query($conn, "update transaksi set tanggal_transaksi='$tanggaltransaksi', nama_pelanggan='$namapelanggan', idproduk='$idproduk', harga_jual='$hargajual', harga_modal='$modal', untung='$untung' where idtransaksi = '$idtransaksi'");
-    if($updatetransaksi){
-        header('location:transaksi.php');
-    } else{
-        echo 'Gagal';
-        header('location:transaksi.php');
-    }
-}
+//     $updatetransaksi = mysqli_query($conn, "update transaksi set tanggal_transaksi='$tanggaltransaksi', nama_pelanggan='$namapelanggan', idproduk='$idproduk', harga_jual='$hargajual', harga_modal='$modal', untung='$untung' where idtransaksi = '$idtransaksi'");
+//     if($updatetransaksi){
+//         header('location:transaksi.php');
+//     } else{
+//         echo 'Gagal';
+//         header('location:transaksi.php');
+//     }
+// }
 
 //Hapus transaksi dari database "Transaksi"
 if(isset($_POST['hapustransaksi'])){
     $idtransaksi = $_POST['idtransaksi'];
+    $pelangganid = $_POST['idpelanggan'];
 
     // $hapustransaksi = mysqli_query($conn, "delete from transaksi where idtransaksi = '$idtransaksi'");
     $hapustransaksi = mysqli_query($conn, "update transaksi set is_active = 0 where idtransaksi = '$idtransaksi'");
 
     if($hapustransaksi){
+        // new Coroutine(checkPelangganTier($conn, $pelangganid)); // async funtion
+        checkPelangganTier($conn, $pelangganid);
         header('location:transaksi.php');
     } else{
         echo 'Gagal';
@@ -365,11 +373,14 @@ if(isset($_POST['hapustransaksi'])){
 //pulihkan transaksi dari database "Transaksi"
 if(isset($_POST['pulihtransaksi'])){
     $idtransaksi = $_POST['idtransaksi'];
+    $pelangganid = $_POST['idpelanggan'];
 
     // $hapustransaksi = mysqli_query($conn, "delete from transaksi where idtransaksi = '$idtransaksi'");
     $pulihtransaksi = mysqli_query($conn, "update transaksi set is_active = 1 where idtransaksi = '$idtransaksi'");
 
     if($pulihtransaksi){
+        // new Coroutine(checkPelangganTier($conn, $pelangganid)); // async funtion
+        checkPelangganTier($conn, $pelangganid);
         header('location:transaksi_recovery.php');
     } else{
         echo '<script> alert("gagal;"); </script>';
@@ -428,6 +439,38 @@ if(isset($_POST['ubahpassword'])){
 
         }
     } 
+}
+
+function checkPelangganTier($conn, $idPelanggan) {
+    // yield; //untuk async funtion
+
+    // $addtotable = mysqli_query($conn, "insert into notifikasi (isi_notif, userid) values('test async', 9)");
+    // if($addtotable){
+        
+    // } else{
+        
+    // }
+
+    $sum = 0;
+    $tier =  'Basic';
+
+    $produk = mysqli_query($conn, "SELECT SUM(totaltransaksi) AS totalsum FROM transaksi WHERE is_active = 1 and idpelanggan = $idPelanggan");
+    while($fetcharray = mysqli_fetch_array($produk)){
+        $sum += $fetcharray['totalsum'];
+    }
+
+    if($sum >= 2000000 && $sum < 6000000) {
+        $tier =  'Silver';
+    }
+    if($sum >= 6000000 && $sum < 10000000) {
+        $tier =  'Gold';
+    }
+    if($sum >= 10000000) {
+        $tier =  'Platinum';
+    }
+
+    mysqli_query($conn, "update pelanggan set prioritas = '$tier' where idpelanggan = $idPelanggan");
+        
 }
 
 ?>

@@ -46,13 +46,14 @@ require 'cek.php';
                                     </thead>
                                     <tbody>
                                     <?php 
-                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, p.namapelanggan, t.totaltransaksi, mp.nama_metode FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 1");
+                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, p.namapelanggan, t.totaltransaksi, mp.nama_metode, p.idpelanggan FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 1");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatatransaksi)){
                                             $idtransaksi = $data['idtransaksi'];
                                             $tanggaltransaksi = $data['tanggal_transaksi'];
                                             
                                             $namapelanggan = $data['namapelanggan'];
+                                            $idpelanggan = $data['idpelanggan'];
                                             
                                             $totaltransaksi = $data['totaltransaksi'];
                                             $nama_metode = $data['nama_metode'];
@@ -182,8 +183,9 @@ require 'cek.php';
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            Apakah anda yakin ingin menghapus <?=$namapelanggan;?>?
+                                                            Apakah anda yakin ingin menghapus transaksi <?=$namapelanggan;?>?
                                                             <input type="hidden" name="idtransaksi" value="<?=$idtransaksi;?>">
+                                                            <input type="hidden" name="idpelanggan" value="<?=$idpelanggan;?>">
                                                             <br>
                                                             <br>
                                                             <button type="submit" class="btn btn-danger" name="hapustransaksi">Hapus</button>
