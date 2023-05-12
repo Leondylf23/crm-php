@@ -46,11 +46,12 @@ require 'cek.php';
                                     </thead>
                                     <tbody>
                                     <?php 
-                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, p.namapelanggan, t.totaltransaksi, mp.nama_metode, p.idpelanggan FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 1");
+                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, DATE_FORMAT(t.tanggal_transaksi, '%d-%m-%Y %H:%i') as tgl_formated, p.namapelanggan, t.totaltransaksi, mp.nama_metode, p.idpelanggan FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 1");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatatransaksi)){
                                             $idtransaksi = $data['idtransaksi'];
                                             $tanggaltransaksi = $data['tanggal_transaksi'];
+                                            $tanggaltransaksif = $data['tgl_formated'];
                                             
                                             $namapelanggan = $data['namapelanggan'];
                                             $idpelanggan = $data['idpelanggan'];
@@ -64,7 +65,7 @@ require 'cek.php';
 
                                         <tr>
                                             <td><?=$i++;?></td>
-                                            <td><?=$tanggaltransaksi;?></td>
+                                            <td><?=$tanggaltransaksif;?></td>
                                             <td><?=$namapelanggan;?></td>
                                             <td><?=$totaltransaksi;?></td>
                                             <td><?=$nama_metode;?></td>

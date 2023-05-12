@@ -38,6 +38,7 @@ if (isset($_SESSION['msg'])) {
                                             <th>No.</th>
                                             <th>Kegiatan</th>
                                             <th>Deskripsi</th>
+                                            <th>Kategori</th>
                                             <th>Tanggal Mulai</th>
                                             <th>Tanggal Selesai</th>
                                         </tr>
@@ -45,19 +46,21 @@ if (isset($_SESSION['msg'])) {
                                     <tbody>
                                     <?php 
                                         $userid = $_SESSION['userid'];
-                                        $logindata = mysqli_query($conn, "SELECT aktifitas, deskripsi, tgl_pelaksanaan, tgl_selesai FROM jadwal where is_active = 1 and adminid = $userid and (tgl_pelaksanaan < CURRENT_TIMESTAMP and tgl_selesai > CURRENT_TIMESTAMP)");
+                                        $logindata = mysqli_query($conn, "SELECT j.aktifitas, j.deskripsi, DATE_FORMAT(j.tgl_pelaksanaan, '%d-%m-%Y %H:%i') as tgl_pelaksanaan, DATE_FORMAT(j.tgl_selesai, '%d-%m-%Y %H:%i') as tgl_selesai, kj.nama_kategori FROM jadwal j inner join kategori_jadwal kj on kj.id = j.kategori where j.is_active = 1 and adminid = $userid and (tgl_pelaksanaan < CURRENT_TIMESTAMP and tgl_selesai > CURRENT_TIMESTAMP)");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($logindata)){
                                             $aktifitas = $data['aktifitas'];
                                             $desc = $data['deskripsi'];
                                             $tglPlksnaan = $data['tgl_pelaksanaan'];
                                             $tglSlse = $data['tgl_selesai'];
+                                            $kategori = $data['nama_kategori'];
                                         
                                         ?>
                                         <tr>
                                             <td><?=$i++;?></td>
                                             <td><?=$aktifitas;?></td>
                                             <td><?=$desc;?></td>
+                                            <td><?=$kategori;?></td>
                                             <td><?=$tglPlksnaan;?></td>
                                             <td><?=$tglSlse;?></td>
                                         </tr>
