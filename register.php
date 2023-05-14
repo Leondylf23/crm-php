@@ -100,13 +100,7 @@ if(isset($_POST['register'])){
                 </main>
             </div>
             <div id="layoutAuthentication_footer">
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Thendy Rhenaldy 2023</div>                
-                        </div>
-                    </div>
-                </footer>
+            <?php require "footer.php"; ?>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

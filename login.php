@@ -1,6 +1,11 @@
 <?php
 require 'function.php';
 
+if (isset($_SESSION['msg'])) {
+    echo '<script> alert("'.$_SESSION['msg'].'"); </script>';
+    unset($_SESSION['msg']);
+} 
+
 // cek login terdaftar apa kagak
 if(isset($_POST['login'])){
     $email = $_POST['email'];
@@ -84,14 +89,8 @@ if(!isset($_SESSION['log'])){
                 </main>
             </div>
             <div id="layoutAuthentication_footer">
-                    <footer class="py-4 bg-light mt-auto">
-                        <div class="container-fluid px-4">
-                            <div class="d-flex align-items-center justify-content-between small">
-                                <div class="text-muted">Copyright &copy; Thendy Rhenaldy 2023</div>                
-                            </div>
-                        </div>
-                    </footer>
-                </div>
+            <?php require "footer.php"; ?>
+            </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>

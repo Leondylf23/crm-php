@@ -5,7 +5,7 @@ if(isset($_SESSION['log'])){
 
 } else {
     $_SESSION['msg'] = "Login terlebih dahulu!";
-    header('location:index.php');
+    header('location:login.php');
 }
 
 

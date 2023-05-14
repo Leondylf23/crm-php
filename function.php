@@ -2,8 +2,8 @@
 session_start();
 // Koneksi DB
 if(!isset($_SESSION['userid'])) {
-    $_SESSION['userid'] = "";
-    $_SESSION['userName'] = "Sales Forces Automation";
+    $_SESSION['userid'] = 0;
+    $_SESSION['userName'] = "Silahkan Login.";
 } else {
     // echo $_SESSION['userid'] . " - " . $_SESSION['userName'];
 }
@@ -31,6 +31,7 @@ if(isset($_POST['addnewcustomer'])){
 
     $addtotable = mysqli_query($conn, "insert into pelanggan (namapelanggan, alamat, telp) values('$namapelanggan','$alamat', '$telp')");
     if($addtotable){
+        updateKpiAdmin($conn, "Pelanggan");
         header('location:pelanggan.php');
     } else{
         echo 'Gagal';
@@ -52,6 +53,7 @@ if(isset($_POST['addnewproduct'])){
 
     $addtotable = mysqli_query($conn, "insert into produk (kode_produk, nama_item, jenis, merek, tipe_item, satuan, harga_pokok, harga_jual, keterangan) values('$kodeproduk','$namaproduk', '$jenisproduk', '$merkproduk', '$tipeitem', '$satuan', '$hargapokok', '$hargajual', '$keterangan')");
     if($addtotable){
+        updateKpiAdmin($conn, "Produk");
         header('location:produk.php');
     } else{
         echo 'Gagal';
@@ -107,6 +109,7 @@ if(isset($_POST['addnewtransaction'])){
 
             // new Coroutine(checkPelangganTier($conn, $pelangganid)); // async funtion
             checkPelangganTier($conn, $pelangganid);
+            updateKpiAdmin($conn, "Transaksi");
         } else{
             echo '<script> alert("Gagal"); </script>';
             // header('location:transaksi.php');
@@ -127,6 +130,7 @@ if(isset($_POST['addnewcomplain'])){
     $addtotable = mysqli_query($conn, "insert into komplain (nama, komplain, idkategori) values('$namapelanggan', '$komplain', '$katg_komplain')");
     if($addtotable){
         header('location:komplain.php');
+        updateKpiAdmin($conn, "Komplain");
     } else{
         echo 'Gagal';
         header('location:komplain.php');
@@ -142,6 +146,7 @@ if(isset($_POST['updatekomplain'])){
 
     $addtotable = mysqli_query($conn, "update komplain set nama='$namapelanggan', komplain='$komplain', idkategori='$katg_komplain' where idkomplain = '$idkomplainedit'");
     if($addtotable){
+        updateKpiAdmin($conn, "Komplain");
         header('location:komplain.php');
     } else{
         echo 'Gagal';
@@ -155,6 +160,7 @@ if(isset($_POST['hapuskomplain'])){
 
     $addtotable = mysqli_query($conn, "update komplain set is_active=0 where idkomplain = '$idkomplaindelete'");
     if($addtotable){
+        updateKpiAdmin($conn, "Komplain");
         header('location:komplain.php');
     } else{
         echo 'Gagal';
@@ -168,6 +174,7 @@ if(isset($_POST['pulihkomplain'])){
 
     $addtotable = mysqli_query($conn, "update komplain set is_active=1 where idkomplain = '$idkomplainpulih'");
     if($addtotable){
+        updateKpiAdmin($conn, "Komplain");
         header('location:komplain_recovery.php');
     } else{
         echo 'Gagal';
@@ -186,6 +193,7 @@ if(isset($_POST['tambahjadwal'])){
 
     $addtotable = mysqli_query($conn, "insert into jadwal (adminid, aktifitas, deskripsi, tgl_pelaksanaan, tgl_selesai, kategori) values ('$admin', '$aktifitas', '$deskripsi', '$tglmulai', '$tglselesai', '$kategori')");
     if($addtotable){
+        updateKpiAdmin($conn, "Jadwal");
         header('location:penjadwalan.php');
     } else{
         echo 'Gagal';
@@ -205,6 +213,7 @@ if(isset($_POST['updatejadwal'])){
 
     $addtotable = mysqli_query($conn, "update jadwal set adminid = '$admin', aktifitas = '$aktifitas', deskripsi = '$deskripsi', tgl_pelaksanaan = '$tglmulai', tgl_selesai = '$tglselesai', kategori = '$kategori' where id = '$idjadwal'");
     if($addtotable){
+        updateKpiAdmin($conn, "Jadwal");
         header('location:penjadwalan.php');
     } else{
         echo 'Gagal';
@@ -218,6 +227,7 @@ if(isset($_POST['hapusjadwal'])){
     
     $addtotable = mysqli_query($conn, "update jadwal set is_active = 0 where id = $idjadwal");
     if($addtotable){
+        updateKpiAdmin($conn, "Jadwal");
         header('location:penjadwalan.php');
     } else{
         echo 'Gagal';
@@ -231,6 +241,7 @@ if(isset($_POST['pulihjadwal'])){
     
     $addtotable = mysqli_query($conn, "update jadwal set is_active = 1 where id = $idjadwal");
     if($addtotable){
+        updateKpiAdmin($conn, "Jadwal");
         header('location:penjadwalan_recovery.php');
     } else{
         echo 'Gagal';
@@ -247,6 +258,7 @@ if(isset($_POST['updatepelanggan'])){
 
     $update = mysqli_query($conn, "update pelanggan set namapelanggan='$namapelanggan', alamat='$alamat', telp='$telp' where idpelanggan = '$idpelanggan'");
     if($update){
+        updateKpiAdmin($conn, "Pelanggan");
         header('location:pelanggan.php');
     } else{
         echo 'Gagal';
@@ -262,6 +274,7 @@ if(isset($_POST['hapuspelanggan'])){
     $hapus = mysqli_query($conn, "update pelanggan set is_active = 0 where idpelanggan = '$idpelanggan'");
 
     if($hapus){
+        updateKpiAdmin($conn, "Pelanggan");
         header('location:pelanggan.php');
     } else{
         echo 'Gagal';
@@ -276,6 +289,7 @@ if(isset($_POST['pulihpelanggan'])){
     $hapus = mysqli_query($conn, "update pelanggan set is_active = 1 where idpelanggan = '$idpelanggan'");
 
     if($hapus){
+        updateKpiAdmin($conn, "Pelanggan");
         header('location:pelanggan_recovery.php');
     } else{
         echo 'Gagal';
@@ -298,6 +312,7 @@ if(isset($_POST['updateproduk'])){
 
     $updateproduk = mysqli_query($conn, "update produk set kode_produk='$kodeproduk', nama_item='$namaproduk', jenis='$jenisproduk', merek='$merkproduk', tipe_item='$tipeitem', satuan='$satuan', harga_pokok='$hargapokok', harga_jual='$hargajual', keterangan='$keterangan' where idproduk = '$idproduk'");
     if($updateproduk){
+        updateKpiAdmin($conn, "Produk");
         header('location:produk.php');
     } else{
         echo 'Gagal';
@@ -312,6 +327,7 @@ if(isset($_POST['hapusproduk'])){
     // $hapusproduk = mysqli_query($conn, "delete from produk where idproduk = '$idproduk'");
     $hapusproduk = mysqli_query($conn, "update produk set is_active = 0 where idproduk = '$idproduk'");
     if($hapusproduk){
+        updateKpiAdmin($conn, "Produk");
         header('location:produk.php');
     } else{
         echo 'Gagal';
@@ -326,6 +342,7 @@ if(isset($_POST['pulihproduk'])){
     // $hapusproduk = mysqli_query($conn, "delete from produk where idproduk = '$idproduk'");
     $hapusproduk = mysqli_query($conn, "update produk set is_active = 1 where idproduk = '$idproduk'");
     if($hapusproduk){
+        updateKpiAdmin($conn, "Produk");
         header('location:produk_recovery.php');
     } else{
         echo 'Gagal';
@@ -361,6 +378,7 @@ if(isset($_POST['hapustransaksi'])){
     $hapustransaksi = mysqli_query($conn, "update transaksi set is_active = 0 where idtransaksi = '$idtransaksi'");
 
     if($hapustransaksi){
+        updateKpiAdmin($conn, "Transaksi");
         // new Coroutine(checkPelangganTier($conn, $pelangganid)); // async funtion
         checkPelangganTier($conn, $pelangganid);
         header('location:transaksi.php');
@@ -379,6 +397,7 @@ if(isset($_POST['pulihtransaksi'])){
     $pulihtransaksi = mysqli_query($conn, "update transaksi set is_active = 1 where idtransaksi = '$idtransaksi'");
 
     if($pulihtransaksi){
+        updateKpiAdmin($conn, "Transaksi");
         // new Coroutine(checkPelangganTier($conn, $pelangganid)); // async funtion
         checkPelangganTier($conn, $pelangganid);
         header('location:transaksi_recovery.php');
@@ -471,6 +490,12 @@ function checkPelangganTier($conn, $idPelanggan) {
 
     mysqli_query($conn, "update pelanggan set prioritas = '$tier' where idpelanggan = $idPelanggan");
         
+}
+
+function updateKpiAdmin($conn, $type) {
+    $userid = $_SESSION['userid'];
+
+    mysqli_query($conn, "insert into kpi_records (adminid, kategori) values('$userid', '$type')");
 }
 
 ?>

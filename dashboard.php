@@ -69,6 +69,7 @@ if(isset($_SESSION['role'])) {
                             </div>
                         </div>
                         <div class="row">
+                            <h3 class="mt-4 mb-2">Data Admin</h3>
                             <div class="card mb-4">
                                 <div class="card-body">
                                     <table id="datatablesSimple">
@@ -111,18 +112,7 @@ if(isset($_SESSION['role'])) {
                         </div>
                     </div>
                 </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2022</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                <?php require "footer.php"; ?>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -188,7 +178,7 @@ if(isset($_SESSION['role'])) {
                     datasets: [{
                         label: 'Kuantitas Produk',
                         data: produk.map(obj => obj.jumlah),
-                        borderWidth: 1
+                        borderWidth: 3
                     }]
                 },
                 options: {
@@ -207,7 +197,7 @@ if(isset($_SESSION['role'])) {
                     datasets: [{
                         label: 'Jumlah Komplain',
                         data: komplain.map(obj => obj.jumlah),
-                        borderWidth: 1
+                        borderWidth: 3
                     }]
                 },
                 options: {
@@ -226,7 +216,7 @@ if(isset($_SESSION['role'])) {
                     datasets: [{
                         label: 'Kuantitas Pelanggan',
                         data: pelanggan.map(obj => obj.jumlah),
-                        borderWidth: 5
+                        borderWidth: 3
                     }]
                 },
                 options: {

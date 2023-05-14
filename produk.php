@@ -50,7 +50,7 @@ require 'cek.php';
                                     <tbody>
 
                                     <?php 
-                                        $ambilsemuadataproduk = mysqli_query($conn, "select * from produk where is_active = 1");
+                                        $ambilsemuadataproduk = mysqli_query($conn, "select idproduk, kode_produk, nama_item, jenis, merek, tipe_item, satuan, CONCAT('Rp. ', FORMAT(harga_pokok, 2, 'id_ID')) as harga_pokok_str, harga_pokok, CONCAT('Rp. ', FORMAT(harga_jual, 2, 'id_ID')) as harga_jual_str, harga_jual, keterangan from produk where is_active = 1");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadataproduk)){
                                             $idproduk = $data['idproduk'];
@@ -60,7 +60,9 @@ require 'cek.php';
                                             $merkproduk = $data['merek'];
                                             $tipeitem = $data['tipe_item'];
                                             $satuan = $data['satuan'];
+                                            $hargapokokstr = $data['harga_pokok_str'];
                                             $hargapokok = $data['harga_pokok'];
+                                            $hargajualstr = $data['harga_jual_str'];
                                             $hargajual = $data['harga_jual'];
                                             $keterangan = $data['keterangan'];
                                         
@@ -75,8 +77,8 @@ require 'cek.php';
                                             <td><?=$merkproduk;?></td>
                                             <td><?=$tipeitem;?></td>
                                             <td><?=$satuan;?></td>
-                                            <td><?=$hargapokok;?></td>
-                                            <td><?=$hargajual;?></td>
+                                            <td><?=$hargapokokstr;?></td>
+                                            <td><?=$hargajualstr;?></td>
                                             <td><?=$keterangan;?></td>
                                             <td>
                                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idproduk;?>">
@@ -167,18 +169,7 @@ require 'cek.php';
                         <a href="produk_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
                     </div>
                 </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2022</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                <?php require "footer.php"; ?>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
