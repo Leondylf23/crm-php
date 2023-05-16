@@ -105,7 +105,7 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Detail Produk</h4>
+                                                        <h4 class="modal-title">Detil Produk</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
@@ -131,19 +131,11 @@ require 'cek.php';
                                                             <input type="text" name="keterangan" value="<?=$keterangan;?>" class="form-control" required>
                                                             <br>
                                                             <input type="hidden" name="idproduk" value="<?=$idproduk;?>">
-                                                            <!-- <label for="test">
-                                                                <input type="radio" name="test" value="tes"  required>
-                                                                Test
-                                                            </label>
-                                                            <label for="test">
-                                                                <input type="radio" name="test" value="tes"  required>
-                                                                Test
-                                                            </label> -->
-                                                            <!-- <br> -->
+                                                            
                                                             <?php 
                                                                 if($status == "Aktif") {
                                                                     echo("
-                                                                    <button type='submit' class='btn btn-primary' name='updateproduk'>Submit</button>
+                                                                    <button type='submit' class='btn btn-warning' name='updateproduk'>Edit</button>
                                                                     
                                                                     <button type='button' class='btn btn-danger ms-3' data-bs-toggle='modal' data-bs-target='#delete$idproduk'>
                                                                         Non-aktifkan

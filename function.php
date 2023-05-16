@@ -184,20 +184,20 @@ if(isset($_POST['pulihkomplain'])){
     }
 }
 
-//Menambah Jadwal Baru
+//Menambah Aktifitas Baru
 if(isset($_POST['tambahjadwal'])){
     $admin = $_POST['admin'];
     // $aktifitas = $_POST['aktifitas'];
-    // $deskripsi = $_POST['deskripsi'];
+    $deskripsi = $_POST['deskripsi'];
     $kategori = $_POST['kategori'];
     // $tglmulai = $_POST['tglmulai'];
     $tglselesai = $_POST['tglselesai'];
     $pelanggan = $_POST['pelanggan'];
 
     // $addtotable = mysqli_query($conn, "insert into jadwal (adminid, aktifitas, deskripsi, tgl_pelaksanaan, tgl_selesai, kategori) values ('$admin', '$aktifitas', '$deskripsi', '$tglmulai', '$tglselesai', '$kategori')");
-    $addtotable = mysqli_query($conn, "insert into jadwal (adminid, tgl_selesai, kategori, idpelanggan) values ('$admin', '$tglselesai', '$kategori', '$pelanggan')");
+    $addtotable = mysqli_query($conn, "insert into jadwal (adminid, tgl_selesai, kategori, idpelanggan, deskripsi) values ('$admin', '$tglselesai', '$kategori', '$pelanggan', '$deskripsi')");
     if($addtotable){
-        updateKpiAdmin($conn, "Jadwal");
+        updateKpiAdmin($conn, "Aktifitas");
         header('location:penjadwalan.php');
     } else{
         echo 'Gagal';
@@ -205,21 +205,21 @@ if(isset($_POST['tambahjadwal'])){
     }
 }
 
-//update Jadwal
+//update Aktifitas
 if(isset($_POST['updatejadwal'])){
     $idjadwal = $_POST['idjadwal'];
     $admin = $_POST['admin'];
     // $aktifitas = $_POST['aktifitas'];
-    // $deskripsi = $_POST['deskripsi'];
+    $deskripsi = $_POST['deskripsi'];
     $kategori = $_POST['kategori'];
     // $tglmulai = $_POST['tglmulai'];
     $tglselesai = $_POST['tglselesai'];
     $idplng = $_POST['pelanggan'];
 
     // $addtotable = mysqli_query($conn, "update jadwal set adminid = '$admin', aktifitas = '$aktifitas', deskripsi = '$deskripsi', tgl_pelaksanaan = '$tglmulai', tgl_selesai = '$tglselesai', kategori = '$kategori' where id = '$idjadwal'");
-    $addtotable = mysqli_query($conn, "update jadwal set adminid = '$admin', tgl_selesai = '$tglselesai', kategori = '$kategori', idpelanggan = '$idplng' where id = '$idjadwal'");
+    $addtotable = mysqli_query($conn, "update jadwal set adminid = '$admin', tgl_selesai = '$tglselesai', kategori = '$kategori', idpelanggan = '$idplng', deskripsi = '$deskripsi' where id = '$idjadwal'");
     if($addtotable){
-        updateKpiAdmin($conn, "Jadwal");
+        updateKpiAdmin($conn, "Aktifitas");
         header('location:penjadwalan.php');
     } else{
         echo 'Gagal';
@@ -227,13 +227,13 @@ if(isset($_POST['updatejadwal'])){
     }
 }
 
-//hapus Jadwal
+//hapus Aktifitas
 if(isset($_POST['hapusjadwal'])){
     $idjadwal = $_POST['idjadwal'];
     
     $addtotable = mysqli_query($conn, "update jadwal set is_active = 0 where id = $idjadwal");
     if($addtotable){
-        updateKpiAdmin($conn, "Jadwal");
+        updateKpiAdmin($conn, "Aktifitas");
         header('location:penjadwalan.php');
     } else{
         echo 'Gagal';
@@ -241,13 +241,13 @@ if(isset($_POST['hapusjadwal'])){
     }
 }
 
-//Pemulihan Jadwal
+//Pemulihan Aktifitas
 if(isset($_POST['pulihjadwal'])){
     $idjadwal = $_POST['idjadwal'];
     
     $addtotable = mysqli_query($conn, "update jadwal set is_active = 1 where id = $idjadwal");
     if($addtotable){
-        updateKpiAdmin($conn, "Jadwal");
+        updateKpiAdmin($conn, "Aktifitas");
         header('location:penjadwalan.php');
     } else{
         echo 'Gagal';
@@ -260,7 +260,7 @@ if(isset($_POST['selesaijadwal'])){
     
     $addtotable = mysqli_query($conn, "update jadwal set status = 2 where id = $idjadwal");
     if($addtotable){
-        updateKpiAdmin($conn, "Jadwal");
+        updateKpiAdmin($conn, "Aktifitas");
         echo '<script>alert("Tes");</script>';
         header('location:penjadwalan.php');
     } else{
@@ -274,7 +274,7 @@ if(isset($_POST['konfirmasijadwal'])){
     
     $addtotable = mysqli_query($conn, "update jadwal set status = 3 where id = $idjadwal");
     if($addtotable){
-        updateKpiAdmin($conn, "Jadwal");
+        updateKpiAdmin($conn, "Aktifitas");
         header('location:penjadwalan.php');
     } else{
         echo 'Gagal';
@@ -437,6 +437,62 @@ if(isset($_POST['pulihtransaksi'])){
     } else{
         echo '<script> alert("gagal;"); </script>';
         header('location:transaksi_recovery.php');
+    }
+}
+
+if(isset($_POST['pulihktgaktifitas'])){
+    $id = $_POST['id'];
+
+    $pulihtransaksi = mysqli_query($conn, "update kategori_jadwal set is_active = 1 where id = '$id'");
+
+    if($pulihtransaksi){
+        updateKpiAdmin($conn, "Aktifitas");
+        header('location:penambahan_aktifitas.php');
+    } else{
+        echo '<script> alert("gagal;"); </script>';
+        header('location:penambahan_aktifitas.php');
+    }
+}
+
+if(isset($_POST['hapusktgaktifitas'])){
+    $id = $_POST['id'];
+
+    $pulihtransaksi = mysqli_query($conn, "update kategori_jadwal set is_active = 0 where id = '$id'");
+
+    if($pulihtransaksi){
+        updateKpiAdmin($conn, "Aktifitas");
+        header('location:penambahan_aktifitas.php');
+    } else{
+        echo '<script> alert("gagal;"); </script>';
+        header('location:penambahan_aktifitas.php');
+    }
+}
+
+if(isset($_POST['updatektgaktifitas'])){
+    $id = $_POST['id'];
+    $kategori = $_POST['kategori'];
+
+    $pulihtransaksi = mysqli_query($conn, "update kategori_jadwal set nama_kategori = '$kategori' where id = '$id'");
+
+    if($pulihtransaksi){
+        updateKpiAdmin($conn, "Aktifitas");
+        header('location:penambahan_aktifitas.php');
+    } else{
+        echo '<script> alert("gagal;"); </script>';
+        header('location:penambahan_aktifitas.php');
+    }
+}
+
+if(isset($_POST['tambahktgaktifitas'])){
+    $kategori = $_POST['aktifitas'];
+    
+    $addtotable = mysqli_query($conn, "insert into kategori_jadwal (nama_kategori) values ('$kategori')");
+    if($addtotable){
+        updateKpiAdmin($conn, "Aktifitas");
+        header('location:penambahan_aktifitas.php');
+    } else{
+        echo '<script> alert("gagal;"); </script>';
+        header('location:penambahan_aktifitas.php');
     }
 }
 

@@ -3,6 +3,10 @@
 require 'function.php';
 require 'cek.php';
 
+if($_SESSION['role'] != 1){
+    header('location:index.php');
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,25 +16,22 @@ require 'cek.php';
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Data Pelanggan</title>
+        <title>Data Produk</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-        
-        <?php require "navigation_bar.php" ?>
+    <?php require "navigation_bar.php" ?>
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Data Pelanggan</h1>
-
-
+                        <h1 class="mt-4">Penambahan Aktifitas</h1>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <!-- Button to Open the Modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Tambah Pelanggan
+                                Tambah Aktifitas
                                 </button>
                             </div>
                             <div class="card-body">
@@ -38,27 +39,20 @@ require 'cek.php';
                                     <thead>
                                         <tr>
                                             <th>No.</th>
-                                            <th>Nama Pelanggan</th>
-                                            <th>Alamat</th>
-                                            <th>Nomor HP</th>
-                                            <th>Prioritas</th>
+                                            <th>Nama Aktifitas</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
-                                        <?php 
-                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select * from pelanggan order by is_active desc");
-                                        $i = 1;
-                                        while($data=mysqli_fetch_array($ambilsemuadatapelanggan)){
-                                            $idpelanggan = $data['idpelanggan'];
-                                            $namapelanggan = $data['namapelanggan'];
-                                            $alamat = $data['alamat'];
-                                            $telp = $data['telp'];
-                                            $prioritas = $data['prioritas'];
-                                            $status = $data['is_active'];
 
+                                    <?php 
+                                        $ambilsemuadataproduk = mysqli_query($conn, "select * from kategori_jadwal order by is_active desc");
+                                        $i = 1;
+                                        while($data=mysqli_fetch_array($ambilsemuadataproduk)){
+                                            $idkategori = $data['id'];
+                                            $kategori = $data['nama_kategori'];
+                                            $status = $data['is_active'];
                                             if($status == 1) {
                                                 $status = "Aktif";
                                             } else {
@@ -67,65 +61,55 @@ require 'cek.php';
                                         
                                         ?>
 
-
                                         <tr>
                                             <td><?=$i++;?></td>
-                                            <!-- <td><?=$idpelanggan;?></td> -->
-                                            <td><?=$namapelanggan;?></td>
-                                            <td><?=$alamat;?></td>
-                                            <td>(+62) <?=$telp;?></td>
-                                            <td><?=$prioritas;?></td>
+                                            <td><?=$kategori;?></td>
                                             <td><?=$status;?></td>
                                             <td>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?=$idpelanggan;?>">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?=$idkategori;?>">
                                                     Detil
                                                 </button>
-                                                <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idpelanggan;?>">
-                                                    Delete
-                                                </button> -->
                                             </td>
                                         </tr>
-                                            <!-- Edit The Modal -->
-                                            <div class="modal fade" id="edit<?=$idpelanggan;?>">
+
+                                        <!-- Edit The Modal -->
+                                        <div class="modal fade" id="edit<?=$idkategori;?>">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Detil Pelanggan</h4>
+                                                        <h4 class="modal-title">Detil Aktifitas</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            <input type="text" name="namapelanggan" value="<?=$namapelanggan;?>" class="form-control" required>
+                                                            <input type="text" name="kategori" value="<?=$kategori;?>" class="form-control" required>
                                                             <br>
-                                                            <input type="text" name="alamat" value="<?=$alamat;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="number" name="telp" class="form-control" value="<?=$telp;?>" required>
-                                                            <br>
-                                                            <input type="hidden" name="idpelanggan" value="<?=$idpelanggan;?>">
+                                                            <input type="hidden" name="id" value="<?=$idkategori;?>">
+                                                            
                                                             <?php 
                                                                 if($status == "Aktif") {
                                                                     echo("
-                                                                    <button type='submit' class='btn btn-warning' name='updatepelanggan'>Edit</button>
+                                                                    <button type='submit' class='btn btn-warning' name='updatektgaktifitas'>Edit</button>
                                                                     
-                                                                    <button type='button' class='btn btn-danger ms-3' data-bs-toggle='modal' data-bs-target='#delete$idpelanggan'>
+                                                                    <button type='button' class='btn btn-danger ms-3' data-bs-toggle='modal' data-bs-target='#delete$idkategori'>
                                                                         Non-aktifkan
                                                                     </button>
                                                                     ");
                                                                 }  else {
                                                                     echo("
                                                                     
-                                                                        <button type='submit' class='btn btn-warning' name='pulihpelanggan'>
+                                                                        <button type='submit' class='btn btn-warning' name='pulihktgaktifitas'>
                                                                             Aktifkan
                                                                         </button>
                                                                     
                                                                     ");
                                                                 }
                                                             
-                                                            ?>
+                                                            ?>                                                              
                                                         </div>
                                                     </form>
 
@@ -134,24 +118,24 @@ require 'cek.php';
                                             </div>
 
                                             <!-- Delete The Modal -->
-                                            <div class="modal fade" id="delete<?=$idpelanggan;?>">
+                                            <div class="modal fade" id="delete<?=$idkategori;?>">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Nonaktifkan Pelanggan?</h4>
+                                                        <h4 class="modal-title">Nonaktifkan Aktifitas?</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            Apakah anda yakin ingin menonaktifkan <?=$namapelanggan;?>?
-                                                            <input type="hidden" name="idpelanggan" value="<?=$idpelanggan;?>">
+                                                            Apakah anda yakin ingin menonaktifkan aktifitas <?=$kategori;?>?
+                                                            <input type="hidden" name="id" value="<?=$idkategori;?>">
                                                             <br>
                                                             <br>
-                                                            <button type="submit" class="btn btn-danger" name="hapuspelanggan">Non-aktifkan</button>
+                                                            <button type="submit" class="btn btn-danger" name="hapusktgaktifitas">Non-aktifkan</button>
                                                         </div>
                                                     </form>
 
@@ -161,16 +145,14 @@ require 'cek.php';
                                         <?php 
                                         };
                                         ?>
-
-
-
                                     </tbody>
                                 </table>
-                            </div>
+                            </div>                                 
                         </div>
                     </div>
+
                     <!-- <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
-                        <a href="pelanggan_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
+                        <a href="produk_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
                     </div> -->
                 </main>
                 <?php require "footer.php"; ?>
@@ -184,27 +166,23 @@ require 'cek.php';
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
     </body>
-        <!-- The Modal -->
-    <div class="modal fade" id="myModal">
+            <!-- The Modal -->
+            <div class="modal fade" id="myModal">
         <div class="modal-dialog">
             <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Tambah Pelanggan Baru</h4>
+                <h4 class="modal-title">Tambah Aktifitas Baru</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <!-- Modal body -->
             <form method="post">
                 <div class="modal-body">
-                    <input type="text" name="namapelanggan" placeholder="Nama Pelanggan" class="form-control" required>
+                    <input type="text" name="aktifitas" placeholder="Nama Aktifitas" class="form-control" required>
                     <br>
-                    <input type="text" name="alamat" placeholder="Alamat" class="form-control" required>
-                    <br>
-                    <input type="number" name="telp" class="form-control" placeholder="Nomor HP" required>
-                    <br>
-                    <button type="submit" class="btn btn-primary" name="addnewcustomer">Submit</button>
+                    <button type="submit" class="btn btn-primary" name="tambahktgaktifitas">Submit</button>
                 </div>
             </form>
 

@@ -36,24 +36,25 @@ require 'function.php';
                         
                         ?>
                         
-                        <h4 class="mt-2 mb-3">Kegiatan Anda yang Sedang Berlangsung</h4>
+                        <h4 class="mt-2 mb-3">Aktifitas Anda yang Sedang Berlangsung</h4>
                         <div class="card mb-4">
+                            <div class="card-header">
+                                <a href="penjadwalan.php">Aktifitas Lengkap</a>
+                            </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
                                             <th>No.</th>
-                                            <th>Kegiatan</th>
-                                            <th>Deskripsi</th>
-                                            <th>Kategori</th>
-                                            <th>Tanggal Mulai</th>
-                                            <th>Tanggal Selesai</th>
+                                            <th>Aktifitas</th>
+                                            <th>Pelanggan</th>
+                                            <th>Tenggang Waktu</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php
                                         $userid = $_SESSION['userid']; 
-                                        $logindata = mysqli_query($conn, "SELECT j.aktifitas, j.deskripsi, DATE_FORMAT(j.tgl_pelaksanaan, '%d-%m-%Y %H:%i') as tgl_pelaksanaan, DATE_FORMAT(j.tgl_selesai, '%d-%m-%Y %H:%i') as tgl_selesai, kj.nama_kategori FROM jadwal j inner join kategori_jadwal kj on kj.id = j.kategori where j.is_active = 1 and adminid = $userid and (tgl_pelaksanaan < CURRENT_TIMESTAMP and tgl_selesai > CURRENT_TIMESTAMP)");
+                                        $logindata = mysqli_query($conn, "SELECT j.aktifitas, j.deskripsi, DATE_FORMAT(j.tgl_pelaksanaan, '%d-%m-%Y %H:%i') as tgl_pelaksanaan, DATE_FORMAT(j.tgl_selesai, '%d-%m-%Y %H:%i') as tgl_selesai, kj.nama_kategori, p.namapelanggan FROM jadwal j inner join kategori_jadwal kj on kj.id = j.kategori inner join pelanggan p on j.idpelanggan = p.idpelanggan where j.is_active = 1 and j.adminid = $userid and j.status = 1 order by tgl_selesai asc");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($logindata)){
                                             $aktifitas = $data['aktifitas'];
@@ -61,14 +62,16 @@ require 'function.php';
                                             $tglPlksnaan = $data['tgl_pelaksanaan'];
                                             $tglSlse = $data['tgl_selesai'];
                                             $kategori = $data['nama_kategori'];
+                                            $pelanggan = $data['namapelanggan'];
                                         
                                         ?>
                                         <tr>
                                             <td><?=$i++;?></td>
-                                            <td><?=$aktifitas;?></td>
-                                            <td><?=$desc;?></td>
                                             <td><?=$kategori;?></td>
-                                            <td><?=$tglPlksnaan;?></td>
+                                            <!-- <td><?=$aktifitas;?></td> -->
+                                            <!-- <td><?=$desc;?></td> -->
+                                            <!-- <td><?=$tglPlksnaan;?></td> -->
+                                            <td><?=$pelanggan;?></td>
                                             <td><?=$tglSlse;?></td>
                                         </tr>
                                     <?php 

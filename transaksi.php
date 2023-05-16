@@ -75,9 +75,9 @@ require 'cek.php';
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detil<?=$idtransaksi;?>">
                                                     Detil
                                                 </button>
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idtransaksi;?>">
+                                                <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idtransaksi;?>">
                                                     Delete
-                                                </button>
+                                                </button> -->
                                             </td>
                                         </tr>
 
@@ -221,6 +221,9 @@ require 'cek.php';
                                                             } 
                                                         ?>
                                                         </div>
+                                                        <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#delete<?=$idtransaksi;?>">
+                                                            Hapus
+                                                        </button>
                                                     </div>
                                                     
 
@@ -262,9 +265,9 @@ require 'cek.php';
                             </div>
                         </div>
                     </div>
-                    <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
+                    <!-- <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
                         <a href="transaksi_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
-                    </div>
+                    </div> -->
                 </main>
                 <?php require "footer.php"; ?>
             </div>
