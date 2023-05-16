@@ -13,17 +13,17 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="user.php">Profil</a></li>
-                        <li><a class="dropdown-item" href="notifikasi.php">Notifikasi</a></li>
+                        <li><a class="dropdown-item" href="user.php"><i class="fas fa-user me-2"></i>Profil</a></li>
+                        <!-- <li><a class="dropdown-item" href="notifikasi.php">Notifikasi</a></li> -->
                         <li><hr class="dropdown-divider" /></li>
                         <?php 
                             if (isset($_SESSION['log'])) {
                                 echo '
-                                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                                <li><a class="dropdown-item" href="logout.php"><i class="fas fa-right-from-bracket me-2"></i>Logout</a></li>
                                 ';
                             } else {
                                 echo '
-                                <li><a class="dropdown-item" href="login.php">Login</a></li>
+                                <li><a class="dropdown-item" href="login.php"><i class="fas fa-right-to-bracket me-2"></i>Login</a></li>
                                 ';
                             }
                         ?>
@@ -53,23 +53,23 @@
                                 } 
                             ?>
                             <a class="nav-link" href="pelanggan.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                                 Pelanggan
                             </a>
                             <a class="nav-link" href="produk.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
                                 Produk
                             </a>
                             <a class="nav-link" href="transaksi.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-money-bill"></i></div>
                                 Transaksi Penjualan
                             </a>
                             <a class="nav-link" href="penjadwalan.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Penjadwalan
+                                Aktifitas
                             </a>                            
                             <a class="nav-link" href="komplain.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-bullhorn"></i></div>
                                 Komplain
                             </a>
                         </div>

@@ -44,17 +44,17 @@ require 'cek.php';
                                     <tbody>
                                         
                                         <?php 
-                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select j.id, l.iduser, l.nama, j.aktifitas, j.deskripsi, j.tgl_pelaksanaan, j.tgl_selesai, j.added_date, j.status, k.id as idkategori, k.nama_kategori from jadwal j inner join login l on j.adminid = l.iduser inner join kategori_jadwal k on j.kategori = k.id where j.is_active = 0");
+                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select j.id, l.iduser, l.nama, j.aktifitas, j.deskripsi, j.tgl_pelaksanaan, DATE_FORMAT(j.tgl_pelaksanaan, '%d-%m-%Y %H:%i') as tgl_plksn, j.tgl_selesai, DATE_FORMAT(j.tgl_selesai, '%d-%m-%Y %H:%i') as tgl_sls, j.added_date, DATE_FORMAT(j.added_date, '%d-%m-%Y %H:%i') as add_dt, j.status, k.id as idkategori, k.nama_kategori from jadwal j inner join login l on j.adminid = l.iduser inner join kategori_jadwal k on j.kategori = k.id where j.is_active = 0");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatapelanggan)){
                                             $idjadwal = $data['id'];
                                             $iduser = $data['iduser'];
                                             $nama = $data['nama'];
                                             $aktifitas = $data['aktifitas'];
-                                            $tglmulai = $data['tgl_pelaksanaan'];
-                                            $tglselesai = $data['tgl_selesai'];
+                                            $tglmulai = $data['tgl_plksn'];
+                                            $tglselesai = $data['tgl_sls'];
                                             $deskripsi = $data['deskripsi'];
-                                            $adddate = $data['added_date'];
+                                            $adddate = $data['add_dt'];
                                             $kategori = $data['nama_kategori'];
                                             $idkategori = $data['idkategori'];
                                             $status = $data['status'];

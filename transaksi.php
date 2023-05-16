@@ -46,7 +46,7 @@ require 'cek.php';
                                     </thead>
                                     <tbody>
                                     <?php 
-                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, DATE_FORMAT(t.tanggal_transaksi, '%d-%m-%Y %H:%i') as tgl_formated, p.namapelanggan, t.totaltransaksi, mp.nama_metode, p.idpelanggan FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 1");
+                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, DATE_FORMAT(t.tanggal_transaksi, '%d-%m-%Y %H:%i') as tgl_formated, p.namapelanggan, t.totaltransaksi, CONCAT('Rp. ', FORMAT(t.totaltransaksi, 2, 'id_ID')) as totaltransaksi_str, mp.nama_metode, p.idpelanggan FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 1 order by t.tanggal_transaksi desc");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatatransaksi)){
                                             $idtransaksi = $data['idtransaksi'];
@@ -57,6 +57,7 @@ require 'cek.php';
                                             $idpelanggan = $data['idpelanggan'];
                                             
                                             $totaltransaksi = $data['totaltransaksi'];
+                                            $totaltransaksistr = $data['totaltransaksi_str'];
                                             $nama_metode = $data['nama_metode'];
                                             
                                         
@@ -67,7 +68,7 @@ require 'cek.php';
                                             <td><?=$i++;?></td>
                                             <td><?=$tanggaltransaksif;?></td>
                                             <td><?=$namapelanggan;?></td>
-                                            <td><?=$totaltransaksi;?></td>
+                                            <td><?=$totaltransaksistr;?></td>
                                             <td><?=$nama_metode;?></td>
                                             
                                             <td>
@@ -128,36 +129,93 @@ require 'cek.php';
 
                                                     <!-- Modal body -->
                                                     <div class="modal-body">
-                                                        <input type="text" disabled value="<?=$tanggaltransaksi;?>" class="form-control">
-                                                        <input type="text" disabled value="<?=$namapelanggan;?>" class="form-control">
-                                                        <input type="text" disabled value="<?=$totaltransaksi;?>" class="form-control">
-                                                        <input type="text" disabled value="<?=$nama_metode;?>" class="form-control">
+                                                        <div class="row">
+                                                            <div class="col-lg-5">
+                                                                <b>Tanggal Transaksi</b>
+                                                            </div>
+                                                            <div class="col-lg-1">
+                                                                <b>: </b>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <a><?=$tanggaltransaksif;?></a>
+                                                            </div>
+                                                            <div class="col-lg-5">
+                                                                <b>Pelanggan</b>
+                                                            </div>
+                                                            <div class="col-lg-1">
+                                                                <b>: </b>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <a><?=$namapelanggan;?></a>
+                                                            </div>
+                                                            <div class="col-lg-5">
+                                                                <b>Total Transaksi</b>
+                                                            </div>
+                                                            <div class="col-lg-1">
+                                                                <b>: </b>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <a><?=$totaltransaksistr;?></a>
+                                                            </div>
+                                                            <div class="col-lg-5">
+                                                                <b>Metode Pembayaran</b>
+                                                            </div>
+                                                            <div class="col-lg-1">
+                                                                <b>: </b>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <a><?=$nama_metode;?></a>
+                                                            </div>
+                                                        </div>
                                                         <br>
-                                                        <h4>Detil - Detil Produk:</h4>
-                                                        <div style="height: max(40vh); overflow-y: auto;">
+                                                        <h4 class="mb-2">Detil - Detil Produk:</h4>
+                                                        <div style="height: max(40vh); overflow-y: auto; overflow-x: hidden;">
                                                         <?php 
                                                             $a = 0;
-                                                            $a++;
-                                                            $dataDetail = mysqli_query($conn, "select * from transaksi_detail td inner join produk p on td.idproduk = p.idproduk where td.idtransaksi = $idtransaksi");
+                                                            $dataDetail = mysqli_query($conn, "select p.nama_item, td.qty, p.satuan, CONCAT('Rp. ', FORMAT(p.harga_jual, 2, 'id_ID')) as harga_jual, CONCAT('Rp. ', FORMAT(td.totalharga, 2, 'id_ID')) as totalharga from transaksi_detail td inner join produk p on td.idproduk = p.idproduk where td.idtransaksi = $idtransaksi");
                                                             while($fetcharray = mysqli_fetch_array($dataDetail)){
+                                                                $a++;
                                                                 $namaItem = $fetcharray['nama_item'];
                                                                 $qtyTd = $fetcharray['qty'];
+                                                                $satuan = $fetcharray['satuan'];
                                                                 $prcPrdk = $fetcharray['harga_jual'];
                                                                 $prcTotal = $fetcharray['totalharga'];
                                                                 
 
                                                         ?>
-
-                                                        <div>
-                                                            <b><?= $namaItem ?></b>
-                                                            <br>
-                                                            <input type="text" disabled value="<?=$qtyTd;?>" class="form-control">
-                                                            <br>
-                                                            <input type="text" disabled value="<?=$prcPrdk;?>" class="form-control">
-                                                            <br>
-                                                            <input type="text" disabled value="<?=$prcTotal;?>" class="form-control">
-                                                            <br>
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <h5><?= $a ?>. <?= $namaItem ?></h5>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <b>Kuantitas</b>
+                                                            </div>
+                                                            <div class="col-lg-1">
+                                                                <b>: </b>
+                                                            </div>
+                                                            <div class="col-lg-7">
+                                                                <a><?=$qtyTd;?> <?=$satuan;?></a>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <b>Harga Satuan</b>
+                                                            </div>
+                                                            <div class="col-lg-1">
+                                                                <b>: </b>
+                                                            </div>
+                                                            <div class="col-lg-7">
+                                                                <a><?=$prcPrdk;?></a>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <b>Total Harga</b>
+                                                            </div>
+                                                            <div class="col-lg-1">
+                                                                <b>: </b>
+                                                            </div>
+                                                            <div class="col-lg-7">
+                                                                <a><?=$prcTotal;?></a>
+                                                            </div>
                                                         </div>
+                                                        <div class="mt-1 mb-1" style="background-color: #000; width: 100%; height: 2px;"></div>
 
                                                         <?php
                                                             } 
@@ -377,17 +435,20 @@ require 'cek.php';
 
             const br1 = document.createElement("br");
             newElement.appendChild(br1);
-            const br2 = document.createElement("br");
-            newElement.appendChild(br2);
+            // const br2 = document.createElement("br");
+            // newElement.appendChild(br2);
 
             const deleteBtn = document.createElement("button");
             deleteBtn.setAttribute("type", "button");
-            deleteBtn.setAttribute("class", "btn btn-danger");
+            deleteBtn.setAttribute("class", "btn btn-danger mt-1");
             deleteBtn.setAttribute("onclick", "removeItem("+i+")");
             deleteBtn.innerHTML = "Hapus";
             newElement.appendChild(deleteBtn);
 
-            const delBtn = document
+            const bar = document.createElement("div");
+            bar.setAttribute("class", "mt-3 mb-1");
+            bar.setAttribute("style", "background-color: #000; width: 100%; height: 2px;");
+            newElement.appendChild(bar);
 
             i++;
 

@@ -39,13 +39,15 @@ require 'cek.php';
                                             <th>Tanggal Komplain</th>
                                             <th>Kategori</th>
                                             <th>Komplain</th>
+                                            <th>Solusi</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                     <?php 
-                                        $ambilsemuadatakomplain = mysqli_query($conn, 'SELECT k.idkomplain, k.nama, k.komplain, DATE_FORMAT(k.tanggal, "%d-%m-%Y") AS tanggal, kk.nama_kategori, k.idkategori FROM komplain k INNER JOIN kategori_komplain kk ON k.idkategori = kk.id WHERE k.is_active = 1;');
+                                        $ambilsemuadatakomplain = mysqli_query($conn, 'SELECT k.idkomplain, k.nama, k.komplain, DATE_FORMAT(k.tanggal, "%d-%m-%Y") AS tanggal, kk.nama_kategori, k.idkategori, k.solusi, k.is_active FROM komplain k INNER JOIN kategori_komplain kk ON k.idkategori = kk.id ORDER BY is_active DESC, k.tanggal DESC');
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatakomplain)){
                                             $idkomplain = $data['idkomplain'];
@@ -54,6 +56,14 @@ require 'cek.php';
                                             $komplain = $data['komplain'];
                                             $kategori = $data['nama_kategori'];
                                             $idkategori = $data['idkategori'];
+                                            $solusi = $data['solusi'];
+                                            $status = $data['is_active'];
+
+                                            if($status == 1) {
+                                                $status = "Aktif";
+                                            } else {
+                                                $status = "Tidak Aktif";
+                                            }
                                         
                                         ?>
 
@@ -65,13 +75,15 @@ require 'cek.php';
                                             <td><?=$tanggalkomplain;?></td>
                                             <td><?=$kategori;?></td>
                                             <td><?=$komplain;?></td>
+                                            <td><?=$solusi;?></td>
+                                            <td><?=$status;?></td>
                                             <td>
-                                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idkomplain;?>">
-                                                    Edit
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?=$idkomplain;?>">
+                                                    Detil
                                                 </button>
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idkomplain;?>">
+                                                <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idkomplain;?>">
                                                     Delete
-                                                </button>
+                                                </button> -->
                                             </td>
                                         </tr>
 
@@ -93,6 +105,8 @@ require 'cek.php';
                                                             <br>
                                                             <input type="text" name="komplain" value="<?=$komplain;?>" class="form-control" required>
                                                             <br>
+                                                            <input type="text" name="solusi" value="<?=$solusi;?>" class="form-control" required>
+                                                            <br>
                                                             <select name="kategori" class="form-control mb-2">
                                                                  <?php 
                                                                     $data = mysqli_query($conn, "select * from kategori_komplain");
@@ -108,7 +122,27 @@ require 'cek.php';
                                                                 ?>
                                                             </select>
                                                             <input type="hidden" name="idkomplain" value="<?=$idkomplain;?>">
-                                                            <button type="submit" class="btn btn-primary" name="updatekomplain">Submit</button>
+                                                            <?php 
+                                                                if($status == "Aktif") {
+                                                                    echo("
+                                                                    <button type='submit' class='btn btn-primary' name='updatekomplain'>Submit</button>
+                                                                    
+                                                                    <button type='button' class='btn btn-danger ms-3' data-bs-toggle='modal' data-bs-target='#delete$idkomplain'>
+                                                                        Non-aktifkan
+                                                                    </button>
+                                                                    ");
+                                                                }  else {
+                                                                    echo("
+                                                                    
+                                                                        <button type='submit' class='btn btn-warning' name='pulihkomplain'>
+                                                                            Aktifkan
+                                                                        </button>
+                                                                    
+                                                                    ");
+                                                                }
+                                                            
+                                                            ?>
+                                                            <!-- <button type="submit" class="btn btn-primary" name="updatekomplain">Submit</button> -->
                                                         </div>
                                                     </form>
 
@@ -123,18 +157,18 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Hapus Pelanggan?</h4>
+                                                        <h4 class="modal-title">Nonaktifkan Komplain?</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            Apakah anda yakin ingin menghapus komplain <?=$namapelanggan;?>?
+                                                            Apakah anda yakin ingin menonaktifkan komplain <?=$namapelanggan;?>?
                                                             <input type="hidden" name="idkomplain" value="<?=$idkomplain;?>">
                                                             <br>
                                                             <br>
-                                                            <button type="submit" class="btn btn-danger" name="hapuskomplain">Hapus</button>
+                                                            <button type="submit" class="btn btn-danger" name="hapuskomplain">Non-aktifkan</button>
                                                         </div>
                                                     </form>
 
@@ -150,9 +184,9 @@ require 'cek.php';
                             </div>
                         </div>
                     </div>
-                    <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
+                    <!-- <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
                         <a href="komplain_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
-                    </div>
+                    </div> -->
                 </main>
                 <?php require "footer.php"; ?>
             </div>
@@ -182,6 +216,8 @@ require 'cek.php';
                     <input type="text" name="namapelanggan" placeholder="Nama Pelanggan" class="form-control" required>
                     <br>
                     <input type="text" name="komplain" class="form-control" placeholder="Komplain/Kritik/Saran" required>
+                    <br>
+                    <input type="text" name="solusi" class="form-control" placeholder="Solusi" required>
                     <br>
                     <select name="kategori" class="form-control mb-2">
                         <?php 

@@ -40,15 +40,16 @@ require 'cek.php';
                                             <th>No.</th>
                                             <th>Nama Pelanggan</th>
                                             <th>Alamat</th>
-                                            <th>Telp</th>
+                                            <th>Nomor HP</th>
                                             <th>Prioritas</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         
                                         <?php 
-                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select * from pelanggan where is_active = 1");
+                                        $ambilsemuadatapelanggan = mysqli_query($conn, "select * from pelanggan order by is_active desc");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatapelanggan)){
                                             $idpelanggan = $data['idpelanggan'];
@@ -56,7 +57,13 @@ require 'cek.php';
                                             $alamat = $data['alamat'];
                                             $telp = $data['telp'];
                                             $prioritas = $data['prioritas'];
-                                            // $idp = $data['idpelanggan'];
+                                            $status = $data['is_active'];
+
+                                            if($status == 1) {
+                                                $status = "Aktif";
+                                            } else {
+                                                $status = "Tidak Aktif";
+                                            }
                                         
                                         ?>
 
@@ -68,13 +75,14 @@ require 'cek.php';
                                             <td><?=$alamat;?></td>
                                             <td>(+62) <?=$telp;?></td>
                                             <td><?=$prioritas;?></td>
+                                            <td><?=$status;?></td>
                                             <td>
-                                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idpelanggan;?>">
-                                                    Edit
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?=$idpelanggan;?>">
+                                                    Detil
                                                 </button>
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idpelanggan;?>">
+                                                <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idpelanggan;?>">
                                                     Delete
-                                                </button>
+                                                </button> -->
                                             </td>
                                         </tr>
                                             <!-- Edit The Modal -->
@@ -98,7 +106,26 @@ require 'cek.php';
                                                             <input type="number" name="telp" class="form-control" value="<?=$telp;?>" required>
                                                             <br>
                                                             <input type="hidden" name="idpelanggan" value="<?=$idpelanggan;?>">
-                                                            <button type="submit" class="btn btn-primary" name="updatepelanggan">Submit</button>
+                                                            <?php 
+                                                                if($status == "Aktif") {
+                                                                    echo("
+                                                                    <button type='submit' class='btn btn-primary' name='updatepelanggan'>Submit</button>
+                                                                    
+                                                                    <button type='button' class='btn btn-danger ms-3' data-bs-toggle='modal' data-bs-target='#delete$idpelanggan'>
+                                                                        Non-aktifkan
+                                                                    </button>
+                                                                    ");
+                                                                }  else {
+                                                                    echo("
+                                                                    
+                                                                        <button type='submit' class='btn btn-warning' name='pulihpelanggan'>
+                                                                            Aktifkan
+                                                                        </button>
+                                                                    
+                                                                    ");
+                                                                }
+                                                            
+                                                            ?>
                                                         </div>
                                                     </form>
 
@@ -113,18 +140,18 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Hapus Pelanggan?</h4>
+                                                        <h4 class="modal-title">Nonaktifkan Pelanggan?</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            Apakah anda yakin ingin menghapus <?=$namapelanggan;?>?
+                                                            Apakah anda yakin ingin menonaktifkan <?=$namapelanggan;?>?
                                                             <input type="hidden" name="idpelanggan" value="<?=$idpelanggan;?>">
                                                             <br>
                                                             <br>
-                                                            <button type="submit" class="btn btn-danger" name="hapuspelanggan">Hapus</button>
+                                                            <button type="submit" class="btn btn-danger" name="hapuspelanggan">Non-aktifkan</button>
                                                         </div>
                                                     </form>
 
@@ -142,9 +169,9 @@ require 'cek.php';
                             </div>
                         </div>
                     </div>
-                    <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
+                    <!-- <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
                         <a href="pelanggan_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
-                    </div>
+                    </div> -->
                 </main>
                 <?php require "footer.php"; ?>
             </div>
@@ -175,7 +202,7 @@ require 'cek.php';
                     <br>
                     <input type="text" name="alamat" placeholder="Alamat" class="form-control" required>
                     <br>
-                    <input type="number" name="telp" class="form-control" placeholder="Telp" required>
+                    <input type="number" name="telp" class="form-control" placeholder="Nomor HP" required>
                     <br>
                     <button type="submit" class="btn btn-primary" name="addnewcustomer">Submit</button>
                 </div>

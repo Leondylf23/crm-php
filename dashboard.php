@@ -61,7 +61,7 @@ if(isset($_SESSION['role'])) {
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-pie me-1"></i>
-                                        Pelanggan
+                                        Prioritas Pelanggan
                                     </div>
                                     <div class="card-body"><canvas id="myPieChart2" width="100%" height="25vh" aria-label="TESTTT" role="img"></canvas></div>
                                     <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
@@ -227,6 +227,7 @@ if(isset($_SESSION['role'])) {
                     }
                 }
             });
+            // console.table(produk);
 
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

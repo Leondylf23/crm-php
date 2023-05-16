@@ -34,7 +34,7 @@ require 'cek.php';
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>No.</th>
+                                            <!-- <th>No.</th> -->
                                             <th>Kode Produk</th>
                                             <th>Nama Produk</th>
                                             <th>Jenis</th>
@@ -44,13 +44,14 @@ require 'cek.php';
                                             <th>Harga Pokok</th>
                                             <th>Harga Jual</th>
                                             <th>Keterangan</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                     <?php 
-                                        $ambilsemuadataproduk = mysqli_query($conn, "select idproduk, kode_produk, nama_item, jenis, merek, tipe_item, satuan, CONCAT('Rp. ', FORMAT(harga_pokok, 2, 'id_ID')) as harga_pokok_str, harga_pokok, CONCAT('Rp. ', FORMAT(harga_jual, 2, 'id_ID')) as harga_jual_str, harga_jual, keterangan from produk where is_active = 1");
+                                        $ambilsemuadataproduk = mysqli_query($conn, "select idproduk, kode_produk, nama_item, jenis, merek, tipe_item, satuan, CONCAT('Rp. ', FORMAT(harga_pokok, 2, 'id_ID')) as harga_pokok_str, harga_pokok, CONCAT('Rp. ', FORMAT(harga_jual, 2, 'id_ID')) as harga_jual_str, harga_jual, keterangan, is_active from produk order by is_active desc");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadataproduk)){
                                             $idproduk = $data['idproduk'];
@@ -65,11 +66,17 @@ require 'cek.php';
                                             $hargajualstr = $data['harga_jual_str'];
                                             $hargajual = $data['harga_jual'];
                                             $keterangan = $data['keterangan'];
+                                            $status = $data['is_active'];
+                                            if($status == 1) {
+                                                $status = "Aktif";
+                                            } else {
+                                                $status = "Tidak Aktif";
+                                            }
                                         
                                         ?>
 
                                         <tr>
-                                            <td><?=$i++;?></td>
+                                            <!-- <td><?=$i++;?></td> -->
                                             <!-- <td><?=$idproduk;?></td> -->
                                             <td><?=$kodeproduk;?></td>
                                             <td><?=$namaproduk;?></td>
@@ -80,13 +87,14 @@ require 'cek.php';
                                             <td><?=$hargapokokstr;?></td>
                                             <td><?=$hargajualstr;?></td>
                                             <td><?=$keterangan;?></td>
+                                            <td><?=$status;?></td>
                                             <td>
-                                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idproduk;?>">
-                                                    Edit
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?=$idproduk;?>">
+                                                    Detil
                                                 </button>
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idproduk;?>">
+                                                <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idproduk;?>">
                                                     Hapus
-                                                </button>
+                                                </button> -->
                                             </td>
                                         </tr>
 
@@ -123,7 +131,35 @@ require 'cek.php';
                                                             <input type="text" name="keterangan" value="<?=$keterangan;?>" class="form-control" required>
                                                             <br>
                                                             <input type="hidden" name="idproduk" value="<?=$idproduk;?>">
-                                                            <button type="submit" class="btn btn-primary" name="updateproduk">Submit</button>
+                                                            <!-- <label for="test">
+                                                                <input type="radio" name="test" value="tes"  required>
+                                                                Test
+                                                            </label>
+                                                            <label for="test">
+                                                                <input type="radio" name="test" value="tes"  required>
+                                                                Test
+                                                            </label> -->
+                                                            <!-- <br> -->
+                                                            <?php 
+                                                                if($status == "Aktif") {
+                                                                    echo("
+                                                                    <button type='submit' class='btn btn-primary' name='updateproduk'>Submit</button>
+                                                                    
+                                                                    <button type='button' class='btn btn-danger ms-3' data-bs-toggle='modal' data-bs-target='#delete$idproduk'>
+                                                                        Non-aktifkan
+                                                                    </button>
+                                                                    ");
+                                                                }  else {
+                                                                    echo("
+                                                                    
+                                                                        <button type='submit' class='btn btn-warning' name='pulihproduk'>
+                                                                            Aktifkan
+                                                                        </button>
+                                                                    
+                                                                    ");
+                                                                }
+                                                            
+                                                            ?>                                                              
                                                         </div>
                                                     </form>
 
@@ -138,18 +174,18 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Hapus Produk?</h4>
+                                                        <h4 class="modal-title">Nonaktifkan Produk?</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            Apakah anda yakin ingin menghapus <?=$namaproduk;?>?
+                                                            Apakah anda yakin ingin menonaktifkan <?=$namaproduk;?>?
                                                             <input type="hidden" name="idproduk" value="<?=$idproduk;?>">
                                                             <br>
                                                             <br>
-                                                            <button type="submit" class="btn btn-danger" name="hapusproduk">Hapus</button>
+                                                            <button type="submit" class="btn btn-danger" name="hapusproduk">Non-aktifkan</button>
                                                         </div>
                                                     </form>
 
@@ -165,9 +201,9 @@ require 'cek.php';
                         </div>
                     </div>
 
-                    <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
+                    <!-- <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
                         <a href="produk_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
-                    </div>
+                    </div> -->
                 </main>
                 <?php require "footer.php"; ?>
             </div>
