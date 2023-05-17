@@ -37,6 +37,7 @@ require 'cek.php';
                             }
                         ?>
                         <div class="mb-4">
+                            <h4 class="mb-3">General</h4>
                             <form method="post">
                                 <div class="form-floating mb-3">
                                     <input class="form-control" name="nama" id="inputNama" type="text" placeholder="Nama Lengkap" value="<?= $nama ?>" />
@@ -53,6 +54,7 @@ require 'cek.php';
                         </div>
 
                         <div>
+                            <h4 class="mb-3">Password</h4>
                             <form method="post">
                                 <div class="form-floating mb-3">
                                     <input class="form-control" name="oldpass" id="inputOldPass" type="password" />

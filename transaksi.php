@@ -76,6 +76,9 @@ require 'cek.php';
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detil<?=$idtransaksi;?>">
                                                     Detil
                                                 </button>
+                                                <button type="button" class="btn btn-primary ms-1" onclick="location.href='exporttoexcel.php?id=<?=$idtransaksi;?>';">
+                                                    Export
+                                                </button>
                                                 <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idtransaksi;?>">
                                                     Delete
                                                 </button> -->
