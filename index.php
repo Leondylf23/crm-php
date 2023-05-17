@@ -109,6 +109,8 @@ require 'function.php';
         <script>
             const ctx = document.getElementById('myPieChart');
             const ctx1 = document.getElementById('myBarChart');
+            let kpiDataTemp = [];
+            let kpiDataLabels = ['Aktifitas', 'Komplain', 'Transaksi', 'Pelanggan', 'Produk'];
             let kpiData = [];
             let kpiYear = [];
 
@@ -119,8 +121,21 @@ require 'function.php';
                 while($fetcharray = mysqli_fetch_array($kpiKategori)){
                     $kategori = $fetcharray['kategori'];
                     $jumlah = $fetcharray['jumlah'];
-                    echo("kpiData.push({label: '$kategori', jumlah: '$jumlah'});");
+                    echo("kpiDataTemp.push({label: '$kategori', jumlah: '$jumlah'});");
                 }
+
+                echo("
+                kpiDataLabels.forEach(e => {
+                    var data = 0;
+                    kpiDataTemp.forEach(d => {
+                        if(d.label == e) {
+                            data = d.jumlah;
+                        }
+                    });
+                    kpiData.push(data);                            
+                });
+                ");
+                
                 $kpiTahunan = mysqli_query($conn, "SELECT MONTHNAME(added_date) as bulan, COUNT(id) as jumlah FROM `kpi_records` WHERE adminid = $userid and YEAR(CURRENT_DATE) = YEAR(added_date) GROUP BY MONTHNAME(added_date)");
                 while($fetcharray = mysqli_fetch_array($kpiTahunan)){
                     $kategoriTh = $fetcharray['bulan'];
@@ -132,10 +147,10 @@ require 'function.php';
             new Chart(ctx, {
                 type: 'radar',
                 data: {
-                    labels: kpiData.map(obj => obj.label),
+                    labels: kpiDataLabels,
                     datasets: [{
                         label: 'Banyaknya Pekerjaan',
-                        data: kpiData.map(obj => obj.jumlah),
+                        data: kpiData,
                         borderWidth: 4,
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
                         borderColor: 'rgb(255, 99, 132)',
