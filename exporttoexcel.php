@@ -36,15 +36,16 @@ if(isset($_GET['id'])) {
         $tglStr = $fetcharray['tgl_str'];
     }
 
-    echo "Transaksi tanggal: " . "\t" . "$tglTransaksi" . "\n";
     echo "Nama Pelanggan: " . "\t" . "$pelanggan" . "\n";
+    echo "Tanggal Transaksi: " . "\t" . "$tglTransaksi" . "\n";
     echo "Metode Pembayaran: " . "\t" . "$metode" . "\n";
     echo "\n";
     
     echo 'Nama Barang' . "\t" . 'Kuantitas' . "\t" . 'Harga Satuan' . "\t" . 'Harga Total' . "\n";
     $sqlData = mysqli_query($conn, "
     select 
-        p.nama_item, 
+        p.nama_item,
+        p.kode_produk, 
         td.qty,
         p.satuan, 
         CONCAT('Rp. ', FORMAT(p.harga_jual, 2, 'id_ID')) as harga_jual,        
@@ -57,12 +58,12 @@ if(isset($_GET['id'])) {
         produk p on td.idproduk = p.idproduk   
     where t.idtransaksi = $idtransaksi ");
     while($fetcharray = mysqli_fetch_array($sqlData)){        
-        echo $fetcharray['nama_item'] . "\t" . $fetcharray['qty'] . " " . $fetcharray['satuan'] . "\t" . $fetcharray['harga_jual'] . "\t" . $fetcharray['totalharga'] . "\n";
+        echo $fetcharray['kode_produk'] . " - " . $fetcharray['nama_item'] . "\t" . $fetcharray['qty'] . " " . $fetcharray['satuan'] . "\t" . $fetcharray['harga_jual'] . "\t" . $fetcharray['totalharga'] . "\n";
     }
 
     echo "\n";
     echo "\n";
-    echo "Total Transaksi: " . "\t" . "$totalTransaksi" . "\n";
+    echo "\t" . "\t" . "Total Transaksi: " . "\t" . "$totalTransaksi" . "\n";
 
     $filename = $pelanggan . $tglStr;
     header("Content-disposition: attachment; filename=$filename.xls");
