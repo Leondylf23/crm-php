@@ -16,6 +16,19 @@ require 'cek.php';
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <style>
+            /* Chrome, Safari, Edge, Opera */
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            /* Firefox */
+            input[type=number] {
+            -moz-appearance: textfield;
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         
@@ -30,7 +43,8 @@ require 'cek.php';
                             <div class="card-header">
                                 <!-- Button to Open the Modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Tambah Pelanggan
+                                    <i class="fas fa-plus me-1"></i>
+                                    Pelanggan
                                 </button>
                             </div>
                             <div class="card-body">
@@ -99,12 +113,19 @@ require 'cek.php';
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            <input type="text" name="namapelanggan" value="<?=$namapelanggan;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="alamat" value="<?=$alamat;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="number" name="telp" class="form-control" value="<?=$telp;?>" required>
-                                                            <br>
+                                                            <div class="form-floating mb-3">
+                                                                <input type="text" name="namapelanggan" value="<?=$namapelanggan;?>" class="form-control" id="namapelanggan" required>
+                                                                <label for="namapelanggan">Nama Pelanggan</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">
+                                                                <input type="text" name="alamat" value="<?=$alamat;?>" class="form-control" id="alamat" required>
+                                                                <label for="alamat">Alamat</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">
+                                                                <input type="number" name="telp" class="form-control" value="<?=$telp;?>" id="telp" required>
+                                                                <label for="telp">Nomor HP (+62)</label>
+
+                                                            </div>
                                                             <input type="hidden" name="idpelanggan" value="<?=$idpelanggan;?>">
                                                             <?php 
                                                                 if($status == "Aktif") {
@@ -198,13 +219,19 @@ require 'cek.php';
             <!-- Modal body -->
             <form method="post">
                 <div class="modal-body">
-                    <input type="text" name="namapelanggan" placeholder="Nama Pelanggan" class="form-control" required>
-                    <br>
-                    <input type="text" name="alamat" placeholder="Alamat" class="form-control" required>
-                    <br>
-                    <input type="number" name="telp" class="form-control" placeholder="Nomor HP" required>
-                    <br>
-                    <button type="submit" class="btn btn-primary" name="addnewcustomer">Submit</button>
+                <div class="form-floating mb-3">
+                    <input type="text" name="namapelanggan" class="form-control" id="nama" placeholder="Nama Pelanggan" required>
+                    <label for="nama">Nama Pelanggan</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" name="alamat" class="form-control" id="alamatn" placeholder="Alamat" required>
+                    <label for="alamatn">Alamat</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" name="telp" class="form-control" id="telpn" placeholder="Nomor HP" required>
+                    <label for="telpn">Nomor HP (+62)</label>
+                </div>
+                <button type="submit" class="btn btn-primary" name="addnewcustomer">Submit</button>
                 </div>
             </form>
 

@@ -23,7 +23,7 @@ require 'cek.php';
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Aktifitas</h1>
+                        <h1 class="mt-4">Aktifitas Sales</h1>
 
 
                         <div class="card mb-4">
@@ -33,7 +33,8 @@ require 'cek.php';
                                     <div class="card-header">
                                         <!-- Button to Open the Modal -->
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                        Tambah Aktifitas
+                                            <i class="fas fa-plus me-1"></i>
+                                            Aktifitas
                                         </button>
                                     </div>
                                     ');
@@ -195,7 +196,8 @@ require 'cek.php';
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            <select name="admin" class="form-control">
+                                                            <div class="form-floating mb-3">                    
+                                                                <select name="admin" class="form-control" id="admin">
                                                                  <?php 
                                                                     $data = mysqli_query($conn, "select * from login");
                                                                     while($fetcharray = mysqli_fetch_array($data)){
@@ -203,52 +205,61 @@ require 'cek.php';
                                                                         $idue = $fetcharray['iduser'];
                                                                 ?>
 
-                                                                <option value="<?=$idue;?>" <?php if($idue == $iduser){echo("selected"); } ?>><?=$valueue;?></option>
+                                                                    <option value="<?=$idue;?>" <?php if($idue == $iduser){echo("selected"); } ?>><?=$valueue;?></option>
 
                                                                 <?php
                                                                     }
                                                                 ?>
-                                                            </select>
-                                                            <br>
-                                                            <select name="pelanggan" class="form-control">
-                                                                 <?php 
-                                                                    $data = mysqli_query($conn, "select * from pelanggan");
-                                                                    while($fetcharray = mysqli_fetch_array($data)){
-                                                                        $valuep = $fetcharray['namapelanggan'];
-                                                                        $tiere = $fetcharray['prioritas'];
-                                                                        $idp = $fetcharray['idpelanggan'];
-                                                                ?>
-
-                                                                <option value="<?=$idp;?>" <?php if($idp == $idplgn){echo("selected"); } ?>><?=$valuep;?> - <?=$tiere;?></option>
-
-                                                                <?php
-                                                                    }
-                                                                ?>
-                                                            </select>
-                                                            <br>
+                                                                </select>                                                            
+                                                                <label for="admin">Pilih Admin</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                    
+                                                                <select name="pelanggan" class="form-control" id="plgn">
+                                                                     <?php 
+                                                                        $data = mysqli_query($conn, "select * from pelanggan");
+                                                                        while($fetcharray = mysqli_fetch_array($data)){
+                                                                            $valuep = $fetcharray['namapelanggan'];
+                                                                            $tiere = $fetcharray['prioritas'];
+                                                                            $idp = $fetcharray['idpelanggan'];
+                                                                    ?>
+    
+                                                                    <option value="<?=$idp;?>" <?php if($idp == $idplgn){echo("selected"); } ?>><?=$valuep;?> - <?=$tiere;?></option>
+    
+                                                                    <?php
+                                                                        }
+                                                                    ?>
+                                                                </select>                                                            
+                                                                <label for="plgn">Pilih Pelanggan</label>
+                                                            </div>                                                            
                                                             <!-- <input type="text" name="aktifitas" value="<?=$aktifitas;?>" class="form-control" required> -->
-                                                            <!-- <br> -->                                                            
-                                                            <select name="kategori" class="form-control">
-                                                                 <?php 
-                                                                    $data = mysqli_query($conn, "select * from kategori_jadwal where is_active = 1");
-                                                                    while($fetcharray = mysqli_fetch_array($data)){
-                                                                        $valueke = $fetcharray['nama_kategori'];
-                                                                        $idke = $fetcharray['id'];
-                                                                ?>
-
-                                                                <option value="<?=$idke;?>" <?php if($idke == $idkategori){echo("selected"); } ?>><?=$valueke;?></option>
-
-                                                                <?php
-                                                                    }
-                                                                ?>
-                                                            </select>
-                                                            <br>
+                                                            <!-- <br> -->   
+                                                            <div class="form-floating mb-3">                    
+                                                                <select name="kategori" class="form-control" id="ktg">
+                                                                     <?php 
+                                                                        $data = mysqli_query($conn, "select * from kategori_jadwal where is_active = 1");
+                                                                        while($fetcharray = mysqli_fetch_array($data)){
+                                                                            $valueke = $fetcharray['nama_kategori'];
+                                                                            $idke = $fetcharray['id'];
+                                                                    ?>
+    
+                                                                    <option value="<?=$idke;?>" <?php if($idke == $idkategori){echo("selected"); } ?>><?=$valueke;?></option>
+    
+                                                                    <?php
+                                                                        }
+                                                                    ?>
+                                                                </select>                                                            
+                                                                <label for="ktg">Aktifitas</label>
+                                                            </div>                                                                                                                     
                                                             <!-- <input type="datetime-local" name="tglmulai" class="form-control" value="<?=$tglmulai;?>" required>
                                                             <br> -->
-                                                            <input type="text" name="deskripsi" value="<?=$deskripsi;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="datetime-local" name="tglselesai" class="form-control" value="<?=$tglselesai;?>" required>
-                                                            <br>
+                                                            <div class="form-floating mb-3">                                                                                
+                                                                <input type="text" name="deskripsi" value="<?=$deskripsi;?>" class="form-control" id="desc" required>
+                                                                <label for="desc">Deskripsi</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                                                                                
+                                                                <input type="datetime-local" name="tglselesai" class="form-control" value="<?=$tglselesai;?>" id="tgl" required>
+                                                                <label for="tgl">Tenggang Waktu</label>
+                                                            </div>                                                                                                                        
                                                             <input type="hidden" name="idjadwal" value="<?=$idjadwal;?>">
 
                                                             <?php 
@@ -377,7 +388,7 @@ require 'cek.php';
                         </div>
                     </div>
                     <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
-                        <a href="penambahan_aktifitas.php" class="ms-4">Tambah Kategori Aktifitas</a>
+                        <a href="penambahan_aktifitas.php" class="ms-4 link-secondary">Tambah Kategori Aktifitas</a>
                         <!-- <a href="penjadwalan_recovery.php" style="padding-left: 25px;">Pemulihan data</a> -->
                     </div>
                 </main>
@@ -406,67 +417,76 @@ require 'cek.php';
             <!-- Modal body -->
             <form method="post">
                 <div class="modal-body">
-                    <select name="admin" class="form-control">
-                        <option value="0">Pilih Admin</option>
-                        <?php 
-                           $data = mysqli_query($conn, "select * from login");
-                           while($fetcharray = mysqli_fetch_array($data)){
-                               $valueun = $fetcharray['nama'];
-                               $idun = $fetcharray['iduser'];
-                       ?>
-    
-                       <option value="<?=$idun;?>"><?=$valueun;?></option>
-    
-                       <?php
-                           }
-                       ?>
-                    </select>
-                    <br>
-                    <select name="pelanggan" class="form-control">
-                        <option value="0">Pilih Pelanggan</option>
-                        <?php 
-                           $data = mysqli_query($conn, "select * from pelanggan");
-                           while($fetcharray = mysqli_fetch_array($data)){
-                               $valuepl = $fetcharray['namapelanggan'];
-                               $tiera = $fetcharray['prioritas'];
-                               $idpl = $fetcharray['idpelanggan'];
-                       ?>
-    
-                       <option value="<?=$idpl;?>"><?=$valuepl;?> - <?=$tiera;?></option>
-    
-                       <?php
-                           }
-                       ?>
-                    </select>
-                    <br>
+                    <div class="form-floating mb-3">                                                                                
+                        <select name="admin" class="form-control" id="adminn">
+                            <option value="0">Pilih Admin</option>
+                            <?php 
+                               $data = mysqli_query($conn, "select * from login");
+                               while($fetcharray = mysqli_fetch_array($data)){
+                                   $valueun = $fetcharray['nama'];
+                                   $idun = $fetcharray['iduser'];
+                            ?>
+        
+                           <option value="<?=$idun;?>"><?=$valueun;?></option>
+        
+                           <?php
+                               }
+                           ?>
+                        </select>
+                        <label for="adminn">Pilih Admin</label>
+                    </div>
+                    <div class="form-floating mb-3">                                                                                
+                        <select name="pelanggan" class="form-control" id="plgnn">
+                            <option value="0">Pilih Pelanggan</option>
+                            <?php 
+                               $data = mysqli_query($conn, "select * from pelanggan");
+                               while($fetcharray = mysqli_fetch_array($data)){
+                                   $valuepl = $fetcharray['namapelanggan'];
+                                   $tiera = $fetcharray['prioritas'];
+                                   $idpl = $fetcharray['idpelanggan'];
+                           ?>
+        
+                           <option value="<?=$idpl;?>"><?=$valuepl;?> - <?=$tiera;?></option>
+        
+                           <?php
+                               }
+                           ?>
+                        </select>
+                        <label for="plgnn">Pilih Pelanggan</label>
+                    </div>                    
                     <!-- <input type="text" name="aktifitas" placeholder="Nama Aktifitas" class="form-control" required> -->
                     <!-- <br> -->
-                    <select name="kategori" class="form-control">
-                        <option value="0">Pilih Aktifitas</option>
-                        <?php 
-                           $data = mysqli_query($conn, "select * from kategori_jadwal where is_active = 1");
-                           while($fetcharray = mysqli_fetch_array($data)){
-                               $valuekn = $fetcharray['nama_kategori'];
-                               $idkn = $fetcharray['id'];
-                       ?>
-    
-                       <option value="<?=$idkn;?>"><?=$valuekn;?></option>
-    
-                       <?php
-                           }
-                       ?>
-                    </select>
-                    <br>
-                    <input type="text" name="deskripsi" placeholder="Deskripsi" class="form-control" required>
-                    <br>
+                    <div class="form-floating mb-3">                    
+                        <select name="kategori" class="form-control" id="ktgn">
+                            <option value="0">Pilih Aktifitas</option>
+                            <?php 
+                               $data = mysqli_query($conn, "select * from kategori_jadwal where is_active = 1");
+                               while($fetcharray = mysqli_fetch_array($data)){
+                                   $valuekn = $fetcharray['nama_kategori'];
+                                   $idkn = $fetcharray['id'];
+                           ?>
+        
+                           <option value="<?=$idkn;?>"><?=$valuekn;?></option>
+        
+                           <?php
+                               }
+                           ?>
+                        </select>                                                            
+                        <label for="ktgn">Aktifitas</label>
+                    </div>
+                    <div class="form-floating mb-3">                                                                                
+                        <input type="text" name="deskripsi" placeholder="Deskripsi" class="form-control" id="descn" required>
+                        <label for="descn">Deskripsi</label>
+                    </div>
                     <!-- <input type="datetime-local" name="tglmulai" class="form-control" placeholder="Tanggal Mulai" required> -->
                     <!-- <br> -->
-                    <input type="datetime-local" name="tglselesai" class="form-control" placeholder="Tanggal Selesai" required>
-                    <br>
+                    <div class="form-floating mb-3">                                                                                
+                        <input type="datetime-local" name="tglselesai" class="form-control" placeholder="Tanggal Selesai" id="tgln" required>
+                        <label for="tgln">Tenggang Waktu</label>
+                    </div>
                     <button type="submit" class="btn btn-primary" name="tambahjadwal">Submit</button>
                 </div>
             </form>
-
             </div>
         </div>
     </div>

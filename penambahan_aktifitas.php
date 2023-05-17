@@ -31,7 +31,8 @@ if($_SESSION['role'] != 1){
                             <div class="card-header">
                                 <!-- Button to Open the Modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Tambah Aktifitas
+                                    <i class="fas fa-plus me-1"></i>
+                                    Aktifitas
                                 </button>
                             </div>
                             <div class="card-body">

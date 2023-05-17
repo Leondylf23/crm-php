@@ -85,7 +85,7 @@ require 'function.php';
                             <div class="col-xl-4">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-pie me-1"></i>
+                                        <i class="fas fa-ranking-star me-1"></i>
                                         Pekerjaan Anda
                                     </div>
                                     <div class="card-body"><canvas id="myPieChart" width="100%" height="40vh"></canvas></div>
@@ -130,13 +130,15 @@ require 'function.php';
             ?>
 
             new Chart(ctx, {
-                type: 'pie',
+                type: 'radar',
                 data: {
                     labels: kpiData.map(obj => obj.label),
                     datasets: [{
                         label: 'Banyaknya Pekerjaan',
                         data: kpiData.map(obj => obj.jumlah),
-                        borderWidth: 4
+                        borderWidth: 4,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgb(255, 99, 132)',
                     }]
                 },
                 options: {
@@ -155,7 +157,9 @@ require 'function.php';
                     datasets: [{
                         label: 'Banyaknya Pekerjaan',
                         data: kpiYear.map(obj => obj.jumlah),
-                        borderWidth: 1
+                        borderWidth: 1,
+                        backgroundColor: 'rgba(255, 200, 20, 0.2)',
+                        borderColor: 'rgb(255, 200, 20)',
                     }]
                 },
                 options: {

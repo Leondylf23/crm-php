@@ -27,7 +27,8 @@ require 'cek.php';
                             <div class="card-header">
                                 <!-- Button to Open the Modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Tambah Transaksi
+                                    <i class="fas fa-plus me-1"></i>
+                                    Transaksi
                                 </button>
                             </div>
                             <div class="card-body">
@@ -293,44 +294,58 @@ require 'cek.php';
 
             <!-- Modal body -->
             <form method="post">
-                <div class="modal-body">
-                    <select name="pelanggannya" class="form-control">
-                        <?php 
-                        $ambilsemuadatapelanggannya = mysqli_query($conn, "select * from pelanggan where is_active = 1");
-                        while($fetcharray = mysqli_fetch_array($ambilsemuadatapelanggannya)){
-                            $namapelanggannya = $fetcharray['namapelanggan'];
-                            $idpelanggannya = $fetcharray['idpelanggan'];
-                        ?>
-
-                        <option value="<?=$idpelanggannya;?>"><?=$namapelanggannya;?></option>
-
-                        <?php
-                        }
-                        ?>
-                    </select>
-                    <br>
-                    <select name="metodepembayaran" class="form-control">
-                        <?php 
-                        $data = mysqli_query($conn, "select * from metode_pembayaran");
-                        while($fetcharray = mysqli_fetch_array($data)){
-                            $metode = $fetcharray['nama_metode'];
-                            $idmp = $fetcharray['id'];
-                        ?>
-
-                        <option value="<?=$idmp;?>"><?=$metode;?></option>
-
-                        <?php
-                        }
-                        ?>
-                    </select>
-                    <br>
-                    <input type="hidden" id="totalprice" name="totalprice" />
-                    <b id="totalHarga">Total Harga: IDR 0.00</b>
-                    <br>
-                    <br>
-                    <button type="button" class="btn btn-primary mb-2" onclick=addItem()>Tambah Produk</button>
-                        
-                    <div class="mb-2" id="table-data" style="height: max(40vh); overflow-y: auto;">
+                <div class="modal-body">                    
+                    <div class="form-floating mb-3">
+                        <select name="pelanggannya" class="form-control" id="plgn">
+                            <?php 
+                            $ambilsemuadatapelanggannya = mysqli_query($conn, "select * from pelanggan where is_active = 1");
+                            while($fetcharray = mysqli_fetch_array($ambilsemuadatapelanggannya)){
+                                $namapelanggannya = $fetcharray['namapelanggan'];
+                                $idpelanggannya = $fetcharray['idpelanggan'];
+                            ?>
+    
+                            <option value="<?=$idpelanggannya;?>"><?=$namapelanggannya;?></option>
+    
+                            <?php
+                            }
+                            ?>
+                        </select>                    
+                        <label for="plgn">Pelanggan</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select name="metodepembayaran" class="form-control" id="mtp">
+                            <?php 
+                            $data = mysqli_query($conn, "select * from metode_pembayaran");
+                            while($fetcharray = mysqli_fetch_array($data)){
+                                $metode = $fetcharray['nama_metode'];
+                                $idmp = $fetcharray['id'];
+                            ?>
+    
+                            <option value="<?=$idmp;?>"><?=$metode;?></option>
+    
+                            <?php
+                            }
+                            ?>
+                        </select>                    
+                        <label for="mtp">Metode Pembayaran</label>
+                    </div>
+                    <div class="mb-3">
+                        <div id="tglField">
+                            
+                        </div>
+                        <button type="button" class="btn btn-primary mb-2 me-2" onclick=addTgl() id="tbhTgl">Tambah Tanggal</button>
+                        <button type="button" class="btn btn-danger mb-2" onclick=addTgl() id="hpsTgl" style="display: none;" >Hapus Tanggal</button>
+                    </div>
+                    <div class="row" style="display: flex; align-items: center;">
+                        <input type="hidden" id="totalprice" name="totalprice" />
+                        <div class="col-lg-3">
+                            <button type="button" class="btn btn-primary mb-2" onclick=addItem()><i class="fas fa-plus me-2"></i>Item</button>
+                        </div>
+                        <div class="col-lg-9">
+                            <h5 id="totalHarga" style="margin-left: -20px;">Total Harga: IDR 0.00</h5>
+                        </div>
+                    </div>                        
+                    <div class="mb-2 pe-1 ps-1" id="table-data" style="height: max(40vh); overflow-y: auto;">
                         <input type="hidden" id="totaldata" name="totaldata" >
                         <!-- Buat isi data -->
                     </div>
@@ -343,10 +358,42 @@ require 'cek.php';
         </div>
     </div>
     <script>
+        var isShowAddTgl = false;
+
+        function addTgl() {
+            isShowAddTgl = !isShowAddTgl;
+
+            const field = document.getElementById("tglField");
+            const addBtn = document.getElementById("tbhTgl");
+            const delBtn = document.getElementById("hpsTgl");
+            
+            '<input class="form-control mb-2" type="date" id="tgl" name="tgl" placeholder="Tanggal" />'
+    
+            if(isShowAddTgl) {
+                addBtn.setAttribute("style", "display: none;");
+                delBtn.removeAttribute("style");
+                
+                const tglElmnt = document.createElement("input");
+                tglElmnt.setAttribute("class", "form-control mb-2");
+                tglElmnt.setAttribute("type", "date");
+                tglElmnt.setAttribute("id", "tgl");
+                tglElmnt.setAttribute("name", "tgl");
+                field.appendChild(tglElmnt);
+
+            } else {
+                const tglField = document.getElementById("tgl");
+
+                delBtn.setAttribute("style", "display: none;");
+                addBtn.removeAttribute("style");
+                tglField.remove();
+            }
+        }
+    </script>
+    <script>
         var i = 0;
         var prdkOptions = [];
         var addedPrdk = [];
-
+        
         <?php 
             $dataa = mysqli_query($conn, "select * from produk where is_active = 1");
             while($fetcharray = mysqli_fetch_array($dataa)){
@@ -356,6 +403,7 @@ require 'cek.php';
                 echo("prdkOptions.push({id: '$idPrdk', nama: '$namaItem', prc: '$prc'});");
             } 
         ?>
+
         
         function addItem() {
             const tableData = document.getElementById("table-data");
@@ -364,7 +412,7 @@ require 'cek.php';
             newElement.setAttribute("id", "data-" + i);
             
             var h4 = document.createElement("h4");
-            h4.setAttribute("class", "modal-title mb-4");
+            h4.setAttribute("class", "modal-title mb-2");
             // h4.setAttribute("id", "h4-"+i);
             h4.innerHTML = "Item ";
             newElement.appendChild(h4);
@@ -372,7 +420,7 @@ require 'cek.php';
             //data
             const prdkElmnt = document.createElement("select");
             prdkElmnt.setAttribute("id", "prdk-" + i);
-            prdkElmnt.setAttribute("class", "form-control mb-3");
+            prdkElmnt.setAttribute("class", "form-control mb-2");
             prdkElmnt.setAttribute("placeholder", "Cari Produk");
             prdkElmnt.setAttribute("name", "prdk-" + i);
             prdkElmnt.setAttribute("onchange", "prdkOnChange("+ i +", this)");
@@ -392,7 +440,7 @@ require 'cek.php';
 
             const qtyElmnt = document.createElement("input");
             qtyElmnt.setAttribute("id", "qty-" + i);
-            qtyElmnt.setAttribute("class", "form-control mb-3");
+            qtyElmnt.setAttribute("class", "form-control mb-2");
             qtyElmnt.setAttribute("type", "number");
             qtyElmnt.setAttribute("name", "qty-" + i);
             qtyElmnt.setAttribute("placeholder", "Kuantitas");
@@ -438,12 +486,10 @@ require 'cek.php';
 
             const br1 = document.createElement("br");
             newElement.appendChild(br1);
-            // const br2 = document.createElement("br");
-            // newElement.appendChild(br2);
 
             const deleteBtn = document.createElement("button");
             deleteBtn.setAttribute("type", "button");
-            deleteBtn.setAttribute("class", "btn btn-danger mt-1");
+            deleteBtn.setAttribute("class", "btn btn-danger mt-2");
             deleteBtn.setAttribute("onclick", "removeItem("+i+")");
             deleteBtn.innerHTML = "Hapus";
             newElement.appendChild(deleteBtn);

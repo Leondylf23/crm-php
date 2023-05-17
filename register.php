@@ -78,14 +78,15 @@ if(isset($_POST['register'])){
                                                 </div>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <select name="role" class="form-control">
+                                                <select name="role" class="form-control" id="role">
                                                     <option value="1">Super Admin</option>
                                                     <option value="2">Admin</option>
                                                 </select>
+                                                <label for="role">Pilih Role</label>
                                             </div>
                                             <div class="mt-4 mb-0">
                                                 <div class="d-grid">
-                                                    <button type="submit" class="btn btn-primary btn-block" name="register">Create Account</button>
+                                                    <button type="submit" class="btn btn-primary btn-block" name="register">Buat Akun</button>
                                                 </div>
                                             </div>
                                         </form>

@@ -27,7 +27,8 @@ require 'cek.php';
                             <div class="card-header">
                                 <!-- Button to Open the Modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Tambah Produk
+                                    <i class="fas fa-plus me-1"></i>
+                                    Produk
                                 </button>
                             </div>
                             <div class="card-body">
@@ -112,24 +113,54 @@ require 'cek.php';
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            <input type="text" name="kodeproduk" value="<?=$kodeproduk;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="namaproduk" value="<?=$namaproduk;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="jenisproduk" value="<?=$jenisproduk;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="merkproduk" value="<?=$merkproduk;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="tipeitem" value="<?=$tipeitem;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="satuan" value="<?=$satuan;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="number" name="hargapokok" value="<?=$hargapokok;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="number" name="hargajual" value="<?=$hargajual;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="keterangan" value="<?=$keterangan;?>" class="form-control" required>
-                                                            <br>
+                                                            <div class="form-floating mb-3">                
+                                                                <input type="text" name="kodeproduk" value="<?=$kodeproduk;?>" class="form-control" id="kdprdk" required>
+                                                                <label for="kdprdk">Kode Produk</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                    
+                                                                <input type="text" name="namaproduk" value="<?=$namaproduk;?>" class="form-control" id="nmprdk" required>
+                                                                <label for="nmprdk">Nama Produk</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                    
+                                                                <input type="text" name="jenisproduk" value="<?=$jenisproduk;?>" class="form-control" id="jenis" required>
+                                                                <label for="jenis">Jenis</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                    
+                                                                <input type="text" name="merkproduk" value="<?=$merkproduk;?>" class="form-control" id="mrk" required>
+                                                                <label for="mrk">Merk Produk</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                    
+                                                                <!-- <input type="text" name="tipeitem" value="<?=$tipeitem;?>" class="form-control" id="tpitem" required> -->
+                                                                <select class="form-control" id="tpitem" name="tipeitem" required>
+                                                                    <option value="INV" <?php if($tipeitem == "INV") {echo"selected";} ?>>INV</option>
+                                                                    <option value="QUA" <?php if($tipeitem == "QUA") {echo"selected";} ?>>QUA</option>
+                                                                    <option value="DMG" <?php if($tipeitem == "DMG") {echo"selected";} ?>>DMG</option>
+                                                                </select>
+                                                                <label for="tpitem">Tipe Item</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">  
+                                                                <!-- <input type="text" name="satuan" value="<?=$satuan;?>" class="form-control" id="satuan" required> -->
+                                                                <select class="form-control" id="satuan" name="satuan" required>
+                                                                    <option value="PCS" <?php if($satuan == "PCS") {echo"selected";} ?>>PCS</option>
+                                                                    <option value="BOX" <?php if($satuan == "BOX") {echo"selected";} ?>>BOX</option>
+                                                                    <option value="GALON" <?php if($satuan == "GALON") {echo"selected";} ?>>GALON</option>
+                                                                    <option value="BTL" <?php if($satuan == "BTL") {echo"selected";} ?>>BTL</option>
+                                                                    <option value="RIM" <?php if($satuan == "RIM") {echo"selected";} ?>>RIM</option>
+                                                                </select>                  
+                                                                <label for="satuan">Satuan</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                    
+                                                                <input type="number" name="hargapokok" value="<?=$hargapokok;?>" class="form-control" id="hgpokok" required>
+                                                                <label for="hgpokok">Harga Pokok (Rp. )</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                    
+                                                                <input type="number" name="hargajual" value="<?=$hargajual;?>" class="form-control" id="hgjual" required>
+                                                                <label for="hgjual">Harga Jual (Rp. )</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                    
+                                                                <input type="text" name="keterangan" value="<?=$keterangan;?>" class="form-control" id="ket" required>
+                                                                <label for="ket">Keterangan</label>
+                                                            </div>                                                            
                                                             <input type="hidden" name="idproduk" value="<?=$idproduk;?>">
                                                             
                                                             <?php 
@@ -222,24 +253,54 @@ require 'cek.php';
             <!-- Modal body -->
             <form method="post">
                 <div class="modal-body">
-                    <input type="text" name="kodeproduk" placeholder="Kode Produk" class="form-control" required>
-                    <br>
-                    <input type="text" name="namaproduk" placeholder="Nama produk" class="form-control" required>
-                    <br>
-                    <input type="text" name="jenisproduk" placeholder="Jenis" class="form-control" required>
-                    <br>
-                    <input type="text" name="merkproduk" placeholder="Merk" class="form-control" required>
-                    <br>
-                    <input type="text" name="tipeitem" placeholder="Tipe Item" class="form-control" required>
-                    <br>
-                    <input type="text" name="satuan" placeholder="Satuan" class="form-control" required>
-                    <br>
-                    <input type="number" name="hargapokok" class="form-control" placeholder="Harga Pokok" required>
-                    <br>
-                    <input type="number" name="hargajual" class="form-control" placeholder="Harga Jual" required>
-                    <br>
-                    <input type="text" name="keterangan" placeholder="Keterangan" class="form-control">
-                    <br>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="kodeproduk" placeholder="Kode Produk" class="form-control" id="kdprdkn" required>
+                        <label for="kdprdkn">Kode Produk</label>                        
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="namaproduk" placeholder="Nama produk" class="form-control" id="nmprdkn" required>
+                        <label for="nmprdkn">Nama Produk</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="jenisproduk" placeholder="Jenis" class="form-control" id="jenisn" required>
+                        <label for="jenisn">Jenis</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="merkproduk" placeholder="Merk" class="form-control" id="merkn" required>
+                        <label for="merkn">Merk Produk</label>
+                    </div>
+                    <div class="form-floating mb-3">                    
+                        <!-- <input type="text" name="tipeitem" placeholder="Tipe Item" class="form-control" id="tpitemn" required> -->
+                        <select class="form-control" id="tpitemn" name="tipeitem" required>
+                            <option value="INV">INV</option>
+                            <option value="QUA">QUA</option>
+                            <option value="DMG">DMG</option>
+                        </select>
+                        <label for="tpitemn">Tipe Item</label>
+                    </div>
+                    <div class="form-floating mb-3">                    
+                        <!-- <input type="text" name="satuan" placeholder="Satuan" class="form-control" id="satuann" required> -->
+                        <select class="form-control" id="satuann" name="satuan" required>
+                            <option value="PCS">PCS</option>
+                            <option value="BOX">BOX</option>
+                            <option value="GALON">GALON</option>
+                            <option value="BTL">BTL</option>
+                            <option value="RIM">RIM</option>
+                        </select>
+                        <label for="satuann">Satuan</label>
+                    </div>
+                    <div class="form-floating mb-3">                        
+                        <input type="number" name="hargapokok" class="form-control" placeholder="Harga Pokok" id="hgpokokn" step=1000 required>
+                        <label for="hgpokokn">Harga Pokok (Rp. )</label>
+                    </div>
+                    <div class="form-floating mb-3">                    
+                        <input type="number" name="hargajual" class="form-control" placeholder="Harga Jual" id="hgjualn" step=1000 required>
+                        <label for="hgjualn">Harga Jual (Rp. )</label>
+                    </div>
+                    <div class="form-floating mb-3">                    
+                        <input type="text" name="keterangan" placeholder="Keterangan" class="form-control" id="ketn">
+                        <label for="ketn">Keterangan</label>
+                    </div>
                     <button type="submit" class="btn btn-primary" name="addnewproduct">Submit</button>
                 </div>
             </form>

@@ -27,7 +27,8 @@ require 'cek.php';
                             <div class="card-header">
                                 <!-- Button to Open the Modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Tambah Komplain
+                                    <i class="fas fa-plus me-1"></i>
+                                    Komplain
                                 </button>
                             </div>
                             <div class="card-body">
@@ -94,33 +95,42 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Edit Komplain</h4>
+                                                        <h4 class="modal-title">Detil Komplain</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            <input type="text" name="namapelanggan" value="<?=$namapelanggan;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="komplain" value="<?=$komplain;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="solusi" value="<?=$solusi;?>" class="form-control" required>
-                                                            <br>
-                                                            <select name="kategori" class="form-control mb-2">
-                                                                 <?php 
-                                                                    $data = mysqli_query($conn, "select * from kategori_komplain");
-                                                                    while($fetcharray = mysqli_fetch_array($data)){
-                                                                        $valuee = $fetcharray['nama_kategori'];
-                                                                        $idkke = $fetcharray['id'];
-                                                                ?>
-
-                                                                <option value="<?=$idkke;?>" <?php if($idkke == $idkategori){echo("selected"); } ?>><?=$valuee;?></option>
-
-                                                                <?php
-                                                                    }
-                                                                ?>
-                                                            </select>
+                                                            <div class="form-floating mb-3">                                                                                
+                                                                <input type="text" name="namapelanggan" value="<?=$namapelanggan;?>" class="form-control" id="plgn" required>
+                                                                <label for="plgn">Nama Pelanggan</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                                                                                
+                                                                <input type="text" name="komplain" value="<?=$komplain;?>" class="form-control" id="kmpln" required>
+                                                                <label for="kmpln">Isi Komplain/Kritik/Saran</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                                                                                
+                                                                <input type="text" name="solusi" value="<?=$solusi;?>" class="form-control" id="sls" required>
+                                                                <label for="sls">Solusi</label>
+                                                            </div>
+                                                            <div class="form-floating mb-3">                    
+                                                                <select name="kategori" class="form-control mb-2" id="ktg">
+                                                                     <?php 
+                                                                        $data = mysqli_query($conn, "select * from kategori_komplain");
+                                                                        while($fetcharray = mysqli_fetch_array($data)){
+                                                                            $valuee = $fetcharray['nama_kategori'];
+                                                                            $idkke = $fetcharray['id'];
+                                                                    ?>
+    
+                                                                    <option value="<?=$idkke;?>" <?php if($idkke == $idkategori){echo("selected"); } ?>><?=$valuee;?></option>
+    
+                                                                    <?php
+                                                                        }
+                                                                    ?>
+                                                                </select>                                                            
+                                                                <label for="ktg">Kategori Komplain</label>
+                                                            </div>
                                                             <input type="hidden" name="idkomplain" value="<?=$idkomplain;?>">
                                                             <?php 
                                                                 if($status == "Aktif") {
@@ -213,26 +223,35 @@ require 'cek.php';
             <!-- Modal body -->
             <form method="post">
                 <div class="modal-body">
-                    <input type="text" name="namapelanggan" placeholder="Nama Pelanggan" class="form-control" required>
-                    <br>
-                    <input type="text" name="komplain" class="form-control" placeholder="Komplain/Kritik/Saran" required>
-                    <br>
-                    <input type="text" name="solusi" class="form-control" placeholder="Solusi" required>
-                    <br>
-                    <select name="kategori" class="form-control mb-2">
-                        <?php 
-                        $data = mysqli_query($conn, "select * from kategori_komplain");
-                        while($fetcharray = mysqli_fetch_array($data)){
-                            $valuen = $fetcharray['nama_kategori'];
-                            $idkkn = $fetcharray['id'];
-                        ?>
-
-                        <option value="<?=$idkkn;?>"><?=$valuen;?></option>
-
-                        <?php
-                        }
-                        ?>
-                    </select>
+                    <div class="form-floating mb-3">                                                                                
+                        <input type="text" name="namapelanggan" placeholder="Nama Pelanggan" class="form-control" id="plgnn" required>
+                        <label for="plgnn">Nama Pelanggan</label>
+                    </div>
+                    <div class="form-floating mb-3">                                                                                
+                        <input type="text" name="komplain" class="form-control" placeholder="Komplain/Kritik/Saran" id="kmplnn" required>
+                        <label for="kmplnn">Isi Komplain/Kritik/Saran</label>
+                    </div>
+                    <div class="form-floating mb-3">                                                                                
+                        <input type="text" name="solusi" class="form-control" placeholder="Solusi" id="slsn" required>
+                        <label for="slsn">Solusi</label>
+                    </div>
+                    <div class="form-floating mb-3">                                                                                
+                        <select name="kategori" class="form-control mb-2" id="ktgn">
+                            <?php 
+                            $data = mysqli_query($conn, "select * from kategori_komplain");
+                            while($fetcharray = mysqli_fetch_array($data)){
+                                $valuen = $fetcharray['nama_kategori'];
+                                $idkkn = $fetcharray['id'];
+                            ?>
+    
+                            <option value="<?=$idkkn;?>"><?=$valuen;?></option>
+    
+                            <?php
+                            }
+                            ?>
+                        </select>
+                        <label for="ktgn">Kategori Komplain</label>
+                    </div>
                     <button type="submit" class="btn btn-primary" name="addnewcomplain">Submit</button>
                 </div>
             </form>
