@@ -199,7 +199,7 @@ require 'cek.php';
                                                             <div class="form-floating mb-3">                    
                                                                 <select name="admin" class="form-control" id="admin">
                                                                  <?php 
-                                                                    $data = mysqli_query($conn, "select * from login");
+                                                                    $data = mysqli_query($conn, "select * from login where role = 2");
                                                                     while($fetcharray = mysqli_fetch_array($data)){
                                                                         $valueue = $fetcharray['nama'];
                                                                         $idue = $fetcharray['iduser'];
@@ -421,7 +421,7 @@ require 'cek.php';
                         <select name="admin" class="form-control" id="adminn">
                             <option value="0">Pilih Admin</option>
                             <?php 
-                               $data = mysqli_query($conn, "select * from login");
+                               $data = mysqli_query($conn, "select * from login where role = 2");
                                while($fetcharray = mysqli_fetch_array($data)){
                                    $valueun = $fetcharray['nama'];
                                    $idun = $fetcharray['iduser'];
