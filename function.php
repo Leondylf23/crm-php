@@ -582,4 +582,60 @@ function updateKpiAdmin($conn, $type) {
     mysqli_query($conn, "insert into kpi_records (adminid, kategori) values('$userid', '$type')");
 }
 
+function numberToText($number) {
+    $ones = array(
+        0 => '', 1 => 'SATU', 2 => 'DUA', 3 => 'TIGA', 4 => 'EMPAT', 5 => 'LIMA', 6 => 'ENAM', 7 => 'TUJUH', 8 => 'DELAPAN', 9 => 'SEMBILAN',
+        10 => 'SEPULUH', 11 => 'SEBELAS', 12 => 'DUA BELAS', 13 => 'TIGA BELAS', 14 => 'EMPAT BELAS', 15 => 'LIMA BELAS', 16 => 'ENAM BELAS', 17 => 'TUJUH BELAS', 18 => 'DELAPAN BELAS', 19 => 'SEMBILAN BELAS'
+    );
+    $tens = array(
+        2 => 'DUA PULUH', 3 => 'TIGA PULUH', 4 => 'EMPAT PULUH', 5 => 'LIMA PULUH', 6 => 'ENAM PULUH', 7 => 'TUJUH PULUH', 8 => 'DELAPAN PULUH', 9 => 'SEBILAN PULUH'
+    );
+    $hundreds = array(
+        1 => 'SERATUS', 2 => 'DUA RATUS', 3 => 'TIGA RATUS', 4 => 'EMPAT RATUS', 5 => 'LIMA RATUS', 6 => 'ENAM RATUS', 7 => 'TUJUH RATUS', 8 => 'DELAPAN RATUS', 9 => 'SEMBILAN RATUS'
+    );
+    $thousands = array(
+        1 => 'SERIBU', 2 => 'DUA RIBU', 3 => 'TIGA RIBU', 4 => 'EMPAT RIBU', 5 => 'LIMA RIBU', 6 => 'ENAM RIBU', 7 => 'TUJUH RIBU', 8 => 'DELAPAN RIBU', 9 => 'SEMBILAN RIBU'
+    );
+
+    if ($number < 20) {
+        return $ones[$number];
+    } elseif ($number < 100) {
+        $tens_digit = floor($number / 10);
+        $ones_digit = $number % 10;
+        if ($ones_digit == 0) {
+            return $tens[$tens_digit];
+        } else {
+            return $tens[$tens_digit] . ' ' . $ones[$ones_digit];
+        }
+    } elseif ($number < 1000) {
+        $hundreds_digit = floor($number / 100);
+        $tens_digit = floor(($number % 100) / 10);
+        $ones_digit = $number % 10;
+        if ($tens_digit == 0 && $ones_digit == 0) {
+            return $hundreds[$hundreds_digit];
+        } elseif ($tens_digit == 0) {
+            return $hundreds[$hundreds_digit] . ' ' . $ones[$ones_digit];
+        } else {
+            return $hundreds[$hundreds_digit] . ' ' . numberToText($number % 100);
+        }
+    } elseif ($number < 10000) {
+        $thousands_digit = floor($number / 1000);
+        $hundreds_digit = floor(($number % 1000) / 100);
+        $tens_digit = floor(($number % 100) / 10);
+        $ones_digit = $number % 10;
+        if ($hundreds_digit == 0 && $tens_digit == 0 && $ones_digit == 0) {
+            return $thousands[$thousands_digit];
+        } elseif ($hundreds_digit == 0 && $tens_digit == 0) {
+            return $thousands[$thousands_digit] . ' ' . $ones[$ones_digit];
+        } elseif ($hundreds_digit == 0) {
+            return $thousands[$thousands_digit] . ' ' . numberToText($number % 100);
+        } else {
+            return $thousands[$thousands_digit] . ' ' . numberToText($number % 1000);
+        }
+    } else {
+        return 'ANGKA MELEBIHI BATAS';
+
+    }
+}
+
 ?>

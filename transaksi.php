@@ -79,6 +79,13 @@ require 'cek.php';
                                                 <button type="button" class="btn btn-primary ms-1" onclick="location.href='exporttoexcel.php?id=<?=$idtransaksi;?>';">
                                                     Export
                                                 </button>
+                                                <button type="button" class="btn btn-primary ms-1" onclick="
+                                                    var tab = window.open();
+                                                    tab.opener = null;
+                                                    tab.location = 'invoice.php?id=<?=$idtransaksi;?>';
+                                                ">
+                                                    Print
+                                                </button>
                                                 <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idtransaksi;?>">
                                                     Delete
                                                 </button> -->
@@ -86,17 +93,17 @@ require 'cek.php';
                                         </tr>
 
                                         <!-- Edit The Modal -->
-                                        <div class="modal fade" id="edit<?=$idtransaksi;?>">
+                                        <!-- <div class="modal fade" id="edit<?=$idtransaksi;?>">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
 
-                                                    <!-- Modal Header -->
+                                                    Modal Header
                                                     <div class="modal-header">
                                                         <h4 class="modal-title">Edit Transaksi</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
-                                                    <!-- Modal body -->
+                                                    Modal body
                                                     <form method="post">
                                                         <div class="modal-body">
                                                             <input type="text" name="tanggal_transaksi" value="<?=$tanggaltransaksi;?>" class="form-control" required>
@@ -118,7 +125,7 @@ require 'cek.php';
 
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
 
                                             <!-- Detil -->
                                             <div class="modal fade" id="detil<?=$idtransaksi;?>">
@@ -225,9 +232,9 @@ require 'cek.php';
                                                             } 
                                                         ?>
                                                         </div>
-                                                        <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#delete<?=$idtransaksi;?>">
+                                                        <!-- <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#delete<?=$idtransaksi;?>">
                                                             Hapus
-                                                        </button>
+                                                        </button> -->
                                                     </div>
                                                     
 
