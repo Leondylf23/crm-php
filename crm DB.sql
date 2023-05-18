@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `pelanggan` (
   `idpelanggan` int(11) NOT NULL AUTO_INCREMENT,
   `namapelanggan` varchar(100) NOT NULL,
   `alamat` varchar(300) NOT NULL,
-  `telp` int(100) NOT NULL,
+  `telp` text NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `prioritas` text NOT NULL DEFAULT 'Basic',
   PRIMARY KEY (`idpelanggan`)
