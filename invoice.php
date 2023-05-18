@@ -168,7 +168,7 @@ if(isset($_GET['id'])) {
                                     <a>TELP</a>
                                 </div>
                                 <div class="col-9">
-                                    <a><?=$telp?></a>
+                                    <a>(+62) <?=$telp?></a>
                                 </div>
                                 <div class="col-3">
                                     <a>FAX</a>
