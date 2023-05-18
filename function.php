@@ -5,31 +5,17 @@ if(!isset($_SESSION['userid'])) {
     $_SESSION['userid'] = 0;
     $_SESSION['userName'] = "Silahkan Login.";
 } else {
-    // echo $_SESSION['userid'] . " - " . $_SESSION['userName'];
+    
 }
 $conn = mysqli_connect("localhost","root","","crm");
-
-// //Menambah User Baru
-// if(isset($_POST['createaccount'])){
-//     $email = $_POST['email'];
-//     $password = $_POST['password'];
-
-//     $addtotablelogin = mysqli_query($conn, "insert into login (email, password) values('$email','$password')");
-//     if($addtotablelogin){
-//         header('location:register.php');
-//     } else{
-//         echo 'Gagal';
-//         header('location:register.php');
-//     }
-// }
 
 //Menambah pelanggan baru
 if(isset($_POST['addnewcustomer'])){
     $namapelanggan = $_POST['namapelanggan'];
     $alamat = $_POST['alamat'];
-    $telp = $_POST['telp'];
+    $telpn = $_POST['telpn'];
 
-    $addtotable = mysqli_query($conn, "insert into pelanggan (namapelanggan, alamat, telp) values('$namapelanggan','$alamat', '$telp')");
+    $addtotable = mysqli_query($conn, "insert into pelanggan (namapelanggan, alamat, telp) values('$namapelanggan','$alamat', '$telpn')");
     if($addtotable){
         updateKpiAdmin($conn, "Pelanggan");
         header('location:pelanggan.php');

@@ -290,11 +290,11 @@ require 'cek.php';
                         <label for="satuann">Satuan</label>
                     </div>
                     <div class="form-floating mb-3">                        
-                        <input type="number" name="hargapokok" class="form-control" placeholder="Harga Pokok" id="hgpokokn" step=1000 required>
+                        <input type="number" name="hargapokok" class="form-control" placeholder="Harga Pokok" id="hgpokokn" required>
                         <label for="hgpokokn">Harga Pokok (Rp. )</label>
                     </div>
                     <div class="form-floating mb-3">                    
-                        <input type="number" name="hargajual" class="form-control" placeholder="Harga Jual" id="hgjualn" step=1000 required>
+                        <input type="number" name="hargajual" class="form-control" placeholder="Harga Jual" id="hgjualn" required>
                         <label for="hgjualn">Harga Jual (Rp. )</label>
                     </div>
                     <div class="form-floating mb-3">                    

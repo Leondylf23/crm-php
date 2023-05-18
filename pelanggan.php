@@ -228,7 +228,7 @@ require 'cek.php';
                     <label for="alamatn">Alamat</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="number" name="telp" class="form-control" id="telpn" placeholder="Nomor HP" required>
+                    <input type="number" name="telpn" class="form-control" id="telpn" placeholder="Nomor HP" required>
                     <label for="telpn">Nomor HP (+62)</label>
                 </div>
                 <button type="submit" class="btn btn-primary" name="addnewcustomer">Submit</button>

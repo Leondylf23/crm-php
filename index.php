@@ -35,8 +35,17 @@ require 'function.php';
                         }
                         
                         ?>
+                        <?php 
+                        $element = '<h4 class="mt-2 mb-3">Aktifitas Anda yang Sedang Berlangsung</h4>';
                         
-                        <h4 class="mt-2 mb-3">Aktifitas Anda yang Sedang Berlangsung</h4>
+                        if(isset($_SESSION['role'])) {
+                            if($_SESSION['role'] == 1) {
+                                $element = '<h4 class="mt-2 mb-3">Aktifitas Yang Perlu Dikonfirmasi</h4>';
+                            }
+                        }
+
+                        echo $element;
+                        ?>                        
                         <div class="card mb-4">
                             <div class="card-header">
                                 <a href="penjadwalan.php">Aktifitas Lengkap</a>
@@ -46,6 +55,7 @@ require 'function.php';
                                     <thead>
                                         <tr>
                                             <th>No.</th>
+                                            <?php if(isset($_SESSION['role'])) {if($_SESSION['role'] == 1) {?><th>Admin</th><?php }} ?>
                                             <th>Aktifitas</th>
                                             <th>Pelanggan</th>
                                             <th>Tenggang Waktu</th>
@@ -53,8 +63,13 @@ require 'function.php';
                                     </thead>
                                     <tbody>
                                     <?php
-                                        $userid = $_SESSION['userid']; 
-                                        $logindata = mysqli_query($conn, "SELECT j.aktifitas, j.deskripsi, DATE_FORMAT(j.tgl_pelaksanaan, '%d-%m-%Y %H:%i') as tgl_pelaksanaan, DATE_FORMAT(j.tgl_selesai, '%d-%m-%Y %H:%i') as tgl_selesai, kj.nama_kategori, p.namapelanggan FROM jadwal j inner join kategori_jadwal kj on kj.id = j.kategori inner join pelanggan p on j.idpelanggan = p.idpelanggan where j.is_active = 1 and j.adminid = $userid and j.status = 1 order by tgl_selesai asc");
+                                        $userid = $_SESSION['userid'];                                        
+                                        $logindata = mysqli_query($conn, "SELECT j.aktifitas, j.deskripsi, DATE_FORMAT(j.tgl_pelaksanaan, '%d-%m-%Y %H:%i') as tgl_pelaksanaan, DATE_FORMAT(j.tgl_selesai, '%d-%m-%Y %H:%i') as tgl_selesai, kj.nama_kategori, p.namapelanggan, p.prioritas FROM jadwal j inner join kategori_jadwal kj on kj.id = j.kategori inner join pelanggan p on j.idpelanggan = p.idpelanggan where j.is_active = 1 and j.adminid = $userid and j.status = 1 order by tgl_selesai asc");
+                                        if(isset($_SESSION['role'])) {
+                                            if($_SESSION['role'] == 1) {
+                                                $logindata = mysqli_query($conn, "SELECT j.aktifitas, j.deskripsi, DATE_FORMAT(j.tgl_pelaksanaan, '%d-%m-%Y %H:%i') as tgl_pelaksanaan, DATE_FORMAT(j.tgl_selesai, '%d-%m-%Y %H:%i') as tgl_selesai, kj.nama_kategori, p.namapelanggan, p.prioritas, l.nama FROM jadwal j inner join kategori_jadwal kj on kj.id = j.kategori inner join pelanggan p on j.idpelanggan = p.idpelanggan inner join login l on l.iduser = j.adminid where j.is_active = 1 and j.status = 2 order by tgl_selesai asc");
+                                            }
+                                        }
                                         $i = 1;
                                         while($data=mysqli_fetch_array($logindata)){
                                             $aktifitas = $data['aktifitas'];
@@ -63,15 +78,18 @@ require 'function.php';
                                             $tglSlse = $data['tgl_selesai'];
                                             $kategori = $data['nama_kategori'];
                                             $pelanggan = $data['namapelanggan'];
+                                            $prioritas = $data['prioritas'];
+                                            if(isset($_SESSION['role'])) {if($_SESSION['role'] == 1) {$namaAdmin = $data['nama'];}}
                                         
                                         ?>
                                         <tr>
                                             <td><?=$i++;?></td>
+                                            <?php if(isset($_SESSION['role'])) {if($_SESSION['role'] == 1) {?><td><?php echo $namaAdmin;?></td><?php }} ?>
                                             <td><?=$kategori;?></td>
                                             <!-- <td><?=$aktifitas;?></td> -->
                                             <!-- <td><?=$desc;?></td> -->
                                             <!-- <td><?=$tglPlksnaan;?></td> -->
-                                            <td><?=$pelanggan;?></td>
+                                            <td><?=$pelanggan;?> - <?=$prioritas;?></td>
                                             <td><?=$tglSlse;?></td>
                                         </tr>
                                     <?php 
