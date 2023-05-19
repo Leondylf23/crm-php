@@ -38,17 +38,29 @@ if(isset($_GET['id'])) {
 
     $numToStr = "";
 
-    if($ttransaksinum >= 10000 && $ttransaksinum < 1000000) {
-        $numToStr = numberToText($ttransaksinum / 1000) . ' RIBU ' . numberToText($ttransaksinum % 1000);
-    } elseif ($ttransaksinum >= 1000000 && $ttransaksinum < 1000000000) {
-        $numToStr = numberToText($ttransaksinum / 1000000) . ' JUTA ' . numberToText(($ttransaksinum / 1000) % 1000) . ' RIBU ' . numberToText($ttransaksinum % 1000);
-    } elseif ($ttransaksinum >= 1000000000 && $ttransaksinum < 1000000000000) {
-        $numToStr = numberToText($ttransaksinum / 1000000000) . ' MILIAR ' . numberToText(($ttransaksinum / 1000000) % 1000) . ' JUTA ' . numberToText(($ttransaksinum / 1000) % 1000) . ' RIBU ' . numberToText($ttransaksinum % 1000);
-    } elseif ($ttransaksinum < 10000) {
-        $numToStr = numberToText($ttransaksinum);
-    } else {
-        $numToStr = numberToText($ttransaksinum);
+
+    if($ttransaksinum >= 1000000000) {
+        $numToStr .= numberToText($ttransaksinum / 1000000000) . " MILIYAR";
+        $ttransaksinum = $ttransaksinum % 1000000000;
+        if($ttransaksinum > 1000000 || $ttransaksinum > 1000 || $ttransaksinum > 1) {
+            $numToStr .= " ";
+        }
     }
+    if ($ttransaksinum >= 1000000) {
+        $numToStr .= numberToText($ttransaksinum / 1000000) . " JUTA";
+        $ttransaksinum = $ttransaksinum % 1000000;
+        if ($ttransaksinum > 1000 || $ttransaksinum > 1) {
+            $numToStr .= " ";
+        }
+    }
+    if ($ttransaksinum >= 2000) {
+        $numToStr .= numberToText($ttransaksinum / 1000) . " RIBU";
+        $ttransaksinum = $ttransaksinum % 1000;
+        if ($ttransaksinum > 1) {
+            $numToStr .= " ";
+        }
+    }
+    $numToStr .= numberToText($ttransaksinum);
 ?>
 
 <!DOCTYPE html>
