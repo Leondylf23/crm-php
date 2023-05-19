@@ -52,11 +52,14 @@ if(isset($_POST['addnewtransaction'])){
     $pelangganid = $_POST['pelanggannya'];
     $pembayaranid = $_POST['metodepembayaran'];
     $totalprice = $_POST['totalprice'];
+    $pesan = $_POST['pesan'];
     $tgl = "";
     if(isset($_POST['tgl'])) {
         $tgl = $_POST['tgl'];
     }
-    
+    if($pesan == "") {
+        $pesan = "-";
+    }
     $totalPrdk = $_POST['totaldata'];
     $produk = array();
     
@@ -76,10 +79,10 @@ if(isset($_POST['addnewtransaction'])){
     if(count($produk) > 0) {        
         $addtotransaksi = "";
         if($tgl == "") {
-            $addtotransaksi = mysqli_query($conn, "insert into transaksi (idpelanggan, idmetode, totaltransaksi) values('$pelangganid','$pembayaranid','$totalprice')");
+            $addtotransaksi = mysqli_query($conn, "insert into transaksi (idpelanggan, idmetode, totaltransaksi, pesan) values('$pelangganid','$pembayaranid','$totalprice', '$pesan')");
         } else {
             
-            $addtotransaksi = mysqli_query($conn, "insert into transaksi (idpelanggan, idmetode, totaltransaksi, tanggal_transaksi) values('$pelangganid','$pembayaranid','$totalprice', '$tgl')");
+            $addtotransaksi = mysqli_query($conn, "insert into transaksi (idpelanggan, idmetode, totaltransaksi, tanggal_transaksi, pesan) values('$pelangganid','$pembayaranid','$totalprice', '$tgl', '$pesan')");
         }
         if($addtotransaksi){
             

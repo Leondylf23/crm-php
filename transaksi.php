@@ -47,7 +47,7 @@ require 'cek.php';
                                     </thead>
                                     <tbody>
                                     <?php 
-                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, DATE_FORMAT(t.tanggal_transaksi, '%d-%m-%Y %H:%i') as tgl_formated, p.namapelanggan, t.totaltransaksi, CONCAT('Rp. ', FORMAT(t.totaltransaksi, 2, 'id_ID')) as totaltransaksi_str, mp.nama_metode, p.idpelanggan FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 1 order by t.tanggal_transaksi desc");
+                                        $ambilsemuadatatransaksi = mysqli_query($conn, "SELECT t.idtransaksi, t.tanggal_transaksi, DATE_FORMAT(t.tanggal_transaksi, '%d-%m-%Y %H:%i') as tgl_formated, p.namapelanggan, t.totaltransaksi, CONCAT('Rp. ', FORMAT(t.totaltransaksi, 2, 'id_ID')) as totaltransaksi_str, mp.nama_metode, p.idpelanggan, t.pesan FROM transaksi t INNER JOIN pelanggan p ON p.idpelanggan = t.idpelanggan LEFT JOIN metode_pembayaran mp ON mp.id = t.idmetode where t.is_active = 1 order by t.tanggal_transaksi desc");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatatransaksi)){
                                             $idtransaksi = $data['idtransaksi'];
@@ -60,6 +60,7 @@ require 'cek.php';
                                             $totaltransaksi = $data['totaltransaksi'];
                                             $totaltransaksistr = $data['totaltransaksi_str'];
                                             $nama_metode = $data['nama_metode'];
+                                            $pesan = $data['pesan'];
                                             
                                         
                                         ?>
@@ -176,6 +177,15 @@ require 'cek.php';
                                                             </div>
                                                             <div class="col-lg-6">
                                                                 <a><?=$nama_metode;?></a>
+                                                            </div>
+                                                            <div class="col-lg-5">
+                                                                <b>Pesan</b>
+                                                            </div>
+                                                            <div class="col-lg-1">
+                                                                <b>: </b>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <a><?=$pesan;?></a>
                                                             </div>
                                                         </div>
                                                         <br>
@@ -343,8 +353,12 @@ require 'cek.php';
                         <div id="tglField">
                             
                         </div>
-                        <button type="button" class="btn btn-primary mb-2 me-2" onclick=addTgl() id="tbhTgl">Tambah Tanggal</button>
-                        <button type="button" class="btn btn-danger mb-2" onclick=addTgl() id="hpsTgl" style="display: none;" >Hapus Tanggal</button>
+                        <button type="button" class="btn btn-primary mb-2 me-2" onclick=addTgl() id="tbhTgl">Atur Tanggal</button>
+                        <button type="button" class="btn btn-danger mb-2" onclick=addTgl() id="hpsTgl" style="display: none;" >Hapus</button>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="pesan" placeholder="Pesan" id="psn" class="form-control">
+                        <label for="psn">Pesan</label>
                     </div>
                     <div class="row" style="display: flex; align-items: center;">
                         <input type="hidden" id="totalprice" name="totalprice" />

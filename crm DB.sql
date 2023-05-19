@@ -3,13 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 17, 2023 at 07:28 AM
+-- Generation Time: May 19, 2023 at 08:50 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
---
--- KALAU IMPORT 1 FILE SQL INI ADA ERROR, COPAS CREATE TABLENYA 1 1. DI ULANG BERKALI2 AMPE MSK SEMUA
---
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -133,6 +130,20 @@ CREATE TABLE IF NOT EXISTS `login` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `merk_produk`
+--
+
+DROP TABLE IF EXISTS `merk_produk`;
+CREATE TABLE IF NOT EXISTS `merk_produk` (
+  `id` int(11) NOT NULL,
+  `merk` text DEFAULT NULL,
+  `is_active` tinyint(4) DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `metode_pembayaran`
 --
 
@@ -215,6 +226,7 @@ CREATE TABLE IF NOT EXISTS `transaksi` (
   `idmetode` bigint(20) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `totaltransaksi` bigint(20) NOT NULL,
+  `pesan` text DEFAULT NULL,
   PRIMARY KEY (`idtransaksi`),
   KEY `idpelanggan` (`idpelanggan`),
   KEY `transaksi_ibfk_3` (`idmetode`)

@@ -14,7 +14,9 @@ if(isset($_GET['id'])) {
         upper(pl.alamat) as alamat,
         upper(pl.telp) as telp,
         DATE_FORMAT(t.tanggal_transaksi, '%d%m%Y/%H%i') as tgl_str,
-        t.totaltransaksi as ttransaksi_num
+        t.totaltransaksi as ttransaksi_num,
+        DATE_FORMAT(t.tanggal_transaksi, '%d-%m-%Y') as jth_tempo,
+        upper(t.pesan) as pesan
     from 
         transaksi t     
     inner join 
@@ -34,6 +36,8 @@ if(isset($_GET['id'])) {
         $alamat = $fetcharray['alamat'];
         $telp = $fetcharray['telp'];
         $ttransaksinum = $fetcharray['ttransaksi_num'];
+        $jthTempo = $fetcharray['jth_tempo'];
+        $pesan = $fetcharray['pesan'];
     }
 
     $numToStr = "";
@@ -76,6 +80,9 @@ if(isset($_GET['id'])) {
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <style>
+            a, td, th, b {
+                    font-size: 12px !important;
+            }
             @media print {
                 body * {
                     visibility: hidden;
@@ -100,7 +107,7 @@ if(isset($_GET['id'])) {
                 }
                 @page :last {
                     margin-bottom: 0;
-                }
+                }                
             }
         </style>
     </head>
@@ -200,7 +207,7 @@ if(isset($_GET['id'])) {
                                 <a>JATUH TEMPO</a>
                             </div>
                             <div class="col-6">
-                                <a>-</a>
+                                <a><?=$jthTempo?></a>
                             </div>
                             <div class="col-12">
                                 <a style="color: #fff">ㅤ</a>
@@ -296,7 +303,9 @@ if(isset($_GET['id'])) {
                         <div class="mb-1">
                             <b>PESAN</b>
                         </div>
-                        <div style="height: 40px;"></div>
+                        <div class="mb-1">
+                            <a><?=$pesan?></a>
+                        </div>
                     </div>
                     <div class="col-7 border-top-0 border border-2 border-dark">
                         <div class="mb-1">
