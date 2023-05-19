@@ -12,7 +12,7 @@ if(isset($_POST['login'])){
     $password = $_POST['password'];
 
     // cocokin dengan database, cari,, ada apa engga 
-    $cekdatabase = mysqli_query($conn, "SELECT * FROM login where email='$email' and password='$password'");
+    $cekdatabase = mysqli_query($conn, "SELECT * FROM login where email='$email' and password='$password' and is_active=1");
     //hitung jumlah data
     $datas = mysqli_fetch_array($cekdatabase);
     $hitung = mysqli_num_rows($cekdatabase);

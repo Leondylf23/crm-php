@@ -494,6 +494,30 @@ if(isset($_POST['tambahktgaktifitas'])){
     }
 }
 
+if(isset($_POST['nonaktifuser'])){
+    $id = $_POST['iduser'];
+
+    $addtotable = mysqli_query($conn, "update login set is_active=0 where iduser = '$id'");
+    if($addtotable){        
+        header('location:dashboard.php');
+    } else{
+        echo 'Gagal';
+        header('location:dashboard.php');
+    }
+}
+
+if(isset($_POST['aktifuser'])){
+    $id = $_POST['iduser'];
+
+    $addtotable = mysqli_query($conn, "update login set is_active=1 where iduser = '$id'");
+    if($addtotable){        
+        header('location:dashboard.php');
+    } else{
+        echo 'Gagal';
+        header('location:dashboard.php');
+    }
+}
+
 //Ubah profil
 if(isset($_POST['ubahprofil'])){
     $iduser = $_SESSION['userid'];

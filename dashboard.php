@@ -14,6 +14,8 @@ if(isset($_SESSION['role'])) {
 
 }
 
+$userid = $_SESSION['userid'];
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +43,7 @@ if(isset($_SESSION['role'])) {
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-pie me-1"></i>
-                                        Penjualan Produk
+                                        Top 5 Penjualan Produk
                                     </div>
                                     <div class="card-body"><canvas id="myPieChart" width="100%" height="25vh" aria-label="TESTTT" role="img"></canvas></div>
                                     <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
@@ -73,7 +75,7 @@ if(isset($_SESSION['role'])) {
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-line me-1"></i>
-                                        Perkembangan Keuntungan Penjualan Produk
+                                        Top 5 Perkembangan Keuntungan Penjualan Produk
                                     </div>
                                     <div class="card-body"><canvas id="myLineChart" width="100%" height="50px" aria-label="TESTTT" role="img"></canvas></div>
                                     <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
@@ -83,7 +85,7 @@ if(isset($_SESSION['role'])) {
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-line me-1"></i>
-                                        Perkembangan Kuantitas Penjualan Produk
+                                        Top 5 Perkembangan Kuantitas Penjualan Produk
                                     </div>
                                     <div class="card-body"><canvas id="myLineChart1" width="100%" height="50px" aria-label="TESTTT" role="img"></canvas></div>
                                     <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
@@ -101,21 +103,31 @@ if(isset($_SESSION['role'])) {
                                                 <th>Nama Admin</th>
                                                 <th>Email</th>
                                                 <th>Role</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         <?php 
-                                            $logindata = mysqli_query($conn, "SELECT nama, role, email FROM login");
+                                            $logindata = mysqli_query($conn, "SELECT iduser, nama, role, email, is_active FROM login WHERE iduser != $userid");
                                             $i = 1;
                                             while($data=mysqli_fetch_array($logindata)){
+                                                $iduser = $data['iduser'];
                                                 $nama = $data['nama'];
                                                 $role = $data['role'];
                                                 $email = $data['email'];
+                                                $status = $data['is_active'];
                                                 
                                                 if ($role == 1) {
                                                     $role = "Super Admin";
                                                 } else {
                                                     $role = "Admin";
+                                                }
+
+                                                if ($status == 1) {
+                                                    $status = "Aktif";
+                                                } else {
+                                                    $status = "Tidak Aktif";
                                                 }
                                             ?>
                                             <tr>
@@ -123,7 +135,73 @@ if(isset($_SESSION['role'])) {
                                                 <td><?=$nama;?></td>
                                                 <td><?=$email;?></td>
                                                 <td><?=$role;?></td>
+                                                <td><?=$status;?></td>
+                                                <td>
+                                                    <?php
+                                                    if($status == "Aktif") {
+                                                    ?>
+                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#nonaktif<?=$iduser;?>">
+                                                        Non-aktifkan
+                                                    </button>
+                                                    <?php
+                                                    } else {
+                                                    ?>
+                                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#aktif<?=$iduser;?>">
+                                                        Aktifkan
+                                                    </button>
+                                                    <?php
+                                                    }                                                                                                        
+                                                    ?>
+                                                </td>
                                             </tr>
+                                            <div class="modal fade" id="nonaktif<?=$iduser;?>">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Nonaktifkan User?</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <form method="post">
+                                                        <div class="modal-body">
+                                                            Apakah anda yakin ingin menonaktifkan <?=$nama;?>?
+                                                            <input type="hidden" name="iduser" value="<?=$iduser;?>">
+                                                            <br>
+                                                            <br>
+                                                            <button type="submit" class="btn btn-danger" name="nonaktifuser">Non-aktifkan</button>
+                                                        </div>
+                                                    </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal fade" id="aktif<?=$iduser;?>">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Aktifkan User?</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <form method="post">
+                                                        <div class="modal-body">
+                                                            Apakah anda yakin ingin mengaktifkan <?=$nama;?>?
+                                                            <input type="hidden" name="iduser" value="<?=$iduser;?>">
+                                                            <br>
+                                                            <br>
+                                                            <button type="submit" class="btn btn-warning" name="aktifuser">Aktifkan</button>
+                                                        </div>
+                                                    </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
                                         <?php 
                                         };
                                         ?>
@@ -161,21 +239,21 @@ if(isset($_SESSION['role'])) {
                 $year = "YEAR(CURRENT_DATE)";
                 // $year = "2022";
 
-                $produk = mysqli_query($conn, "SELECT p.nama_item, COUNT(p.nama_item) as jumlah FROM transaksi t INNER JOIN transaksi_detail td ON t.idtransaksi = td.idtransaksi INNER JOIN produk p ON td.idproduk = p.idproduk WHERE t.is_active = 1 AND YEAR(t.tanggal_transaksi) = $year GROUP BY p.nama_item");
+                $produk = mysqli_query($conn, "SELECT p.nama_item, SUM(td.qty) as jumlah FROM transaksi t INNER JOIN transaksi_detail td ON t.idtransaksi = td.idtransaksi INNER JOIN produk p ON td.idproduk = p.idproduk WHERE t.is_active = 1 AND YEAR(t.tanggal_transaksi) = $year GROUP BY p.nama_item ORDER BY SUM(td.qty) DESC LIMIT 5");
                 while($fetcharray = mysqli_fetch_array($produk)){
                     $namaItem = $fetcharray['nama_item'];
                     $jumlahPrdk = $fetcharray['jumlah'];
                     echo("produk.push({label: '$namaItem', jumlah: '$jumlahPrdk'});");
                 }
                 
-                $komplain = mysqli_query($conn, "SELECT kk.nama_kategori, COUNT(kk.nama_kategori) AS jumlah FROM komplain k INNER JOIN kategori_komplain kk ON k.idkategori = kk.id WHERE k.is_active = 1 AND YEAR(k.tanggal) = $year GROUP BY kk.nama_kategori");
+                $komplain = mysqli_query($conn, "SELECT kk.nama_kategori, COUNT(kk.nama_kategori) AS jumlah FROM komplain k INNER JOIN kategori_komplain kk ON k.idkategori = kk.id WHERE k.is_active = 1 AND YEAR(k.tanggal) = $year GROUP BY kk.nama_kategori ORDER BY COUNT(kk.nama_kategori) DESC LIMIT 5");
                 while($fetcharray = mysqli_fetch_array($komplain)){
                     $namaKategori = $fetcharray['nama_kategori'];
                     $jumlahKmpln = $fetcharray['jumlah'];
                     echo("komplain.push({label: '$namaKategori', jumlah: '$jumlahKmpln'});");
                 } 
 
-                $pelanggan = mysqli_query($conn, "SELECT prioritas, COUNT(idpelanggan) as jumlah from pelanggan WHERE is_active = 1 GROUP BY prioritas");
+                $pelanggan = mysqli_query($conn, "SELECT prioritas, COUNT(idpelanggan) as jumlah from pelanggan WHERE is_active = 1 GROUP BY prioritas ORDER BY COUNT(idpelanggan) DESC LIMIT 5");
                 while($fetcharray = mysqli_fetch_array($pelanggan)){
                     $prioritas = $fetcharray['prioritas'];
                     $jumlahPlgn = $fetcharray['jumlah'];
@@ -184,30 +262,41 @@ if(isset($_SESSION['role'])) {
                 
                 $penjualan = mysqli_query($conn, "
                 SELECT
-	                SUM(transaksi_detail.qty) AS qty, 
-	                SUM(transaksi_detail.totalharga) AS totalharga,
-	                SUM(transaksi_detail.qty * produk.harga_pokok) AS modal, 
-	                produk.nama_item, 
-	                MONTH(transaksi.tanggal_transaksi) AS bulan
+	                SUM( transaksi_detail.qty ) AS qty,
+	                SUM( transaksi_detail.totalharga ) AS totalharga,
+	                SUM( transaksi_detail.qty * produk.harga_pokok ) AS modal,
+	                produk.nama_item,
+	                MONTH ( transaksi.tanggal_transaksi ) AS bulan 
                 FROM
 	                transaksi_detail
-	            INNER JOIN
-	                produk
-	            ON 
-		            transaksi_detail.idproduk = produk.idproduk
-	            INNER JOIN
-	                transaksi
-	            ON 
-		            transaksi_detail.idtransaksi = transaksi.idtransaksi
+	            INNER JOIN (
+	                SELECT
+		                pr.nama_item,
+		                pr.harga_pokok,
+		                pr.is_active,
+		                pr.idproduk 
+	                FROM
+		                transaksi_detail td
+		            INNER JOIN produk pr ON pr.idproduk = td.idproduk
+		            INNER JOIN transaksi t ON t.idtransaksi = td.idtransaksi 
+	                WHERE
+		                t.is_active = 1 
+	                GROUP BY
+		                td.idproduk 
+	                ORDER BY
+		                SUM( td.totalharga - ( pr.harga_pokok * td.qty ) ) DESC 
+		            LIMIT 5 
+	                ) produk ON transaksi_detail.idproduk = produk.idproduk
+	            INNER JOIN transaksi ON transaksi_detail.idtransaksi = transaksi.idtransaksi 
                 WHERE
-                    transaksi.is_active = 1 AND
-                    produk.is_active = 1 AND
-                    YEAR(transaksi.tanggal_transaksi) = $year
+	                transaksi.is_active = 1 
+	            AND produk.is_active = 1 
+	            AND YEAR ( transaksi.tanggal_transaksi ) = $year 
                 GROUP BY
-	                MONTH(transaksi.tanggal_transaksi), 
-	                produk.nama_item
+	                MONTH ( transaksi.tanggal_transaksi ),
+	                produk.nama_item 
                 ORDER BY
-	                transaksi.tanggal_transaksi
+	                transaksi.tanggal_transaksi ASC
                 ");                
                 while($fetcharray = mysqli_fetch_array($penjualan)){
                     $item = $fetcharray['nama_item'];

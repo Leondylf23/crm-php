@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2023 at 08:50 AM
+-- Generation Time: May 19, 2023 at 11:56 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `crm`
 --
-CREATE DATABASE IF NOT EXISTS `crm` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `crm`;
 
 -- --------------------------------------------------------
 
@@ -124,6 +122,7 @@ CREATE TABLE IF NOT EXISTS `login` (
   `password` varchar(50) NOT NULL,
   `role` smallint(6) NOT NULL DEFAULT 1,
   `nama` text NOT NULL,
+  `is_active` tinyint(4) DEFAULT 1,
   PRIMARY KEY (`iduser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
