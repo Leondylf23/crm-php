@@ -71,7 +71,7 @@ if(isset($_GET['id'])) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Invoice-<?=$tglStr?><?=$pelanggan?></title>
+        <title>Invoice-<?=$tglStr?>/<?=$pelanggan?></title>
         <link href="css/styles.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -91,7 +91,7 @@ if(isset($_GET['id'])) {
                 }
                 @page {
                     size: auto;   /* auto is the initial value */
-                    margin: 0 20px 0 20px;  /* this affects the margin in the printer settings */
+                    margin: 0;  /* this affects the margin in the printer settings */
                 }
 
                 /* Remove header and footer */
@@ -136,7 +136,7 @@ if(isset($_GET['id'])) {
                                 <a>:</a>
                             </div>
                             <div class="col-7">
-                                <a>INV/<?=$tglStr?>/<?=$pelanggan?></a>
+                                <a>INV/<?=$tglStr?>/<?=substr($pelanggan, 0, 3)?></a>
                             </div>
                             <div class="col-4">
                                 <b>TANGGAL</b>
@@ -287,7 +287,7 @@ if(isset($_GET['id'])) {
                                     <td class=""></td>
                                     <td class=""></td>
                                     <td class="p-1">Sisa Tagihan</td>
-                                    <td class=" border-2 border-dark p-1" style="text-align: right;"><?=$totalTransaksi?></td>
+                                    <td class="border-2 border-dark p-1" style="text-align: right;"><?=$totalTransaksi?></td>
                                 <tr>
                             </tbody>
                         </table>
@@ -309,7 +309,7 @@ if(isset($_GET['id'])) {
                     <div class="col-lg-12 mt-5">                        
                     </div>
                     <div class="col-lg-12 d-sm-flex justify-content-end mt-5">
-                        <div class="w-25 border border-1 border-dark"></div>
+                        <div class="w-25 border border-top-0 border-end-0 border-start-0 border-1 border-dark"></div>
                     </div>
                 </div>
             </div>
