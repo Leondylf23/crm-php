@@ -335,7 +335,7 @@ require 'cek.php';
                     <div class="form-floating mb-3">
                         <select name="metodepembayaran" class="form-control" id="mtp">
                             <?php 
-                            $data = mysqli_query($conn, "select * from metode_pembayaran");
+                            $data = mysqli_query($conn, "select * from metode_pembayaran where is_active = 1");
                             while($fetcharray = mysqli_fetch_array($data)){
                                 $metode = $fetcharray['nama_metode'];
                                 $idmp = $fetcharray['id'];
