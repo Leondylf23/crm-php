@@ -154,12 +154,24 @@ require 'function.php';
                 });
                 ");
                 
-                $kpiTahunan = mysqli_query($conn, "SELECT MONTHNAME(added_date) as bulan, COUNT(id) as jumlah FROM `kpi_records` WHERE adminid = $userid and YEAR(CURRENT_DATE) = YEAR(added_date) GROUP BY MONTHNAME(added_date)");
+                $kpiTahunan = mysqli_query($conn, "SELECT MONTH(added_date) as bulan, COUNT(id) as jumlah FROM `kpi_records` WHERE adminid = $userid and YEAR(CURRENT_DATE) = YEAR(added_date) GROUP BY MONTHNAME(added_date)");
+                $dataKPIYear = array();                
                 while($fetcharray = mysqli_fetch_array($kpiTahunan)){
                     $kategoriTh = $fetcharray['bulan'];
                     $jumlahTh = $fetcharray['jumlah'];
-                    echo("kpiYear.push({label: '$kategoriTh', jumlah: '$jumlahTh'});");
-                }               
+
+                    array_push($dataKPIYear, array("bln" => $kategoriTh, "jmlh" => $jumlahTh));
+                }
+                for ($i=1; $i <= 12; $i++) { 
+                    $jmlh = 0;
+
+                    foreach ($dataKPIYear as $d) {
+                        if($d['bln'] == $i) {
+                            $jmlh = $d['jmlh'];
+                        }
+                    }
+                    echo("kpiYear.push($jmlh);");
+                }
             ?>
 
             new Chart(ctx, {
@@ -186,10 +198,10 @@ require 'function.php';
             new Chart(ctx1, {
                 type: 'bar',
                 data: {
-                    labels: kpiYear.map(obj => obj.label),
+                    labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
                     datasets: [{
                         label: 'Banyaknya Pekerjaan',
-                        data: kpiYear.map(obj => obj.jumlah),
+                        data: kpiYear,
                         borderWidth: 1,
                         backgroundColor: 'rgba(255, 200, 20, 0.2)',
                         borderColor: 'rgb(255, 200, 20)',
