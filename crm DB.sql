@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2023 at 11:56 PM
+-- Generation Time: May 22, 2023 at 01:15 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `komplain` (
   `tanggal` timestamp NOT NULL DEFAULT current_timestamp(),
   `komplain` varchar(500) NOT NULL,
   `solusi` text NOT NULL,
+  `tgl_solusi` datetime DEFAULT NULL,
   `idkategori` int(11) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`idkomplain`),

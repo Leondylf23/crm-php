@@ -41,6 +41,7 @@ require 'cek.php';
                                             <th>Kategori</th>
                                             <th>Komplain</th>
                                             <th>Solusi</th>
+                                            <th>Tgl Solusi Diselesaikan</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -48,7 +49,7 @@ require 'cek.php';
                                     <tbody>
 
                                     <?php 
-                                        $ambilsemuadatakomplain = mysqli_query($conn, 'SELECT k.idkomplain, k.nama, k.komplain, DATE_FORMAT(k.tanggal, "%d-%m-%Y") AS tanggal, kk.nama_kategori, k.idkategori, k.solusi, k.is_active FROM komplain k INNER JOIN kategori_komplain kk ON k.idkategori = kk.id ORDER BY is_active DESC, k.tanggal DESC');
+                                        $ambilsemuadatakomplain = mysqli_query($conn, 'SELECT k.idkomplain, k.nama, k.komplain, DATE_FORMAT(k.tanggal, "%d-%m-%Y") AS tanggal, kk.nama_kategori, k.idkategori, k.solusi, DATE_FORMAT(k.tgl_solusi, "%d-%m-%Y") AS tanggal_sls, k.is_active FROM komplain k INNER JOIN kategori_komplain kk ON k.idkategori = kk.id ORDER BY is_active DESC, k.tanggal DESC');
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadatakomplain)){
                                             $idkomplain = $data['idkomplain'];
@@ -59,6 +60,7 @@ require 'cek.php';
                                             $idkategori = $data['idkategori'];
                                             $solusi = $data['solusi'];
                                             $status = $data['is_active'];
+                                            $tglsolusi = $data['tanggal_sls'];
 
                                             if($status == 1) {
                                                 $status = "Aktif";
@@ -77,6 +79,7 @@ require 'cek.php';
                                             <td><?=$kategori;?></td>
                                             <td><?=$komplain;?></td>
                                             <td><?=$solusi;?></td>
+                                            <td><?=$tglsolusi;?></td>
                                             <td><?=$status;?></td>
                                             <td>
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?=$idkomplain;?>">
@@ -114,6 +117,10 @@ require 'cek.php';
                                                                 <input type="text" name="solusi" value="<?=$solusi;?>" class="form-control" id="sls" required>
                                                                 <label for="sls">Solusi</label>
                                                             </div>
+                                                            <div class="form-floating mb-3">                                                                                
+                                                                <input type="date" name="tglsolusi" class="form-control" value="<?=$tglsolusi;?>" id="tglsls" required>
+                                                                <label for="tglsls">Tanggal Selesai Solusi</label>
+                                                            </div>
                                                             <div class="form-floating mb-3">                    
                                                                 <select name="kategori" class="form-control mb-2" id="ktg">
                                                                      <?php 
@@ -135,7 +142,7 @@ require 'cek.php';
                                                             <?php 
                                                                 if($status == "Aktif") {
                                                                     echo("
-                                                                    <button type='submit' class='btn btn-primary' name='updatekomplain'>Submit</button>
+                                                                    <button type='submit' class='btn btn-warning' name='updatekomplain'>Edit</button>
                                                                     
                                                                     <button type='button' class='btn btn-danger ms-3' data-bs-toggle='modal' data-bs-target='#delete$idkomplain'>
                                                                         Non-aktifkan
@@ -234,6 +241,10 @@ require 'cek.php';
                     <div class="form-floating mb-3">                                                                                
                         <input type="text" name="solusi" class="form-control" placeholder="Solusi" id="slsn" required>
                         <label for="slsn">Solusi</label>
+                    </div>
+                    <div class="form-floating mb-3">                                                                                
+                        <input type="date" name="tglsolusi" class="form-control" placeholder="Tanggal Selesai Solusi" id="tglslsn" required>
+                        <label for="tglslsn">Tanggal Selesai Solusi</label>
                     </div>
                     <div class="form-floating mb-3">                                                                                
                         <select name="kategori" class="form-control mb-2" id="ktgn">

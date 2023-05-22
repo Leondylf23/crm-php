@@ -97,7 +97,7 @@ if(isset($_POST['addnewtransaction'])){
                 // echo "<script>alert('$qtyData')</script>";
         
                 if($addtotransaksidetail) {
-                    // header('location:transaksi.php'); 
+                    header('location:transaksi.php'); 
                     
                 } else {
                     echo '<script> alert("Gagal"); </script>';
@@ -125,8 +125,9 @@ if(isset($_POST['addnewcomplain'])){
     $komplain = $_POST['komplain'];
     $solusi = $_POST['solusi'];
     $katg_komplain = $_POST['kategori'];
+    $tglsls = $_POST['tglsolusi'];
 
-    $addtotable = mysqli_query($conn, "insert into komplain (nama, komplain, idkategori, solusi) values('$namapelanggan', '$komplain', '$katg_komplain', '$solusi')");
+    $addtotable = mysqli_query($conn, "insert into komplain (nama, komplain, idkategori, solusi, tgl_solusi) values('$namapelanggan', '$komplain', '$katg_komplain', '$solusi', '$tglsls')");
     if($addtotable){
         header('location:komplain.php');
         updateKpiAdmin($conn, "Komplain");
@@ -143,8 +144,9 @@ if(isset($_POST['updatekomplain'])){
     $solusi = $_POST['solusi'];
     $katg_komplain = $_POST['kategori'];
     $idkomplainedit = $_POST['idkomplain'];
+    $tglsls = $_POST['tglsolusi'];
 
-    $addtotable = mysqli_query($conn, "update komplain set nama='$namapelanggan', komplain='$komplain', idkategori='$katg_komplain', solusi='$solusi' where idkomplain = '$idkomplainedit'");
+    $addtotable = mysqli_query($conn, "update komplain set nama='$namapelanggan', komplain='$komplain', idkategori='$katg_komplain', solusi='$solusi', tgl_solusi='$tglsls' where idkomplain = '$idkomplainedit'");
     if($addtotable){
         updateKpiAdmin($conn, "Komplain");
         header('location:komplain.php');

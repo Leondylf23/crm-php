@@ -2,7 +2,7 @@
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 ms-2" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
     <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="index.php">SFA-CRM</a>
+    <a class="navbar-brand ps-3" href="index.php">SFA</a>
     <!-- Navbar Search-->
     <div class="d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0">
         <a class="navbar-brand ps-3"><?php echo $_SESSION['userName']; ?></a>
@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="sb-sidenav-footer">
-                <div class="small">Copyright © 2023 Thendy Rhenaldy. All rights reserved.</div>
+                <div class="small">Copyright © 2023 PT. Maju Jaya Kreasindo. All rights reserved.</div>
             </div>  
         </nav>
     </div>

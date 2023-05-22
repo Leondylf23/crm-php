@@ -77,10 +77,10 @@ require 'cek.php';
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detil<?=$idtransaksi;?>">
                                                     Detil
                                                 </button>
-                                                <button type="button" class="btn btn-primary ms-1" onclick="location.href='exporttoexcel.php?id=<?=$idtransaksi;?>';">
-                                                    Export
+                                                <button type="button" class="btn btn-success" onclick="location.href='exporttoexcel.php?id=<?=$idtransaksi;?>';">
+                                                    Export Excel
                                                 </button>
-                                                <button type="button" class="btn btn-primary ms-1" onclick="
+                                                <button type="button" class="btn btn-warning" onclick="
                                                     var tab = window.open();
                                                     tab.opener = null;
                                                     tab.location = 'invoice.php?id=<?=$idtransaksi;?>';
