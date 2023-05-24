@@ -93,41 +93,6 @@ require 'cek.php';
                                             </td>
                                         </tr>
 
-                                        <!-- Edit The Modal -->
-                                        <!-- <div class="modal fade" id="edit<?=$idtransaksi;?>">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-
-                                                    Modal Header
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Edit Transaksi</h4>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                    </div>
-
-                                                    Modal body
-                                                    <form method="post">
-                                                        <div class="modal-body">
-                                                            <input type="text" name="tanggal_transaksi" value="<?=$tanggaltransaksi;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="nama_pelanggan" value="<?=$namapelanggan;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="idproduk" value="<?=$idproduk;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="number" name="harga_jual" value="<?=$hargajual;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="number" name="harga_modal" value="<?=$modal;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="number" name="untung" value="<?=$untung;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="hidden" name="idtransaksi" value="<?=$idtransaksi;?>">
-                                                            <button type="submit" class="btn btn-primary" name="updatetransaksi">Submit</button>
-                                                        </div>
-                                                    </form>
-
-                                                    </div>
-                                                </div>
-                                            </div> -->
-
                                             <!-- Detil -->
                                             <div class="modal fade" id="detil<?=$idtransaksi;?>">
                                                 <div class="modal-dialog">
@@ -313,68 +278,79 @@ require 'cek.php';
             </div>
 
             <!-- Modal body -->
-            <form method="post">
-                <div class="modal-body">                    
-                    <div class="form-floating mb-3">
-                        <select name="pelanggannya" class="form-control" id="plgn">
-                            <?php 
-                            $ambilsemuadatapelanggannya = mysqli_query($conn, "select * from pelanggan where is_active = 1");
-                            while($fetcharray = mysqli_fetch_array($ambilsemuadatapelanggannya)){
-                                $namapelanggannya = $fetcharray['namapelanggan'];
-                                $idpelanggannya = $fetcharray['idpelanggan'];
-                            ?>
-    
-                            <option value="<?=$idpelanggannya;?>"><?=$namapelanggannya;?></option>
-    
-                            <?php
-                            }
-                            ?>
-                        </select>                    
-                        <label for="plgn">Pelanggan</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <select name="metodepembayaran" class="form-control" id="mtp">
-                            <?php 
-                            $data = mysqli_query($conn, "select * from metode_pembayaran where is_active = 1");
-                            while($fetcharray = mysqli_fetch_array($data)){
-                                $metode = $fetcharray['nama_metode'];
-                                $idmp = $fetcharray['id'];
-                            ?>
-    
-                            <option value="<?=$idmp;?>"><?=$metode;?></option>
-    
-                            <?php
-                            }
-                            ?>
-                        </select>                    
-                        <label for="mtp">Metode Pembayaran</label>
-                    </div>
-                    <div class="mb-3">
-                        <div id="tglField">
-                            
+            <form method="post" onsubmit="tgglConfirm()">
+                <div class="modal-body">
+                    <div>
+                        <div class="form-floating mb-3">
+                            <select name="pelanggannya" class="form-control" id="plgn">
+                                <?php 
+                                $ambilsemuadatapelanggannya = mysqli_query($conn, "select * from pelanggan where is_active = 1");
+                                while($fetcharray = mysqli_fetch_array($ambilsemuadatapelanggannya)){
+                                    $namapelanggannya = $fetcharray['namapelanggan'];
+                                    $idpelanggannya = $fetcharray['idpelanggan'];
+                                ?>
+        
+                                <option value="<?=$idpelanggannya;?>"><?=$namapelanggannya;?></option>
+        
+                                <?php
+                                }
+                                ?>
+                            </select>                    
+                            <label for="plgn">Pelanggan</label>
                         </div>
-                        <button type="button" class="btn btn-primary mb-2 me-2" onclick=addTgl() id="tbhTgl">Atur Tanggal</button>
-                        <button type="button" class="btn btn-danger mb-2" onclick=addTgl() id="hpsTgl" style="display: none;" >Hapus</button>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input type="text" name="pesan" placeholder="Pesan" id="psn" class="form-control">
-                        <label for="psn">Pesan</label>
-                    </div>
-                    <div class="row" style="display: flex; align-items: center;">
-                        <input type="hidden" id="totalprice" name="totalprice" />
-                        <div class="col-lg-3">
-                            <button type="button" class="btn btn-primary mb-2" onclick=addItem()><i class="fas fa-plus me-2"></i>Item</button>
+                        <div class="form-floating mb-3">
+                            <select name="metodepembayaran" class="form-control" id="mtp">
+                                <?php 
+                                $data = mysqli_query($conn, "select * from metode_pembayaran where is_active = 1");
+                                while($fetcharray = mysqli_fetch_array($data)){
+                                    $metode = $fetcharray['nama_metode'];
+                                    $idmp = $fetcharray['id'];
+                                ?>
+        
+                                <option value="<?=$idmp;?>"><?=$metode;?></option>
+        
+                                <?php
+                                }
+                                ?>
+                            </select>                    
+                            <label for="mtp">Metode Pembayaran</label>
                         </div>
-                        <div class="col-lg-9">
-                            <h5 id="totalHarga" style="margin-left: -20px;">Total Harga: IDR 0.00</h5>
+                        <div class="mb-3">
+                            <div id="tglField">
+                                
+                            </div>
+                            <button type="button" class="btn btn-primary mb-2 me-2" onclick=addTgl() id="tbhTgl">Atur Tanggal</button>
+                            <button type="button" class="btn btn-danger mb-2" onclick=addTgl() id="hpsTgl" style="display: none;" >Hapus</button>
                         </div>
-                    </div>                        
-                    <div class="mb-2 pe-1 ps-1" id="table-data" style="height: max(40vh); overflow-y: auto;">
-                        <input type="hidden" id="totaldata" name="totaldata" >
-                        <!-- Buat isi data -->
-                    </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" name="pesan" placeholder="Pesan" id="psn" class="form-control">
+                            <label for="psn">Pesan</label>
+                        </div>
+                        <div class="row" style="display: flex; align-items: center;">
+                            <input type="hidden" id="totalprice" name="totalprice" />
+                            <div class="col-lg-3">
+                                <button type="button" class="btn btn-primary mb-2" id="additem" onclick=addItem()><i class="fas fa-plus me-2"></i>Item</button>
+                            </div>
+                            <div class="col-lg-9">
+                                <h5 id="totalHarga" style="margin-left: -20px;">Total Harga: IDR 0.00</h5>
+                            </div>
+                        </div>                        
+                        <div class="mb-2 pe-1 ps-1" id="table-data" style="height: max(40vh); overflow-y: auto;">
+                            <input type="hidden" id="totaldata" name="totaldata" >
+                            <!-- Buat isi data -->
+                        </div>
+                    </div>                    
                     
-                    <button type="submit" class="btn btn-primary" name="addnewtransaction">Submit</button>
+                    <div id="submit">
+                        <button type="button" class="btn btn-primary" onclick="tgglConfirm()">Submit</button>
+                    </div>
+                    <div id="confirm" class="d-none">
+                        <div class="mb-2"><b>Apakah data yang anda masukkan sudah benar?</b></div>
+                        <div>
+                            <button type="submit" class="btn btn-danger" name="addnewtransaction">Ya</button>
+                            <button type="button" class="btn btn-primary ms-3" onclick="tgglConfirm()">Masukkan Kembali</button>
+                        </div>
+                    </div>
                 </div>
             </form>
 
@@ -383,6 +359,7 @@ require 'cek.php';
     </div>
     <script>
         var isShowAddTgl = false;
+        var isShowConfirm = false;
 
         function addTgl() {
             isShowAddTgl = !isShowAddTgl;
@@ -412,6 +389,71 @@ require 'cek.php';
                 tglField.remove();
             }
         }
+
+        function tgglConfirm() {
+            const submit = document.getElementById("submit");
+            const confirm = document.getElementById("confirm");
+            const addBtn = document.getElementById("tbhTgl");
+            const delBtn = document.getElementById("hpsTgl");
+            const addItmBtn = document.getElementById("additem");
+            const hapusBtn = document.querySelectorAll("#hapusBtn");
+            const totalData = document.getElementById("totaldata").value;
+            const plgn = document.getElementById("plgn");
+            const mtp = document.getElementById("mtp");
+            const psn = document.getElementById("psn");
+
+            isShowConfirm = !isShowConfirm;
+
+            if(isShowConfirm) {
+                addBtn.setAttribute("disabled","");
+                delBtn.setAttribute("disabled","");
+                addItmBtn.setAttribute("disabled","");
+                hapusBtn.forEach(e => {
+                    e.setAttribute("disabled","");                    
+                });
+                for (let index = 0; index < totalData; index++) {
+                    const select = document.getElementById("prdk-"+index);
+                    const qty = document.getElementById("qty-"+index);
+
+                    select.setAttribute("disabled","");
+                    qty.setAttribute("disabled","");
+                }
+                plgn.setAttribute("disabled","");
+                mtp.setAttribute("disabled","");
+                psn.setAttribute("disabled","");
+                submit.setAttribute("class", "d-none");
+                confirm.removeAttribute("class");
+
+                if(isShowAddTgl) {
+                    const tgl = document.getElementById("tgl");
+                    psn.setAttribute("disabled","");
+                }
+            } else {
+                addBtn.removeAttribute("disabled");
+                delBtn.removeAttribute("disabled");
+                addItmBtn.removeAttribute("disabled");
+                hapusBtn.forEach(e => {
+                    e.removeAttribute("disabled");                    
+                });
+                for (let index = 0; index < totalData; index++) {
+                    const select = document.getElementById("prdk-"+index);
+                    const qty = document.getElementById("qty-"+index);
+
+                    select.removeAttribute("disabled");
+                    qty.removeAttribute("disabled");
+                }
+                plgn.removeAttribute("disabled");
+                mtp.removeAttribute("disabled");
+                psn.removeAttribute("disabled");
+                confirm.setAttribute("class", "d-none");
+                submit.removeAttribute("class");
+
+                if(isShowAddTgl) {
+                    const tgl = document.getElementById("tgl");
+                    psn.removeAttribute("disabled");
+                }
+            }
+        }
     </script>
     <script>
         var i = 0;
@@ -427,7 +469,6 @@ require 'cek.php';
                 echo("prdkOptions.push({id: '$idPrdk', nama: '$namaItem', prc: '$prc'});");
             } 
         ?>
-
         
         function addItem() {
             const tableData = document.getElementById("table-data");
@@ -513,9 +554,11 @@ require 'cek.php';
 
             const deleteBtn = document.createElement("button");
             deleteBtn.setAttribute("type", "button");
+            deleteBtn.setAttribute("id", "hapusBtn");
             deleteBtn.setAttribute("class", "btn btn-danger mt-2");
             deleteBtn.setAttribute("onclick", "removeItem("+i+")");
             deleteBtn.innerHTML = "Hapus";
+
             newElement.appendChild(deleteBtn);
 
             const bar = document.createElement("div");
