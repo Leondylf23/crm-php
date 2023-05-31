@@ -15,6 +15,7 @@ if(isset($_SESSION['role'])) {
 }
 
 $userid = $_SESSION['userid'];
+$userRole = $_SESSION['role'];
 
 ?>
 
@@ -109,14 +110,16 @@ $userid = $_SESSION['userid'];
                                         </thead>
                                         <tbody>
                                         <?php 
-                                            $logindata = mysqli_query($conn, "SELECT iduser, nama, role, email, is_active FROM login WHERE iduser != $userid");
+                                            $logindata = mysqli_query($conn, "SELECT iduser, nama, role, email, is_active, is_new FROM login WHERE iduser != $userid AND role > 0 ORDER BY created_date DESC");
                                             $i = 1;
                                             while($data=mysqli_fetch_array($logindata)){
                                                 $iduser = $data['iduser'];
                                                 $nama = $data['nama'];
-                                                $role = $data['role'];
                                                 $email = $data['email'];
                                                 $status = $data['is_active'];
+                                                $new = $data['is_new'];
+                                                $role = $data['role'];
+                                                $roleNum = $data['role'];
                                                 
                                                 if ($role == 1) {
                                                     $role = "Super Admin";
@@ -128,6 +131,9 @@ $userid = $_SESSION['userid'];
                                                     $status = "Aktif";
                                                 } else {
                                                     $status = "Tidak Aktif";
+                                                    if($new == 1) {
+                                                        $status = "Belum Diaktifkan";
+                                                    }
                                                 }
                                             ?>
                                             <tr>
@@ -138,15 +144,20 @@ $userid = $_SESSION['userid'];
                                                 <td><?=$status;?></td>
                                                 <td>
                                                     <?php
+                                                    $disable = "";
+                                                    if($userRole != 0 && $roleNum == 1) {
+                                                        $disable = "disabled";
+                                                    }
+
                                                     if($status == "Aktif") {
                                                     ?>
-                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#nonaktif<?=$iduser;?>">
+                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#nonaktif<?=$iduser;?>" <?=$disable?>>
                                                         Non-aktifkan
                                                     </button>
                                                     <?php
                                                     } else {
                                                     ?>
-                                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#aktif<?=$iduser;?>">
+                                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#aktif<?=$iduser;?>" <?=$disable?>>
                                                         Aktifkan
                                                     </button>
                                                     <?php

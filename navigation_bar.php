@@ -39,7 +39,7 @@
                     <div class="sb-sidenav-menu-heading">Menu</div>    
                     <?php 
                         if(isset($_SESSION['role'])) {
-                            if($_SESSION['role'] == 1) {
+                            if($_SESSION['role'] != 2) {
                                 echo(
                                     '
                                     <a class="nav-link" href="dashboard.php">

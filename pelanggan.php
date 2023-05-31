@@ -92,7 +92,7 @@ require 'cek.php';
                                             <td><?=$status;?></td>
                                             <td>
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?=$idpelanggan;?>">
-                                                    Detil
+                                                    Detail
                                                 </button>
                                                 <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idpelanggan;?>">
                                                     Delete
@@ -106,7 +106,7 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Detil Pelanggan</h4>
+                                                        <h4 class="modal-title">Detail Pelanggan</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 

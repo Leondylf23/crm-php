@@ -2,23 +2,39 @@
 
 require 'function.php';
 
+$is_enable_supadmin = false;
+
+$sql_check = "SELECT * FROM login WHERE role < 2 AND is_active = 1";
+$result = $conn->query($sql_check);
+$num_sup_admin = $result->num_rows;
+
+
+// limit superadmin yg bisa dimasukkan
+if ($num_sup_admin < 3) {
+    $is_enable_supadmin = true;
+}
+
 // cek login terdaftar apa kagak
 if(isset($_POST['register'])){
     $nama = $_POST['nama'];
     $email = $_POST['email'];
     $password = $_POST['password'];
     $role = $_POST['role'];
-    // echo "<script>alert('test!')</script>";
+    
     //cek apakah email sudah digunakan
     $sql_check = "SELECT * FROM login WHERE email='$email'";
     $result = $conn->query($sql_check);
 
-    if ($result->num_rows > 0) {
-    // echo "Email sudah digunakan";
+    if ($result->num_rows > 0) {    
     echo "<script>alert('email sudah digunakan!')</script>";
     } else {
     //insert data ke database
-    $sql_insert = "INSERT INTO login (email, password, role, nama) VALUES ('$email', '$password', '$role', '$nama')";
+    $sql_insert = "INSERT INTO login (email, password, role, nama, is_active) VALUES ('$email', '$password', '$role', '$nama', 0)";
+    
+    if(($role == 1) && $num_sup_admin == 0) {
+        $sql_insert = "INSERT INTO login (email, password, role, nama, is_active, is_new) VALUES ('$email', '$password', 0, '$nama', 1, 0)";
+    }
+
     if ($conn->query($sql_insert) === TRUE) {
         header('location:login.php');
         // echo "<script>alert('Registrasi berhasil!')</script>";
@@ -29,6 +45,7 @@ if(isset($_POST['register'])){
 
     $conn->close();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +96,13 @@ if(isset($_POST['register'])){
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <select name="role" class="form-control" id="role">
-                                                    <option value="1">Super Admin</option>
+                                                    <?php 
+                                                        if($is_enable_supadmin) {
+                                                            ?>
+                                                            <option value="1">Super Admin</option>
+                                                            <?php
+                                                        }
+                                                    ?>                                                
                                                     <option value="2">Admin</option>
                                                 </select>
                                                 <label for="role">Pilih Role</label>
@@ -87,6 +110,9 @@ if(isset($_POST['register'])){
                                             <div class="mt-4 mb-0">
                                                 <div class="d-grid">
                                                     <button type="submit" class="btn btn-primary btn-block" name="register">Buat Akun</button>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <a>*Setelah melakukan pendaftaran akun, harap melakukan verifikasi kepada super admin.</a>
                                                 </div>
                                             </div>
                                         </form>

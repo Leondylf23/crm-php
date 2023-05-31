@@ -3,7 +3,7 @@
 require 'function.php';
 require 'cek.php';
 
-if($_SESSION['role'] != 1){
+if($_SESSION['role'] == 2){
     header('location:index.php');
 }
 
@@ -26,13 +26,13 @@ if($_SESSION['role'] != 1){
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Penambahan Aktifitas</h1>
+                        <h1 class="mt-4">Penambahan Aktivitas</h1>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <!-- Button to Open the Modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
                                     <i class="fas fa-plus me-1"></i>
-                                    Aktifitas
+                                    Aktivitas
                                 </button>
                             </div>
                             <div class="card-body">
@@ -40,7 +40,7 @@ if($_SESSION['role'] != 1){
                                     <thead>
                                         <tr>
                                             <th>No.</th>
-                                            <th>Nama Aktifitas</th>
+                                            <th>Nama Aktivitas</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -68,7 +68,7 @@ if($_SESSION['role'] != 1){
                                             <td><?=$status;?></td>
                                             <td>
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?=$idkategori;?>">
-                                                    Detil
+                                                    Detail
                                                 </button>
                                             </td>
                                         </tr>
@@ -80,7 +80,7 @@ if($_SESSION['role'] != 1){
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Detil Aktifitas</h4>
+                                                        <h4 class="modal-title">Detail Aktivitas</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
@@ -125,14 +125,14 @@ if($_SESSION['role'] != 1){
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Nonaktifkan Aktifitas?</h4>
+                                                        <h4 class="modal-title">Nonaktifkan Aktivitas?</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            Apakah anda yakin ingin menonaktifkan aktifitas <?=$kategori;?>?
+                                                            Apakah anda yakin ingin menonaktifkan aktivitas <?=$kategori;?>?
                                                             <input type="hidden" name="id" value="<?=$idkategori;?>">
                                                             <br>
                                                             <br>

@@ -12,7 +12,7 @@ require 'cek.php';
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Aktifitas</title>
+        <title>Aktivitas</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -23,18 +23,18 @@ require 'cek.php';
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Aktifitas Sales</h1>
+                        <h1 class="mt-4">Aktivitas Sales</h1>
 
 
                         <div class="card mb-4">
                             <?php
-                                if($_SESSION['role'] == 1) {
+                                if($_SESSION['role'] != 2) {
                                     echo('
                                     <div class="card-header">
                                         <!-- Button to Open the Modal -->
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
                                             <i class="fas fa-plus me-1"></i>
-                                            Aktifitas
+                                            Aktivitas
                                         </button>
                                     </div>
                                     ');
@@ -46,7 +46,7 @@ require 'cek.php';
                                         <tr>
                                             <th>No.</th>
                                             <th>Nama</th>
-                                            <th>Aktifitas</th>
+                                            <th>Aktivitas</th>
                                             <th>Pelanggan</th>
                                             <!-- <th>Tgl Mulai</th> -->
                                             <th>Tenggang Waktu</th>
@@ -61,7 +61,7 @@ require 'cek.php';
                                         
                                         <?php 
                                         $adminid = $_SESSION['userid'];
-                                        if($_SESSION['role'] == 1) {
+                                        if($_SESSION['role'] != 2) {
                                             $datapenjadwalan = mysqli_query($conn, "select j.id, l.iduser, l.nama, j.aktifitas, j.deskripsi, j.tgl_pelaksanaan, DATE_FORMAT(j.tgl_pelaksanaan, '%d-%m-%Y %H:%i') as tgl_plksn, j.tgl_selesai, DATE_FORMAT(j.tgl_selesai, '%d-%m-%Y %H:%i') as tgl_sls, j.added_date, DATE_FORMAT(j.added_date, '%d-%m-%Y %H:%i') as add_dt, j.status, k.id as idkategori, k.nama_kategori, j.idpelanggan as idplng, p.namapelanggan as plng, j.is_active, p.prioritas from jadwal j inner join login l on j.adminid = l.iduser inner join kategori_jadwal k on j.kategori = k.id inner join pelanggan p on j.idpelanggan = p.idpelanggan order by added_date asc");
                                         } else {
                                             $datapenjadwalan = mysqli_query($conn, "select j.id, l.iduser, l.nama, j.aktifitas, j.deskripsi, j.tgl_pelaksanaan, DATE_FORMAT(j.tgl_pelaksanaan, '%d-%m-%Y %H:%i') as tgl_plksn, j.tgl_selesai, DATE_FORMAT(j.tgl_selesai, '%d-%m-%Y %H:%i') as tgl_sls, j.added_date, DATE_FORMAT(j.added_date, '%d-%m-%Y %H:%i') as add_dt, j.status, k.id as idkategori, k.nama_kategori, j.idpelanggan as idplng, p.namapelanggan as plng, j.is_active, p.prioritas from jadwal j inner join login l on j.adminid = l.iduser inner join kategori_jadwal k on j.kategori = k.id inner join pelanggan p on j.idpelanggan = p.idpelanggan where j.is_active = 1 and adminid = $adminid order by tgl_selesai asc");
@@ -136,12 +136,12 @@ require 'cek.php';
 
                                             <?php 
                                             
-                                            if($_SESSION['role'] == 1) {
+                                            if($_SESSION['role'] != 2) {
                                                 echo("
                                             <td>
                                                 <div style='align-items: center; justify-content: center !important;'>
                                                 <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#edit$idjadwal'>
-                                                    Detil
+                                                    Detail
                                                 </button>
                                                 <!-- <button type='button' class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#delete$idjadwal'>
                                                     Delete
@@ -189,15 +189,21 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Detil Aktifitas</h4>
+                                                        <h4 class="modal-title">Detail Aktivitas</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
+                                                    <?php 
+                                                        $disableBtn = "";
+                                                        if($status == "Selesai" || $status == "Menunggu Konfirmasi") {
+                                                            $disableBtn = "disabled";
+                                                        }                                                    
+                                                    ?>
                                                     <form method="post">
                                                         <div class="modal-body">
                                                             <div class="form-floating mb-3">                    
-                                                                <select name="admin" class="form-control" id="admin">
+                                                                <select name="admin" class="form-control" id="admin" <?= $disableBtn ?>>
                                                                  <?php 
                                                                     $data = mysqli_query($conn, "select * from login where role = 2");
                                                                     while($fetcharray = mysqli_fetch_array($data)){
@@ -214,7 +220,7 @@ require 'cek.php';
                                                                 <label for="admin">Pilih Admin</label>
                                                             </div>
                                                             <div class="form-floating mb-3">                    
-                                                                <select name="pelanggan" class="form-control" id="plgn">
+                                                                <select name="pelanggan" class="form-control" id="plgn" <?= $disableBtn ?>>
                                                                      <?php 
                                                                         $data = mysqli_query($conn, "select * from pelanggan");
                                                                         while($fetcharray = mysqli_fetch_array($data)){
@@ -234,7 +240,7 @@ require 'cek.php';
                                                             <!-- <input type="text" name="aktifitas" value="<?=$aktifitas;?>" class="form-control" required> -->
                                                             <!-- <br> -->   
                                                             <div class="form-floating mb-3">                    
-                                                                <select name="kategori" class="form-control" id="ktg">
+                                                                <select name="kategori" class="form-control" id="ktg" <?= $disableBtn ?>>
                                                                      <?php 
                                                                         $data = mysqli_query($conn, "select * from kategori_jadwal where is_active = 1");
                                                                         while($fetcharray = mysqli_fetch_array($data)){
@@ -248,25 +254,21 @@ require 'cek.php';
                                                                         }
                                                                     ?>
                                                                 </select>                                                            
-                                                                <label for="ktg">Aktifitas</label>
+                                                                <label for="ktg">Aktivitas</label>
                                                             </div>                                                                                                                     
                                                             <!-- <input type="datetime-local" name="tglmulai" class="form-control" value="<?=$tglmulai;?>" required>
                                                             <br> -->
                                                             <div class="form-floating mb-3">                                                                                
-                                                                <input type="text" name="deskripsi" value="<?=$deskripsi;?>" class="form-control" id="desc" required>
+                                                                <input type="text" name="deskripsi" value="<?=$deskripsi;?>" class="form-control" id="desc" required <?= $disableBtn ?>>
                                                                 <label for="desc">Deskripsi</label>
                                                             </div>
                                                             <div class="form-floating mb-3">                                                                                
-                                                                <input type="datetime-local" name="tglselesai" class="form-control" value="<?=$tglselesai;?>" id="tgl" required>
+                                                                <input type="datetime-local" name="tglselesai" class="form-control" value="<?=$tglselesai;?>" id="tgl" required <?= $disableBtn ?>>
                                                                 <label for="tgl">Tenggang Waktu</label>
                                                             </div>                                                                                                                        
                                                             <input type="hidden" name="idjadwal" value="<?=$idjadwal;?>">
 
-                                                            <?php 
-                                                                $disableBtn = "";
-                                                                if($status == "Selesai" || $status == "Menunggu Konfirmasi") {
-                                                                    $disableBtn = "disabled";
-                                                                }
+                                                            <?php                                                                 
                                                                 if($statusAktif == 1) {
                                                                     echo("
                                                                     <button type='submit' class='btn btn-warning' name='updatejadwal' $disableBtn>Edit</button>
@@ -302,14 +304,14 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Nonaktifkan Aktifitas?</h4>
+                                                        <h4 class="modal-title">Nonaktifkan Aktivitas?</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            Apakah anda yakin ingin menonaktifkan aktifitas <?=$kategori;?> untuk <?=$nama;?>?
+                                                            Apakah anda yakin ingin menonaktifkan aktivitas <?=$kategori;?> untuk <?=$nama;?>?
                                                             <input type="hidden" name="idjadwal" value="<?=$idjadwal;?>">
                                                             <br>
                                                             <br>
@@ -328,14 +330,14 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Selesaikan Aktifitas?</h4>
+                                                        <h4 class="modal-title">Selesaikan Aktivitas?</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            Apakah anda yakin aktifitas <?=$kategori;?> untuk pelanggan <?=$plgn;?> sudah selesai?
+                                                            Apakah anda yakin aktivitas <?=$kategori;?> untuk pelanggan <?=$plgn;?> sudah selesai?
                                                             <input type="hidden" name="idjadwal" value="<?=$idjadwal;?>">
                                                             <br>
                                                             <br>
@@ -356,14 +358,14 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Konfirmasi Selesai Aktifitas?</h4>
+                                                        <h4 class="modal-title">Konfirmasi Selesai Aktivitas?</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            Apakah anda yakin aktifitas <?=$kategori;?> dari admin <?=$nama;?> sudah selesai?
+                                                            Apakah anda yakin aktivitas <?=$kategori;?> dari admin <?=$nama;?> sudah selesai?
                                                             <input type="hidden" name="idjadwal" value="<?=$idjadwal;?>">
                                                             <br>
                                                             <br>
@@ -387,8 +389,8 @@ require 'cek.php';
                             </div>
                         </div>
                     </div>
-                    <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
-                        <a href="penambahan_aktifitas.php" class="ms-4 link-secondary">Tambah Kategori Aktifitas</a>
+                    <div <?php if($_SESSION['role'] > 1) {echo('style="display: none;"');} ?>>
+                        <a href="penambahan_aktifitas.php" class="ms-4 link-secondary">Tambah Kategori Aktivitas</a>
                         <!-- <a href="penjadwalan_recovery.php" style="padding-left: 25px;">Pemulihan data</a> -->
                     </div>
                 </main>
@@ -410,7 +412,7 @@ require 'cek.php';
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Tambah Aktifitas Baru</h4>
+                <h4 class="modal-title">Tambah Aktivitas Baru</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
@@ -458,7 +460,7 @@ require 'cek.php';
                     <!-- <br> -->
                     <div class="form-floating mb-3">                    
                         <select name="kategori" class="form-control" id="ktgn">
-                            <option value="0">Pilih Aktifitas</option>
+                            <option value="0">Pilih Aktivitas</option>
                             <?php 
                                $data = mysqli_query($conn, "select * from kategori_jadwal where is_active = 1");
                                while($fetcharray = mysqli_fetch_array($data)){
@@ -472,7 +474,7 @@ require 'cek.php';
                                }
                            ?>
                         </select>                                                            
-                        <label for="ktgn">Aktifitas</label>
+                        <label for="ktgn">Aktivitas</label>
                     </div>
                     <div class="form-floating mb-3">                                                                                
                         <input type="text" name="deskripsi" placeholder="Deskripsi" class="form-control" id="descn" required>

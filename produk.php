@@ -91,7 +91,7 @@ require 'cek.php';
                                             <td><?=$status;?></td>
                                             <td>
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?=$idproduk;?>">
-                                                    Detil
+                                                    Detail
                                                 </button>
                                                 <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idproduk;?>">
                                                     Hapus
@@ -106,7 +106,7 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Detil Produk</h4>
+                                                        <h4 class="modal-title">Detail Produk</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 

@@ -75,7 +75,7 @@ require 'cek.php';
                                             
                                             <td>
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detil<?=$idtransaksi;?>">
-                                                    Detil
+                                                    Detail
                                                 </button>
                                                 <button type="button" class="btn btn-success" onclick="location.href='exporttoexcel.php?id=<?=$idtransaksi;?>';">
                                                     Export Excel
@@ -100,7 +100,7 @@ require 'cek.php';
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Detil Transaksi</h4>
+                                                        <h4 class="modal-title">Detail Transaksi</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
@@ -154,7 +154,7 @@ require 'cek.php';
                                                             </div>
                                                         </div>
                                                         <br>
-                                                        <h4 class="mb-2">Detil - Detil Produk:</h4>
+                                                        <h4 class="mb-2">Detail - Detail Produk:</h4>
                                                         <div style="height: max(40vh); overflow-y: auto; overflow-x: hidden;">
                                                         <?php 
                                                             $a = 0;
