@@ -3,6 +3,11 @@
 require 'function.php';
 require 'cek.php';
 
+$json = file_get_contents('limitsupadmin.json');
+$data = json_decode($json, true);
+$limitNow = $data['limit'];
+$isSuperAdmin0 = $_SESSION['role'] == 0;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +57,6 @@ require 'cek.php';
                                 </div>
                             </form>
                         </div>
-
                         <div>
                             <h4 class="mb-3">Password</h4>
                             <form method="post">
@@ -73,8 +77,25 @@ require 'cek.php';
                                 </div>
                             </form>
                         </div>
+                        <?php
 
-                        
+                        if($isSuperAdmin0) {
+                            ?>
+                            <div>
+                                <h4 class="mb-3">Limit Super Admin</h4>
+                                <form method="post">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" name="limit" id="limit" type="number" value=<?=$limitNow?> />
+                                        <label for="limit">Atur Limit</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <button class="btn btn-primary" name="ubahlimitsadmin">Ubah</button>
+                                    </div>
+                                </form>
+                            </div>
+                        <?php
+                        }
+                        ?>                        
                     </div>
                 </main>
                 <?php require "footer.php"; ?>

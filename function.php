@@ -546,15 +546,39 @@ if(isset($_POST['nonaktifuser'])){
 
 if(isset($_POST['aktifuser'])){
     $id = $_POST['iduser'];
+    $isSupAdmin = $_POST['issupadmin'];
+    
+    if($isSupAdmin == 1) {
+        $json = file_get_contents('limitsupadmin.json');
+        $data = json_decode($json, true);
+        $limit = $data['limit'];
+        $cekdatabase = mysqli_query($conn, "SELECT email FROM login where role < 2 and is_active=1");
+        $hitung = mysqli_num_rows($cekdatabase);
 
-    $addtotable = mysqli_query($conn, "update login set is_active = 1, is_new = 0 where iduser = '$id'");
-    if($addtotable){
-        $_SESSION['msg'] = "Berhasil diupdate";        
-        header('location:dashboard.php');
-    } else{
-        $_SESSION['msg'] = "Gagal";
-        header('location:dashboard.php');
+        if($hitung < $limit) {
+            $addtotable = mysqli_query($conn, "update login set is_active = 1, is_new = 0 where iduser = '$id'");
+            if($addtotable){
+                $_SESSION['msg'] = "Berhasil diupdate";                        
+                header('location:dashboard.php');
+            } else{
+                $_SESSION['msg'] = "Gagal";
+                header('location:dashboard.php');
+            }
+        } else {
+            $_SESSION['msg'] = "Tidak bisa melebihi jumlah limit super admin!";
+            header('location:dashboard.php');
+        }
+    } else {
+        $addtotable = mysqli_query($conn, "update login set is_active = 1, is_new = 0 where iduser = '$id'");
+        if($addtotable){
+            $_SESSION['msg'] = "Berhasil diupdate";        
+            header('location:dashboard.php');
+        } else{
+            $_SESSION['msg'] = "Gagal";
+            header('location:dashboard.php');
+        }
     }
+
 }
 
 //Ubah profil
@@ -612,6 +636,28 @@ if(isset($_POST['ubahpassword'])){
 
         }
     } 
+}
+
+if(isset($_POST['ubahlimitsadmin'])) {
+    $limit = $_POST['limit'];
+
+    $cekdatabase = mysqli_query($conn, "SELECT email FROM login where role < 2 and is_active=1");
+    $hitung = mysqli_num_rows($cekdatabase);
+
+    if($hitung <= $limit) {
+        $data = array(
+            'limit' => $limit,
+        );
+        
+        $json = json_encode($data);
+        
+        file_put_contents('limitsupadmin.json', $json);
+        $_SESSION['msg'] = "Berhasil diubah!";
+        header('location:user.php');
+    } else {
+        $_SESSION['msg'] = "Tidak boleh kurang dari jumlah super admin yang sedang aktif!";
+        header('location:user.php');
+    }
 }
 
 function checkPelangganTier($conn, $idPelanggan) {

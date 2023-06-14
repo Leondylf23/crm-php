@@ -11,7 +11,6 @@ if(isset($_SESSION['role'])) {
 } else {
     echo '<script> alert("Anda tidak memiliki akses halaman ini!");</script>';
     header('location:index.php');
-
 }
 
 $userid = $_SESSION['userid'];
@@ -204,6 +203,7 @@ $userRole = $_SESSION['role'];
                                                         <div class="modal-body">
                                                             Apakah anda yakin ingin mengaktifkan <?=$nama;?>?
                                                             <input type="hidden" name="iduser" value="<?=$iduser;?>">
+                                                            <input type="hidden" name="issupadmin" value=<?php if($role == "Super Admin"){echo 1;} else {echo 0;}?>>
                                                             <br>
                                                             <br>
                                                             <button type="submit" class="btn btn-warning" name="aktifuser">Aktifkan</button>

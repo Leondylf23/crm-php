@@ -9,8 +9,12 @@ $result = $conn->query($sql_check);
 $num_sup_admin = $result->num_rows;
 
 
+$json = file_get_contents('limitsupadmin.json');
+$data = json_decode($json, true);
+$limit = $data['limit'];
+
 // limit superadmin yg bisa dimasukkan
-if ($num_sup_admin < 3) {
+if ($num_sup_admin < $limit) {
     $is_enable_supadmin = true;
 }
 
