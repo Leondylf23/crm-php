@@ -249,7 +249,8 @@ $userRole = $_SESSION['role'];
             <?php
                 $year = "YEAR(CURRENT_DATE)";
                 // $year = "2022";
-
+                
+                // query top 5 penjualan produk
                 $produk = mysqli_query($conn, "SELECT p.nama_item, SUM(td.qty) as jumlah FROM transaksi t INNER JOIN transaksi_detail td ON t.idtransaksi = td.idtransaksi INNER JOIN produk p ON td.idproduk = p.idproduk WHERE t.is_active = 1 AND YEAR(t.tanggal_transaksi) = $year GROUP BY p.nama_item ORDER BY SUM(td.qty) DESC LIMIT 5");
                 while($fetcharray = mysqli_fetch_array($produk)){
                     $namaItem = $fetcharray['nama_item'];
@@ -257,6 +258,7 @@ $userRole = $_SESSION['role'];
                     echo("produk.push({label: '$namaItem', jumlah: '$jumlahPrdk'});");
                 }
                 
+                // query komplain
                 $komplain = mysqli_query($conn, "SELECT kk.nama_kategori, COUNT(kk.nama_kategori) AS jumlah FROM komplain k INNER JOIN kategori_komplain kk ON k.idkategori = kk.id WHERE k.is_active = 1 AND YEAR(k.tanggal) = $year GROUP BY kk.nama_kategori ORDER BY COUNT(kk.nama_kategori) DESC LIMIT 5");
                 while($fetcharray = mysqli_fetch_array($komplain)){
                     $namaKategori = $fetcharray['nama_kategori'];
@@ -264,13 +266,15 @@ $userRole = $_SESSION['role'];
                     echo("komplain.push({label: '$namaKategori', jumlah: '$jumlahKmpln'});");
                 } 
 
+                // query prioritas pelanggan
                 $pelanggan = mysqli_query($conn, "SELECT prioritas, COUNT(idpelanggan) as jumlah from pelanggan WHERE is_active = 1 GROUP BY prioritas ORDER BY COUNT(idpelanggan) DESC LIMIT 5");
                 while($fetcharray = mysqli_fetch_array($pelanggan)){
                     $prioritas = $fetcharray['prioritas'];
                     $jumlahPlgn = $fetcharray['jumlah'];
                     echo("pelanggan.push({label: '$prioritas', jumlah: '$jumlahPlgn'});");
-                } 
+                }
                 
+                // query Top 5 Perkembangan Keuntungan Penjualan Produk dan Top 5 Perkembangan Kuantitas Penjualan Produk
                 $penjualan = mysqli_query($conn, "
                 SELECT
 	                SUM( transaksi_detail.qty ) AS qty,
