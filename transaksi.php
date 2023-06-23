@@ -730,9 +730,13 @@ require 'cek.php';
             
             deletedElmnt.value = 1;
             divElmnt.setAttribute("style","display: none;");
-
-            calculateAll(dataId, 0);
-            
+            for (let j = 0; j < excludedPrdk.length; j++) {
+                const el = excludedPrdk[j];                        
+                if(el.id == dataId) {
+                    excludedPrdk.splice(j,1);
+                }
+            }
+            calculateAll(dataId, 0);            
         }
 
         function calculateAll(dataId, totalPrc) {             
