@@ -11699,3 +11699,13 @@ body {
   font-size: 0.75rem;
   border-radius: 0.25rem !important;
 }
+
+.data-atb {
+  text-decoration: none;
+  color: #000;
+}
+.data-atb:hover {
+  background-color: #bcd0c7;
+  text-decoration: none;
+  color: #000;
+}

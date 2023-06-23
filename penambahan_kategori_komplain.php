@@ -16,7 +16,7 @@ if($_SESSION['role'] == 2){
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Aktifitas</title>
+        <title>Komplain</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -26,13 +26,13 @@ if($_SESSION['role'] == 2){
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Penambahan Aktivitas</h1>
+                        <h1 class="mt-4">Penambahan Kategori Komplain</h1>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <!-- Button to Open the Modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
                                     <i class="fas fa-plus me-1"></i>
-                                    Aktivitas
+                                    Kategori Komplain
                                 </button>
                             </div>
                             <div class="card-body">
@@ -40,7 +40,7 @@ if($_SESSION['role'] == 2){
                                     <thead>
                                         <tr>
                                             <th>No.</th>
-                                            <th>Nama Aktivitas</th>
+                                            <th>Nama Kategori</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -48,7 +48,7 @@ if($_SESSION['role'] == 2){
                                     <tbody>
 
                                     <?php 
-                                        $ambilsemuadataproduk = mysqli_query($conn, "select * from kategori_jadwal order by is_active desc");
+                                        $ambilsemuadataproduk = mysqli_query($conn, "select * from kategori_komplain order by is_active desc");
                                         $i = 1;
                                         while($data=mysqli_fetch_array($ambilsemuadataproduk)){
                                             $idkategori = $data['id'];
@@ -80,7 +80,7 @@ if($_SESSION['role'] == 2){
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Detail Aktivitas</h4>
+                                                        <h4 class="modal-title">Detail Kategori Komplain</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
@@ -94,7 +94,7 @@ if($_SESSION['role'] == 2){
                                                             <?php 
                                                                 if($status == "Aktif") {
                                                                     echo("
-                                                                    <button type='submit' class='btn btn-warning' name='updatektgaktifitas'>Edit</button>
+                                                                    <button type='submit' class='btn btn-warning' name='updatektgkomplain'>Edit</button>
                                                                     
                                                                     <button type='button' class='btn btn-danger ms-3' data-bs-toggle='modal' data-bs-target='#delete$idkategori'>
                                                                         Non-aktifkan
@@ -103,7 +103,7 @@ if($_SESSION['role'] == 2){
                                                                 }  else {
                                                                     echo("
                                                                     
-                                                                        <button type='submit' class='btn btn-warning' name='pulihktgaktifitas'>
+                                                                        <button type='submit' class='btn btn-warning' name='pulihktgkomplain'>
                                                                             Aktifkan
                                                                         </button>
                                                                     
@@ -125,18 +125,18 @@ if($_SESSION['role'] == 2){
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Nonaktifkan Aktivitas?</h4>
+                                                        <h4 class="modal-title">Nonaktifkan Kategori Komplain?</h4>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
 
                                                     <!-- Modal body -->
                                                     <form method="post">
                                                         <div class="modal-body">
-                                                            Apakah anda yakin ingin menonaktifkan aktivitas <?=$kategori;?>?
+                                                            Apakah anda yakin ingin menonaktifkan kategori <?=$kategori;?>?
                                                             <input type="hidden" name="id" value="<?=$idkategori;?>">
                                                             <br>
                                                             <br>
-                                                            <button type="submit" class="btn btn-danger" name="hapusktgaktifitas">Non-aktifkan</button>
+                                                            <button type="submit" class="btn btn-danger" name="hapusktgkomplain">Non-aktifkan</button>
                                                         </div>
                                                     </form>
 
@@ -174,16 +174,16 @@ if($_SESSION['role'] == 2){
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Tambah Aktifitas Baru</h4>
+                <h4 class="modal-title">Tambah Kategori Kompalain Baru</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <!-- Modal body -->
             <form method="post">
                 <div class="modal-body">
-                    <input type="text" name="aktifitas" placeholder="Nama Aktifitas" class="form-control" required>
+                    <input type="text" name="komplain" placeholder="Nama Kategori" class="form-control" required>
                     <br>
-                    <button type="submit" class="btn btn-primary" name="tambahktgaktifitas">Submit</button>
+                    <button type="submit" class="btn btn-primary" name="tambahktgkomplain">Submit</button>
                 </div>
             </form>
 

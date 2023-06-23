@@ -125,7 +125,7 @@ require 'cek.php';
                                                             <div class="form-floating mb-3">                    
                                                                 <select name="kategori" class="form-control mb-2" id="ktg">
                                                                      <?php 
-                                                                        $data = mysqli_query($conn, "select * from kategori_komplain");
+                                                                        $data = mysqli_query($conn, "select * from kategori_komplain where is_active = 1");
                                                                         while($fetcharray = mysqli_fetch_array($data)){
                                                                             $valuee = $fetcharray['nama_kategori'];
                                                                             $idkke = $fetcharray['id'];
@@ -205,6 +205,10 @@ require 'cek.php';
                     <!-- <div <?php if($_SESSION['role'] != 1) {echo('style="display: none;"');} ?>>
                         <a href="komplain_recovery.php" style="padding-left: 25px;">Pemulihan data</a>
                     </div> -->
+                    <div <?php if($_SESSION['role'] > 1) {echo('style="display: none;"');} ?>>
+                        <a href="penambahan_kategori_komplain.php" class="ms-4 link-secondary">Tambah Kategori Aktivitas</a>
+                        <!-- <a href="penjadwalan_recovery.php" style="padding-left: 25px;">Pemulihan data</a> -->
+                    </div>
                 </main>
                 <?php require "footer.php"; ?>
             </div>
@@ -250,7 +254,7 @@ require 'cek.php';
                     <div class="form-floating mb-3">                                                                                
                         <select name="kategori" class="form-control mb-2" id="ktgn">
                             <?php 
-                            $data = mysqli_query($conn, "select * from kategori_komplain");
+                            $data = mysqli_query($conn, "select * from kategori_komplain where is_active = 1");
                             while($fetcharray = mysqli_fetch_array($data)){
                                 $valuen = $fetcharray['nama_kategori'];
                                 $idkkn = $fetcharray['id'];

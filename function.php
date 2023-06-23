@@ -88,7 +88,7 @@ if(isset($_POST['addnewtransaction'])){
         }
     }
     
-    if(count($produk) > 0) {        
+    if(count($produk) > 0 && $pelangganid != "") {        
         $addtotransaksi = "";
         if($tgl == "") {
             $addtotransaksi = mysqli_query($conn, "insert into transaksi (idpelanggan, idmetode, totaltransaksi, pesan) values('$pelangganid','$pembayaranid','$totalprice', '$pesan')");
@@ -125,7 +125,7 @@ if(isset($_POST['addnewtransaction'])){
             header('location:transaksi.php');
         }
     } else {        
-        $_SESSION['msg'] = "Data produk tidak boleh kosong!";
+        $_SESSION['msg'] = "Data produk atau data pelanggan tidak boleh kosong!";
         header('location:transaksi.php');
     }
 
@@ -528,6 +528,67 @@ if(isset($_POST['tambahktgaktifitas'])){
         $_SESSION['msg'] = "Gagal";
         echo '<script> alert("gagal;"); </script>';
         header('location:penambahan_aktifitas.php');
+    }
+}
+
+if(isset($_POST['pulihktgkomplain'])){
+    $id = $_POST['id'];
+
+    $pulihtransaksi = mysqli_query($conn, "update kategori_komplain set is_active = 1 where id = '$id'");
+
+    if($pulihtransaksi){
+        $_SESSION['msg'] = "Berhasil diupdate";
+        updateKpiAdmin($conn, "Aktifitas");
+        header('location:penambahan_kategori_komplain.php');
+    } else{
+        $_SESSION['msg'] = "Gagal";
+        header('location:penambahan_kategori_komplain.php');
+    }
+}
+
+if(isset($_POST['hapusktgkomplain'])){
+    $id = $_POST['id'];
+
+    $pulihtransaksi = mysqli_query($conn, "update kategori_komplain set is_active = 0 where id = '$id'");
+
+    if($pulihtransaksi){
+        $_SESSION['msg'] = "Berhasil diupdate";
+        updateKpiAdmin($conn, "Aktifitas");
+        header('location:penambahan_kategori_komplain.php');
+    } else{
+        $_SESSION['msg'] = "Gagal";
+        header('location:penambahan_kategori_komplain.php');
+    }
+}
+
+if(isset($_POST['updatektgkomplain'])){
+    $id = $_POST['id'];
+    $kategori = $_POST['kategori'];
+
+    $pulihtransaksi = mysqli_query($conn, "update kategori_komplain set nama_kategori = '$kategori' where id = '$id'");
+
+    if($pulihtransaksi){
+        $_SESSION['msg'] = "Berhasil diupdate";
+        updateKpiAdmin($conn, "Aktifitas");
+        header('location:penambahan_kategori_komplain.php');
+    } else{
+        $_SESSION['msg'] = "Gagal";
+        header('location:penambahan_kategori_komplain.php');
+    }
+}
+
+if(isset($_POST['tambahktgaktifitas'])){
+    $kategori = $_POST['komplain'];
+    
+    $addtotable = mysqli_query($conn, "insert into kategori_komplain (nama_kategori) values ('$kategori')");
+    if($addtotable){
+        $_SESSION['msg'] = "Berhasil dimasukkan";
+        updateKpiAdmin($conn, "Aktifitas");
+        header('location:penambahan_kategori_komplain.php');
+    } else{
+        $_SESSION['msg'] = "Gagal";
+        echo '<script> alert("gagal;"); </script>';
+        header('location:penambahan_kategori_komplain.php');
     }
 }
 

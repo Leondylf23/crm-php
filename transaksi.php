@@ -281,21 +281,12 @@ require 'cek.php';
             <form method="post" onsubmit="tgglConfirm()">
                 <div class="modal-body">
                     <div>
-                        <div class="form-floating mb-3">
-                            <select name="pelanggannya" class="form-control" id="plgn">
-                                <?php 
-                                $ambilsemuadatapelanggannya = mysqli_query($conn, "select * from pelanggan where is_active = 1");
-                                while($fetcharray = mysqli_fetch_array($ambilsemuadatapelanggannya)){
-                                    $namapelanggannya = $fetcharray['namapelanggan'];
-                                    $idpelanggannya = $fetcharray['idpelanggan'];
-                                ?>
-        
-                                <option value="<?=$idpelanggannya;?>"><?=$namapelanggannya;?></option>
-        
-                                <?php
-                                }
-                                ?>
-                            </select>                    
+                        <div class="form-floating mb-3 position-relative">                    
+                            <input type="hidden" name="pelanggannya" value="" id="idplgn" required />
+                            <input class="form-control" type="text" id="plgn" placeholder="Pelanggan" required />
+                            <div id="plgndatas" style="z-index: 100; max-height: 300px; overflow-y: auto;">
+
+                            </div>
                             <label for="plgn">Pelanggan</label>
                         </div>
                         <div class="form-floating mb-3">
@@ -342,7 +333,7 @@ require 'cek.php';
                     </div>                    
                     
                     <div id="submit">
-                        <button type="button" class="btn btn-primary" onclick="tgglConfirm()">Submit</button>
+                        <button type="button" class="btn btn-primary" onclick="tgglConfirm()" id="sbmt" disabled >Submit</button>
                     </div>
                     <div id="confirm" class="d-none">
                         <div class="mb-2"><b>Apakah data yang anda masukkan sudah benar?</b></div>
@@ -358,6 +349,60 @@ require 'cek.php';
         </div>
     </div>
     <script>
+        var plgnDatas = [];
+        const sbmt = document.getElementById("sbmt");
+        <?php             
+            $ambilsemuadatapelanggannya = mysqli_query($conn, "select * from pelanggan where is_active = 1");
+            while($fetcharray = mysqli_fetch_array($ambilsemuadatapelanggannya)){
+                $namapelanggannya = $fetcharray['namapelanggan'];
+                $idpelanggannya = $fetcharray['idpelanggan'];
+                echo("plgnDatas.push({id: $idpelanggannya, name: '$namapelanggannya'});");
+            }
+        ?>
+        const showData = document.getElementById("plgndatas");
+        function ShowDataSelector() {
+            const searchPlgn = document.getElementById("plgn");
+            const plgnId = document.getElementById("idplgn");
+            showData.innerHTML = "";            
+            showData.setAttribute("class", "position-absolute bg-white mt-1 py-2 border rounded-3 w-100");
+            sbmt.setAttribute("disabled", "");
+            plgnId.value = "";
+
+            for (let index = 0; index < plgnDatas.length; index++) {
+                const element = plgnDatas[index];
+                
+                if(element.name.toLowerCase().indexOf(searchPlgn.value.toLowerCase()) != -1) {                    
+                    const data = document.createElement("div");
+                    data.setAttribute("class", "w-100 data-atb px-2 py-1");
+                    data.addEventListener("click", () => {                        
+                        // const inputRef = document.getElementById("plgn");
+                        searchPlgn.value = element.name;
+                        plgnId.value = element.id;
+                        sbmt.removeAttribute("disabled");
+                    })
+                    data.innerHTML = element.name
+                    showData.appendChild(data);
+                    // showData.appendChild(document.createElement("br"));
+                }
+            }
+        }
+
+        document.getElementById("plgn").addEventListener("keyup", ShowDataSelector);
+        document.getElementById("plgn").addEventListener("focus", ShowDataSelector);
+        // showData.addEventListener("blur", () => {
+        //     showData.innerHTML = "";          
+        //     showData.removeAttribute("class");
+        // });
+
+        const input = document.getElementById('plgn');
+        document.addEventListener('click', function(event) {
+            if (!input.contains(event.target)) {  
+                showData.innerHTML = "";          
+                showData.removeAttribute("class");
+            }
+        });
+    </script>
+    <script>
         var isShowAddTgl = false;
         var isShowConfirm = false;
 
@@ -367,8 +412,6 @@ require 'cek.php';
             const field = document.getElementById("tglField");
             const addBtn = document.getElementById("tbhTgl");
             const delBtn = document.getElementById("hpsTgl");
-            
-            '<input class="form-control mb-2" type="date" id="tgl" name="tgl" placeholder="Tanggal" />'
     
             if(isShowAddTgl) {
                 addBtn.setAttribute("style", "display: none;");
@@ -412,7 +455,7 @@ require 'cek.php';
                     e.setAttribute("disabled","");                    
                 });
                 for (let index = 0; index < totalData; index++) {
-                    const select = document.getElementById("prdk-"+index);
+                    const select = document.getElementById("prdkName-"+index);
                     const qty = document.getElementById("qty-"+index);
 
                     select.setAttribute("disabled","");
@@ -459,6 +502,7 @@ require 'cek.php';
         var i = 0;
         var prdkOptions = [];
         var addedPrdk = [];
+        var excludedPrdk = [];
         
         <?php 
             $dataa = mysqli_query($conn, "select * from produk where is_active = 1");
@@ -475,33 +519,79 @@ require 'cek.php';
 
             var newElement = document.createElement("div");
             newElement.setAttribute("id", "data-" + i);
+            newElement.setAttribute("class", "position-relative");
             
             var h4 = document.createElement("h4");
-            h4.setAttribute("class", "modal-title mb-2");
-            // h4.setAttribute("id", "h4-"+i);
+            h4.setAttribute("class", "modal-title mb-2");            
             h4.innerHTML = "Item ";
             newElement.appendChild(h4);
 
             //data
-            const prdkElmnt = document.createElement("select");
-            prdkElmnt.setAttribute("id", "prdk-" + i);
-            prdkElmnt.setAttribute("class", "form-control mb-2");
-            prdkElmnt.setAttribute("placeholder", "Cari Produk");
-            prdkElmnt.setAttribute("name", "prdk-" + i);
-            prdkElmnt.setAttribute("onchange", "prdkOnChange("+ i +", this)");
+            // dropdown search
+            const inputPrdkId = document.createElement("input");
+            inputPrdkId.setAttribute("id", "prdk-" + i);            
+            inputPrdkId.setAttribute("type", "hidden");
+            inputPrdkId.setAttribute("name", "prdk-" + i);
+            inputPrdkId.setAttribute("value", 0); 
+            // inputPrdkId.setAttribute("onchange", "prdkOnChange("+ i +", this)");            
+            newElement.appendChild(inputPrdkId);
 
-            const prdkOption = document.createElement("option");
-            prdkOption.setAttribute("value",0);
-            prdkOption.innerHTML = "Pilih Produk";
-            prdkElmnt.appendChild(prdkOption);
+            const inputPrdk = document.createElement("input");
+            inputPrdk.setAttribute("id", "prdkName-" + i);
+            inputPrdk.setAttribute("class", "form-control mb-2");
+            inputPrdk.setAttribute("type", "text");            
+            inputPrdk.setAttribute("placeholder", "Produk");
+            newElement.appendChild(inputPrdk);
 
-            prdkOptions.forEach(e => {
-                const prdkOption = document.createElement("option");
-                prdkOption.setAttribute("value",e.id);
-                prdkOption.innerHTML = e.nama;
-                prdkElmnt.appendChild(prdkOption);
-            });
-            newElement.appendChild(prdkElmnt);
+            const prdkSelector = document.createElement("div");            
+            prdkSelector.setAttribute("style", "z-index: 100; max-height: 300px; overflow-y: auto;");
+            // prdkSelector.setAttribute("id", `slc-prdk-${i}`);
+            newElement.appendChild(prdkSelector);
+
+            function eventKeyUp(event){
+                var val = event.target.value;
+                const idNow = newElement.id.substring(5);
+                inputPrdkId.setAttribute("value", 0);
+                prdkOnChange(newElement.id.substring(5) , 0);
+                prdkSelector.innerHTML = "";
+                prdkSelector.setAttribute("class", "position-absolute bg-white py-2 border rounded-3 w-100");
+
+                for (let index = 0; index < prdkOptions.length; index++) {
+                    const element = prdkOptions[index];
+                    let isExistInCart = false;
+
+                    for (let j = 0; j < excludedPrdk.length; j++) {
+                        const el = excludedPrdk[j];                        
+                        if(el.id != idNow && el.prdk_id == element.id) {
+                            isExistInCart = true
+                        } else if (el.id == idNow) {
+                            excludedPrdk.splice(j,1);
+                        }
+                    }
+
+                    if(element.nama.toLowerCase().indexOf(val.toLowerCase()) != -1 && !isExistInCart) {
+                        const data = document.createElement("div");
+                        data.setAttribute("class", "w-100 data-atb px-2 py-1");
+                        data.addEventListener("click", () => {                                                         
+                            event.target.value = element.nama;                            
+                            inputPrdkId.setAttribute("value", element.id);
+                            excludedPrdk.push({id: idNow, prdk_id: element.id});
+                            prdkOnChange(idNow , element.id);                                                                                   
+                        })
+                        data.innerHTML = element.nama
+                        prdkSelector.appendChild(data);
+                    }
+                }
+            }
+
+            inputPrdk.addEventListener("keyup", eventKeyUp);
+            inputPrdk.addEventListener("focus", eventKeyUp);
+            
+            document.addEventListener('click', function(event) {
+            if (!inputPrdk.contains(event.target)) {  
+                prdkSelector.innerHTML = "";          
+                prdkSelector.removeAttribute("class");
+            }});
 
             const qtyElmnt = document.createElement("input");
             qtyElmnt.setAttribute("id", "qty-" + i);
@@ -574,15 +664,13 @@ require 'cek.php';
             tableData.appendChild(newElement);
         }
 
-        function prdkOnChange(dataId, element) {
+        function prdkOnChange(dataId, prdkIdIn) {
             const prcDataElmnt = document.getElementById("prcSatuan-"+dataId);
             const prcDataHdnElmnt = document.getElementById("prcSatuanHdn-"+dataId);
-            const prcTotalElmnt = document.getElementById("prcTotal-"+dataId);
-            const prcTotalHdnElmnt = document.getElementById("prcTotalHdn-"+dataId);
-            const selectedId = element.value;
+            const selectedId = prdkIdIn;
             const qtyInputElmnt = document.getElementById("qty-"+dataId);
             var prcData = 0;
-
+            
             if(selectedId != 0) {
                 prdkOptions.forEach(a => {
                     if(a.id == selectedId) {
@@ -601,7 +689,7 @@ require 'cek.php';
                 
             }
             
-            qtyOnChage(dataId, qtyInputElmnt)
+            qtyOnChage(dataId, qtyInputElmnt);
         }
 
         function qtyOnChage(dataId, element) {
@@ -647,8 +735,7 @@ require 'cek.php';
             
         }
 
-        function calculateAll(dataId, totalPrc) {
-
+        function calculateAll(dataId, totalPrc) {             
             if(addedPrdk.length > 0) {
                 var found = false;
                 addedPrdk.forEach(e => {
@@ -658,23 +745,19 @@ require 'cek.php';
                     }
                 });
 
-                if(!found) {
-                    addedPrdk.push({id: dataId, prc_total: totalPrc});    
-                    
+                if(!found) {                                        
+                    addedPrdk.push({id: dataId, prc_total: totalPrc});                        
                 }
-            } else {
-                addedPrdk.push({id: dataId, prc_total: totalPrc}); 
-                
+            } else {                
+                addedPrdk.push({id: dataId, prc_total: totalPrc});                 
             }
 
             const totalHargaHdn = document.getElementById("totalprice");
             const totalHarga = document.getElementById("totalHarga");
             var tempTotalHarga = 0;
 
-            addedPrdk.forEach(e => {
-                
-                tempTotalHarga += e.prc_total;
-                
+            addedPrdk.forEach(e => {                
+                tempTotalHarga += e.prc_total;                
             });
 
             const formattedAmount = tempTotalHarga.toLocaleString('en-US', { style: 'currency', currency: 'IDR' });
