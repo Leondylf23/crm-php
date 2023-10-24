@@ -7,7 +7,7 @@ if(!isset($_SESSION['userid'])) {
 } else {
     
 }
-$conn = mysqli_connect("localhost","root","","crm");
+$conn = mysqli_connect("localhost","root","aaa12345","crm");
 
 if(isset($_SESSION['msg'])) {
     $msg = $_SESSION['msg'];

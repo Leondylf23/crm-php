@@ -8,6 +8,7 @@
 -- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET FOREIGN_KEY_CHECKS = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -186,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `pelanggan` (
   `alamat` varchar(300) NOT NULL,
   `telp` text NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  `prioritas` text NOT NULL DEFAULT 'Basic',
+  `prioritas` varchar(255) NOT NULL DEFAULT 'Basic',
   PRIMARY KEY (`idpelanggan`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
