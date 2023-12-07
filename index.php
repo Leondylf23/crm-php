@@ -154,7 +154,7 @@ require 'function.php';
                 });
                 ");
                 
-                $kpiTahunan = mysqli_query($conn, "SELECT MONTH(added_date) as bulan, COUNT(id) as jumlah FROM `kpi_records` WHERE adminid = $userid and YEAR(CURRENT_DATE) = YEAR(added_date) GROUP BY MONTHNAME(added_date)");
+                $kpiTahunan = mysqli_query($conn, "SELECT MONTH(MAX(added_date)) as bulan, COUNT(*) as jumlah FROM `kpi_records` WHERE adminid = $userid and YEAR(CURRENT_DATE) = YEAR(added_date) GROUP BY MONTHNAME(added_date)");
                 $dataKPIYear = array();                
                 while($fetcharray = mysqli_fetch_array($kpiTahunan)){
                     $kategoriTh = $fetcharray['bulan'];

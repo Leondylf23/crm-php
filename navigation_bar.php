@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="sb-sidenav-footer">
-                <div class="small">Copyright © 2023 PT. Maju Jaya Kreasindo. All rights reserved.</div>
+                <div class="small">Copyright © 2023 PT. XYZ. All rights reserved.</div>
             </div>  
         </nav>
     </div>
